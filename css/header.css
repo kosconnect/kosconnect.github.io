@@ -1,0 +1,529 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+
+.top-bar-responsive {
+    display: none;
+
+}
+
+/* Top Bar Styling */
+.top-bar {
+    background-color: #09431f;
+    color: #ffffff;
+    padding: 5px 10px;
+    font-size: 0.9em;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.top-bar span {
+    margin: 0 10px;
+}
+
+.top-bar a {
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.top-bar a:hover {
+    color: #c9994c;
+}
+
+.address {
+    margin-left: auto;
+}
+
+/* Main Header Styling */
+.header {
+    font-family: "Signika", Arial, sans-serif;
+    background-color: #1b3446;
+    padding: 15px 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header .dropdown {
+    display: flex;
+    align-items: center;
+    /* Rata tengah dengan elemen lain */
+    margin-left: auto;
+    /* Dorong ke kanan */
+}
+
+.header .hamburger {
+    display: flex;
+    align-items: center;
+    /* Untuk ikon hamburger */
+    margin-left: 10px;
+    /* Spasi antara dropdown dan hamburger */
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 5px;
+    width: 100%;
+    position: relative !important;
+    padding: 0 20px;
+}
+/* Navbar Styles */
+.navbar {
+    display: flex;
+    gap: 10px;
+    margin-left: auto;
+    padding-right: 40px;
+}
+
+.navbar a {
+    text-decoration: none;
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    gap: 50%;   
+}
+
+/* Nav Link */
+/* nav .nav-links a {
+    padding: 8px 12px;
+    margin: 0;
+    display: inline-block;
+    align-items: center;
+    text-decoration: none;
+    width: auto;
+    height: auto;
+} */
+
+
+/* Logo and Brand Name */
+.brand-logo {
+    width: 50px;
+    height: 50px;
+    align-items: center !important;
+}
+
+.brand-name {
+    font-weight: bold;
+    color: #25a48a;
+    font-family: "Signika", sans-serif !important;
+    font-size: 2em;
+}
+
+/* Logo and Brand Name Wrapper */
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    white-space: nowrap;
+    /* Mencegah teks Logic Coffee terpisah */
+    flex-shrink: 0;
+}
+
+/* Navigation Links */
+/* .nav-links {
+    display: flex;
+    gap: 10px;
+    font-family: "Signika", sans-serif;
+    flex-wrap: wrap;
+}*
+
+.nav-links a {
+    display: flex;
+    align-items: left; 
+    text-decoration: none;
+    color: inherit;  
+    padding: 10px;
+    gap: 10px;
+}*/
+
+.nav-links a:hover {
+    color: #25a48a;
+}
+
+/* .nav-links a::after {
+    content: "";
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background-color: #0e6b37;
+    transition: all 0.3s ease;
+    border-radius: 5px;
+} */
+
+.nav-links a:hover::after {
+    width: 100%;
+    left: 0;
+}
+
+/* Search Bar */
+.search-bar {
+    display: flex;
+    align-items: center;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    padding: 5px;
+    width: 400px;
+    max-width: 100%;
+    margin-right: 10px;
+    transition: box-shadow 0.3s ease;
+    margin-left: 10px;
+}
+
+.search-bar:hover {
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+.search-bar input {
+    font-family: "Signika", Arial, sans-serif;
+    border: none;
+    background: transparent;
+    outline: none;
+    width: 100%;
+    padding-left: 5px;
+    font-size: 0.9em;
+}
+
+.search-bar input:focus {
+    outline: none;
+}
+
+.search-button {
+    background-color: #c9994c;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1em;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+.search-button:hover {
+    background-color: #a57b32;
+}
+
+/* User and Cart Section */
+.user-cart {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.cart-icon {
+    position: relative;
+    font-size: 1.2em;
+}
+
+.cart-count {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background: red;
+    color: #ffffff;
+    border-radius: 50%;
+    padding: 2px 5px;
+    font-size: 0.7em;
+}
+
+.profile {
+    cursor: pointer;
+}
+
+/* Dropdown Style */
+.dropdown {
+    position: relative;
+    margin-left: auto;
+    /* Agar dropdown berada di sisi kanan */
+}
+
+.dropdown a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-decoration: none;
+    color: #805700;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: large;
+    padding: 8px 12px;
+    border-radius: 4px;
+    width: 150px;
+    /* Panjang tetap untuk Pengguna */
+    text-align: center;
+    /* Teks berada di tengah */
+    font-family: "Signika", Arial, sans-serif;
+}
+
+.dropdown a:hover {
+    color: #09431f;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    color: #805700;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 150px;
+    /* Panjang menu sama dengan "Pengguna" */
+    padding: 0;
+    /* Hilangkan padding untuk konsistensi */
+    z-index: 1000;
+}
+
+.dropdown-menu a {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 5px;
+    /* Jarak antara ikon dan teks */
+    text-decoration: none;
+    color: #09431f;
+    padding: 10px 12px;
+    /* Padding vertikal */
+    text-align: center;
+    /* Teks berada di tengah */
+    width: 100%;
+    /* Sesuaikan lebar dengan dropdown-menu */
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-menu a:hover {
+    background-color: #a57b32;
+    color: #fff;
+}
+
+/* Hover Dropdown */
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+
+    /* Stack top bar items */
+    .top-bar {
+        display: none;
+    }
+
+    /* Top Bar Styling */
+    .top-bar-responsive {
+        background-color: #09431f;
+        color: #ffffff;
+        padding: 5px 10px;
+        font-size: 0.9em;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+
+    .top-bar-responsive span {
+        margin: 0 10px;
+    }
+
+    .top-bar-responsive a {
+        color: #ffffff;
+        text-decoration: none;
+    }
+
+    .top-bar-responsive a:hover {
+        color: #c9994c;
+    }
+
+    /* Adjust navbar layout */
+    .navbar {
+        flex-direction: row;
+        align-items: center;
+        gap: 0px;
+        margin-bottom: 15px;
+        margin-top: 15px;
+        width: 100%;
+        display: flex;
+        position: relative;
+        justify-content: flex-start;
+    }
+
+    /* Navbar Styles */
+.navbar {
+    display: flex;
+    gap: 10px;
+    margin-left: auto;
+    padding-right: 40px;
+}
+
+.navbar a {
+    display: inline-block;
+    position: relative;
+    text-decoration: none;
+    color: #807500;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 8px 12px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+
+    /* Center align brand logo and name */
+    .brand {
+        justify-content: flex-start;
+        width: 100%;
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 0px !important;
+        flex-shrink: 0;
+    }
+
+    /* Pengguna dan Hamburger Menu */
+    .user-cart,
+    .hamburger,
+    .dropdown {
+        display: flex;
+        align-items: center;
+        gap: 0px !important;
+        /* Mengatur jarak antara hamburger dan pengguna */
+    }
+
+    .dropdown {
+        order: 2;
+        /* Tempatkan dropdown setelah nama */
+        margin-left: 10px;
+        /* Tambahkan spasi kecil antara nama dan dropdown */
+    }
+
+    /* Stack nav links */
+    .nav-links {
+        display: none;
+        flex-direction: column;
+        align-items: right !important;
+        background-color: #fff;
+        position: absolute;
+        top: 45px; /* Sesuaikan dengan tinggi header */
+        right: 0;
+        width: 100%;
+        text-align: center !important;
+        z-index: 1000;
+        border-top: 1px solid #805700;
+        max-height: 90vh;
+        /* Maksimal tinggi menu agar tidak terlalu besar */
+        padding: 15px;
+        gap: 5px;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+    .search-bar {
+        display: none;
+        align-items: center;
+        background-color: #f0f0f0;
+        border-radius: 10px;
+        padding: 5px;
+        width: 400px;
+        max-width: 100%;
+        margin-right: 10px;
+        transition: box-shadow 0.3s ease;
+        margin-left: 10px;
+    }
+    
+
+    /* Search bar muncul jika hamburger menu diaktifkan */
+    .search-bar.active {
+        display: none;
+    }
+
+    .search-bar input {
+        width: 100%;
+        /* Input search bar mengambil lebar penuh */
+    }
+
+    /* Align user and cart section to center */
+    .user-cart {
+        justify-content: center;
+        width: 100%;
+        gap: 10px;
+    }
+
+    /* Tampilkan nav-links saat active */
+    .nav-links.active {
+        display: flex;
+    }
+
+    .nav-links .search-bar {
+        display: none;
+        margin-bottom: 10px;
+        /* Tambahkan margin jika perlu */
+    }
+
+    /* Hamburger Menu Tampil di Mobile */
+    .hamburger {
+        display: block !important;
+        margin-left: auto;
+    }
+
+    /* Search bar muncul jika hamburger menu aktif */
+    .nav-links.active .search-bar {
+        display: flex;
+        /* Tampilkan */
+        width: 90%;
+    }
+
+    .header {
+        padding: 2px;
+        margin-bottom: 10px;
+    }
+
+    .brand-logo {
+        width: 30px;
+        height: 30px;
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    /* Further adjustments for very small screens */
+    .brand-name {
+        font-size: 1.2em;
+    }
+
+    .nav-links a {
+        display: flex;
+        font-size: medium;
+        text-align: right;
+        padding-left: 20px;
+        flex-direction: row-reverse;
+        gap: 10px;
+        padding: 5px;
+    }
+
+    .search-button {
+        padding: 10px;
+        font-size: 16px;
+        
+    }
+
+    .navbar {
+        flex-wrap: wrap;
+        /* Elemen melipat jika layar sangat kecil */
+    }
+}

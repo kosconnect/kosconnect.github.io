@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Logic Coffee adalah UKM di ULBI yang menyediakan coffee shop dengan beragam kopi premium dan produk terkait kopi.">
+    <meta name="keywords"
+        content="coffee shop ULBI, UKM ULBI, kopi premium, kedai kopi, aksesoris kopi, kopi mahasiswa">
+    <meta name="author" content="Logic Coffee ULBI">
+
+    <title>KostConnect</title>
+    <link rel="shortcut icon" href="img/logokos.png" type="image/x-icon">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="./css/header.css">
+    <link rel="stylesheet" href="./css/footer.css">
+    <!-- Tambahkan AOS CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+
+    <!-- Tambahkan AOS JS -->
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+
+
+    <!-- google fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Signika:wght@300..700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+
+    <!-- fontawesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+</head>
+
+<body>
+
+    <!-- Main Header -->
+    <header class="header">
+        <div class="navbar">
+            <div class="brand">
+                <img src="./bg/logo logic(1).png" alt="Brand Logo" class="brand-logo" />
+                <h1 class="brand-name" data-jscroot="fade-in">Kosconnect</h1>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" placeholder="Cari di halaman ini..." id="search-input" />
+                <button class="search-button" onclick="searchProducts()">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+
+
+            <div class="hamburger" onclick="toggleMenu()" style="display: none;">☰</div>
+
+            <nav class="nav-links">
+                <a href="index.html"><i class="fa fa-house"></i> Home</a>
+                <a href=""><i class="fa-solid fa-list"></i> Category</a>
+                <button class="btn-login">
+                    <i class="fa-solid fa-user"></i> Login
+                </button>
+                <button class="btn-login">
+                    <i class="fa-solid fa-id-card"></i> Daftar
+                </button>
+
+
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <!-- <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h2 class="animate__animated animate__zoomIn">Welcome!</h2>
+            </div>
+    </section> -->
+
+    <div class="container-wrapper">
+        <main class="main-container">
+            <h2>Selamat Datang di KosConnect!</h2>
+            <!-- konten kiri: form pesanan -->
+            <div id="menuGrid" class="menu-grid">
+                <!-- Elemen menu akan diisi oleh JavaScript -->
+            </div>
+        </main>
+    </div>
+
+
+    <footer class="site-footer" id="kontak">
+        <div class="footer-content">
+            <p class="footer-intro">Kenali lebih dekat dan temui kami di</p>
+            <div class="footer-links">
+                <span class="about searchable">
+                    <a href="">
+                        <i class="fa-solid fa-info-circle"></i> Tentang
+                    </a>
+                </span>
+                <span class="contact searchable">
+                    <a href="https://logiccoffee.id.biz.id/kontak/">
+                        <i class="fa-solid fa-phone"></i> Kontak
+                    </a>
+                </span>
+                <span class="instagram searchable">
+                    <a href="http://www.instagram.com/logic_coffeee">
+                        <i class="fa-brands fa-instagram"></i> Instagram
+                    </a>
+                </span>
+                <span class="address searchable">
+                    <a href="https://g.co/kgs/3VB5ztr">
+                        <i class="fa-solid fa-map-marker-alt"></i> Jl. Sariasih No. 54, Sarijadi
+                    </a>
+                </span>
+            </div>
+            <p>KosConnect &copy; 2024 All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+
+</html>
