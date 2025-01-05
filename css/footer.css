@@ -26,18 +26,18 @@
 }
 
 .footer-intro {
-    font-size: 18px;
-    color: #1b3446;
-    font-weight: medium;
+    font-size: 17px;
+    color: #003f53 ;
+    font-weight: normal;
     margin: 5px 0;
-    font-family: Arial, sans-serif;
+    font-family: "Merriweather Sans", serif;
 }
 
 .footer-links {
     display: flex;
     gap: 15px;
     font-size: 16px;
-    color: #1b3446;
+    color: #003f53;
 }
 
 .footer-links span {
@@ -52,17 +52,20 @@
 }
 
 .footer-content p {
-    font-weight: bold;
     margin: 0;
     line-height: 1.4;
     margin-top: 10px;
-    font-family: "Signika", Arial, sans-serif;
 }
 
+.copyright {
+    font-family: "Poppins", serif;
+    font-weight: 600;
+    color: #003f53;
+}
 
 .footer-content a {
     text-decoration: none;
-    color: #1b3446;
+    color: #003f53 ;
     font-weight: 500;
     position: relative;
     text-decoration: none;
@@ -70,7 +73,7 @@
 }
 
 .footer-content a:hover {
-    color: #0e6b37;
+    color: #005f73 ;
 }
 
 .footer-content a::after {
@@ -80,7 +83,7 @@
     left: 50%;
     width: 0;
     height: 2px;
-    background-color: #0e6b37;
+    background-color: #005f73;
     transition: all 0.3s ease;
     border-radius: 5px;
 }

@@ -13,28 +13,6 @@ body {
     
 }
 
-
-.btn-login {
-    background-color: #25a48a; /* Warna tombol */
-    color: #ffffff; /* Warna teks */
-    border: none; /* Menghilangkan border */
-    border-radius: 5px; /* Membuat sudut tombol melengkung */
-    padding: 10px 20px; /* Jarak di dalam tombol */
-    font-size: 14px; /* Ukuran teks */
-    cursor: pointer; /* Mengubah kursor menjadi pointer saat hover */
-    display: inline-flex; /* Untuk ikon dan teks sejajar */
-    align-items: center; /* Menyelaraskan ikon dan teks secara vertikal */
-    gap: 5px; /* Memberi jarak antara ikon dan teks */
-}
-
-.btn-login:hover {
-    background-color: #6BA3B0; /* Warna saat tombol di-hover */
-}
-
-.btn-login i {
-    font-size: 16px; /* Ukuran ikon */
-}
-
 .container-wrapper {
     display: flex;
     gap: 20px;
@@ -116,7 +94,7 @@ h2 {
 .order-button {
     margin-top: 10px;
     padding: 10px 15px;
-    background: #1b3446;
+    background: #005f73;
     color: #fff;
     border: none;
     border-radius: 4px;
@@ -127,7 +105,7 @@ h2 {
 }
 
 .order-button:hover {
-    background: #2d4f6c;
+    background: #003f53;
 }
 
 

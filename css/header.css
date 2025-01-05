@@ -42,7 +42,7 @@
 /* Main Header Styling */
 .header {
     font-family: "Signika", Arial, sans-serif;
-    background-color: #1b3446;
+    background-color: #ffffff;
     padding: 15px 20px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
@@ -70,41 +70,10 @@
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
-    gap: 5px;
     width: 100%;
     position: relative !important;
     padding: 0 20px;
 }
-/* Navbar Styles */
-.navbar {
-    display: flex;
-    gap: 10px;
-    margin-left: auto;
-    padding-right: 40px;
-}
-
-.navbar a {
-    text-decoration: none;
-    color: #ffffff;
-    font-size: 16px;
-    font-weight: bold;
-    padding: 8px 12px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-    gap: 50%;   
-}
-
-/* Nav Link */
-/* nav .nav-links a {
-    padding: 8px 12px;
-    margin: 0;
-    display: inline-block;
-    align-items: center;
-    text-decoration: none;
-    width: auto;
-    height: auto;
-} */
-
 
 /* Logo and Brand Name */
 .brand-logo {
@@ -115,8 +84,8 @@
 
 .brand-name {
     font-weight: bold;
-    color: #25a48a;
-    font-family: "Signika", sans-serif !important;
+    color: #005f73;
+    font-family: 'Merriweather', serif;
     font-size: 2em;
 }
 
@@ -131,37 +100,38 @@
 }
 
 /* Navigation Links */
-/* .nav-links {
+.nav-links {
     display: flex;
-    gap: 10px;
-    font-family: "Signika", sans-serif;
+    font-family: 'Merriweather Sans', serif;
     flex-wrap: wrap;
-}*
-
-.nav-links a {
-    display: flex;
-    align-items: left; 
-    text-decoration: none;
-    color: inherit;  
-    padding: 10px;
-    gap: 10px;
-}*/
-
-.nav-links a:hover {
-    color: #25a48a;
 }
 
-/* .nav-links a::after {
+.nav-links a {
+    text-decoration: none;
+    color: #005f73;
+    font-weight: 500;
+    font-size: large;
+    padding: 8px 12px;
+    font-family: 'Merriweather Sans', serif;
+    position: relative;
+    gap: 50%;
+}
+
+.nav-links a:hover {
+    color: #20B2AA;
+}
+
+.nav-links a::after {
     content: "";
     position: absolute;
-    bottom: -5px;
+    bottom: 0px;
     left: 50%;
     width: 0;
     height: 2px;
-    background-color: #0e6b37;
+    background-color: #20B2AA;
     transition: all 0.3s ease;
     border-radius: 5px;
-} */
+}
 
 .nav-links a:hover::after {
     width: 100%;
@@ -187,7 +157,7 @@
 }
 
 .search-bar input {
-    font-family: "Signika", Arial, sans-serif;
+    font-family: "Merriweather Sans", serif;
     border: none;
     background: transparent;
     outline: none;
@@ -201,7 +171,7 @@
 }
 
 .search-button {
-    background-color: #c9994c;
+    background-color: #D5B561;
     border: none;
     padding: 10px 15px;
     border-radius: 10px;
@@ -214,7 +184,7 @@
 }
 
 .search-button:hover {
-    background-color: #a57b32;
+    background-color: #FFBD59 ;
 }
 
 /* User and Cart Section */
@@ -244,6 +214,29 @@
     cursor: pointer;
 }
 
+.btn-login {
+    background-color: #005f73; /* Warna tombol */
+    color: #ffffff; /* Warna teks */
+    border: none; /* Menghilangkan border */
+    border-radius: 5px; /* Membuat sudut tombol melengkung */
+    padding: 10px 20px; /* Jarak di dalam tombol */
+    font-size: 14px; /* Ukuran teks */
+    cursor: pointer; /* Mengubah kursor menjadi pointer saat hover */
+    display: inline-flex; /* Untuk ikon dan teks sejajar */
+    align-items: center; /* Menyelaraskan ikon dan teks secara vertikal */
+    gap: 5px; /* Memberi jarak antara ikon dan teks */
+    font-family: "Poppins", serif;
+    margin-left: 10px;
+}
+
+.btn-login:hover {
+    background-color: #20B2AA; /* Warna saat tombol di-hover */
+}
+
+.btn-login i {
+    font-size: 16px; /* Ukuran ikon */
+}
+
 /* Dropdown Style */
 .dropdown {
     position: relative;
@@ -254,7 +247,7 @@
 .dropdown a {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: end;
     text-decoration: none;
     color: #805700;
     text-decoration: none;
@@ -262,7 +255,6 @@
     font-size: large;
     padding: 8px 12px;
     border-radius: 4px;
-    width: 150px;
     /* Panjang tetap untuk Pengguna */
     text-align: center;
     /* Teks berada di tengah */
@@ -282,7 +274,6 @@
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 150px;
     /* Panjang menu sama dengan "Pengguna" */
     padding: 0;
     /* Hilangkan padding untuk konsistensi */
@@ -292,7 +283,7 @@
 .dropdown-menu a {
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: end;
     gap: 5px;
     /* Jarak antara ikon dan teks */
     text-decoration: none;
@@ -362,27 +353,6 @@
         justify-content: flex-start;
     }
 
-    /* Navbar Styles */
-.navbar {
-    display: flex;
-    gap: 10px;
-    margin-left: auto;
-    padding-right: 40px;
-}
-
-.navbar a {
-    display: inline-block;
-    position: relative;
-    text-decoration: none;
-    color: #807500;
-    font-size: 16px;
-    font-weight: bold;
-    padding: 8px 12px;
-    border-radius: 5px;
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
-
     /* Center align brand logo and name */
     .brand {
         justify-content: flex-start;
@@ -407,7 +377,7 @@
     .dropdown {
         order: 2;
         /* Tempatkan dropdown setelah nama */
-        margin-left: 10px;
+         margin-left: 10px; 
         /* Tambahkan spasi kecil antara nama dan dropdown */
     }
 
@@ -415,10 +385,11 @@
     .nav-links {
         display: none;
         flex-direction: column;
-        align-items: right !important;
+        align-items: center !important;
         background-color: #fff;
         position: absolute;
-        top: 45px; /* Sesuaikan dengan tinggi header */
+        top: 45px;
+        /* Sesuaikan dengan tinggi header */
         right: 0;
         width: 100%;
         text-align: center !important;
@@ -432,23 +403,32 @@
         border-bottom-right-radius: 20px;
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
     }
+
+    .hamburger {
+        display: none !important;
+        /* Sembunyikan di desktop */
+        font-size: 24px;
+        cursor: pointer;
+        margin-left: auto;
+        padding: 0;
+        order: 3;
+    }
+
+    /* Resize search bar */
     .search-bar {
         display: none;
-        align-items: center;
-        background-color: #f0f0f0;
-        border-radius: 10px;
-        padding: 5px;
-        width: 400px;
+        width: 100%;
+        margin-right: auto;
+        margin-left: auto !important;
+        flex: 1;
         max-width: 100%;
-        margin-right: 10px;
-        transition: box-shadow 0.3s ease;
-        margin-left: 10px;
+        flex-grow: 1 !important;
+        margin-top: 10px;
     }
-    
 
     /* Search bar muncul jika hamburger menu diaktifkan */
     .search-bar.active {
-        display: none;
+        display: flex;
     }
 
     .search-bar input {
@@ -519,7 +499,6 @@
     .search-button {
         padding: 10px;
         font-size: 16px;
-        
     }
 
     .navbar {

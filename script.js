@@ -107,3 +107,12 @@ function renderRooms() {
 
 // Panggil fungsi untuk merender kamar saat halaman dimuat
 document.addEventListener("DOMContentLoaded", renderRooms);
+
+function login() {
+    // Redirect pengguna ke endpoint Google OAuth di backend
+    window.location.href = 'https://kosconnect.github.io/login/';
+  }
+function register() {
+    // Redirect pengguna ke endpoint Google OAuth di backend
+    window.location.href = 'https://kosconnect.github.io/register/';
+  }
