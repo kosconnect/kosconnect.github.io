@@ -91,6 +91,62 @@ function register() {
   window.location.href = "https://kosconnect.github.io/register/";
 }
 
+// kategori
+document.addEventListener("DOMContentLoaded", () => {
+  // Elemen kategori
+  const categoryList = document.getElementById("category-list");
+
+  // Fetch kategori dari backend
+  fetch("https://kosconnect-server.vercel.app/api/categories/", {
+    method: "GET",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to fetch categories");
+      }
+      return response.json();
+    })
+    .then((categories) => {
+      // Render kategori ke dropdown
+      categories.forEach((category) => {
+        const categoryItem = document.createElement("a");
+        categoryItem.classList.add("dropdown-item");
+        categoryItem.textContent = category.name;
+        categoryItem.setAttribute("data-id", category.id); // Set ID untuk filter berdasarkan ID
+        categoryList.appendChild(categoryItem);
+
+        // Tambahkan event listener untuk setiap kategori
+        categoryItem.addEventListener("click", (e) => {
+          e.preventDefault();
+          const categoryId = e.target.getAttribute("data-id");
+          filterDataByCategory(categoryId, category.name);
+        });
+      });
+    })
+    .catch((error) => console.error("Error fetching categories:", error));
+
+  // Fungsi untuk memfilter data berdasarkan kategori
+  function filterDataByCategory(categoryId, categoryName) {
+    console.log(`Filter data untuk kategori: ${categoryName} (ID: ${categoryId})`);
+    // Fetch data berdasarkan ID kategori
+    fetch(`https://kosconnect-server.vercel.app/api/categories/${categoryId}`, {
+      method: "GET",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch category data");
+        }
+        return response.json();
+      })    
+      .then((categoryData) => {
+        console.log("Filtered data:", categoryData);
+        // Lakukan manipulasi DOM untuk menampilkan data kategori sesuai kebutuhan
+      })
+      .catch((error) => console.error("Error filtering category data:", error));
+  }
+});
+
+
 // Data kamar kos
 const roomsData = [
   {

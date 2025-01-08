@@ -222,7 +222,7 @@
     display: none;
     position: absolute;
     top: 100%;
-    /* right: 0; */
+    right: 0;
     color: #20B2AA;
     background-color: #fff;
     border-radius: 8px;
@@ -296,9 +296,10 @@
 }
 
 /* Hover Dropdown */
-.dropdown:hover .dropdown-category {
+#dropdown-category:hover .dropdown-category {
     display: block;
-}
+  }
+  
 
 
 /* Responsive Styling */
