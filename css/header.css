@@ -5,40 +5,6 @@
     font-family: Arial, sans-serif;
 }
 
-
-.top-bar-responsive {
-    display: none;
-
-}
-
-/* Top Bar Styling */
-.top-bar {
-    background-color: #09431f;
-    color: #ffffff;
-    padding: 5px 10px;
-    font-size: 0.9em;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-}
-
-.top-bar span {
-    margin: 0 10px;
-}
-
-.top-bar a {
-    color: #ffffff;
-    text-decoration: none;
-}
-
-.top-bar a:hover {
-    color: #c9994c;
-}
-
-.address {
-    margin-left: auto;
-}
-
 /* Main Header Styling */
 .header {
     font-family: "Signika", Arial, sans-serif;
@@ -187,29 +153,6 @@
     background-color: #FFBD59 ;
 }
 
-/* User and Cart Section */
-.user-cart {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.cart-icon {
-    position: relative;
-    font-size: 1.2em;
-}
-
-.cart-count {
-    position: absolute;
-    top: -5px;
-    right: -10px;
-    background: red;
-    color: #ffffff;
-    border-radius: 50%;
-    padding: 2px 5px;
-    font-size: 0.7em;
-}
-
 .profile {
     cursor: pointer;
 }
@@ -237,10 +180,20 @@
     font-size: 16px; /* Ukuran ikon */
 }
 
+
+.header-login {
+    font-family: "Signika", Arial, sans-serif;
+    background-color: #ffffff;
+    padding: 15px 20px;
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
 /* Dropdown Style */
 .dropdown {
     position: relative;
-    margin-left: auto;
+    margin-left: 0;
     /* Agar dropdown berada di sisi kanan */
 }
 
@@ -249,7 +202,7 @@
     align-items: center;
     justify-content: end;
     text-decoration: none;
-    color: #805700;
+    color: #005f73;
     text-decoration: none;
     font-weight: 500;
     font-size: large;
@@ -262,7 +215,7 @@
 }
 
 .dropdown a:hover {
-    color: #09431f;
+    color: #20B2AA;
 }
 
 .dropdown-menu {
@@ -270,7 +223,7 @@
     position: absolute;
     top: 100%;
     right: 0;
-    color: #805700;
+    color: #20B2AA;
     background-color: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -287,7 +240,7 @@
     gap: 5px;
     /* Jarak antara ikon dan teks */
     text-decoration: none;
-    color: #09431f;
+    color: #005f73;
     padding: 10px 12px;
     /* Padding vertikal */
     text-align: center;
@@ -298,7 +251,7 @@
 }
 
 .dropdown-menu a:hover {
-    background-color: #a57b32;
+    background-color: #20B2AA;
     color: #fff;
 }
 
@@ -310,36 +263,6 @@
 
 /* Responsive Styling */
 @media (max-width: 768px) {
-
-    /* Stack top bar items */
-    .top-bar {
-        display: none;
-    }
-
-    /* Top Bar Styling */
-    .top-bar-responsive {
-        background-color: #09431f;
-        color: #ffffff;
-        padding: 5px 10px;
-        font-size: 0.9em;
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap;
-    }
-
-    .top-bar-responsive span {
-        margin: 0 10px;
-    }
-
-    .top-bar-responsive a {
-        color: #ffffff;
-        text-decoration: none;
-    }
-
-    .top-bar-responsive a:hover {
-        color: #c9994c;
-    }
-
     /* Adjust navbar layout */
     .navbar {
         flex-direction: row;

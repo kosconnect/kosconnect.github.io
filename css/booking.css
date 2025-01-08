@@ -1,0 +1,408 @@
+.body {
+    font-family: "Nunito", Arial, sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: #333;
+}
+
+h4 {
+    margin: 0;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    width: 250px;
+    padding: 20px;
+}
+
+.profile {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.profile-picture {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ccc;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.profile-name {
+    font-size: 18px;
+    color: #333;
+    margin: 0;
+}
+
+.edit-profile {
+    font-size: 14px;
+    color: #666;
+    text-decoration: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.edit-profile:hover {
+    text-decoration: underline;
+}
+
+.menu {
+    margin-top: 20px;
+}
+
+.menu-item {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    color: #333;
+    text-decoration: none;
+    padding: 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+    gap: 10px;
+}
+
+.menu-item:hover {
+    background-color: #d6d6d6;
+}
+
+.menu-item.active {
+    font-weight: bold;
+    color: #ffc107;
+}
+/* General Styles */
+a {
+    text-decoration: none;
+    color: #333;
+}
+
+h4 {
+    margin: 0;
+}
+h4.phone {
+    display: none;
+}
+
+/* Order Card */
+.order-card {
+    display: flex;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    font-family: Arial, sans-serif;
+    position: relative;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+/* Left Section */
+.left-section {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    border-right: 2px solid #ddd;
+    padding-right: 20px;
+}
+
+.left-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%; /* Memastikan elemen memenuhi seluruh lebar */
+}
+
+.left-header .brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1; /* Membuat brand logo menyesuaikan lebar yang tersedia */
+}
+
+.left-header .brand-logo img {
+    width: 50px;
+    height: 50px;
+}
+
+.left-header .brand-logo h4 {
+    font-family: "Signika", sans-serif;
+    white-space: nowrap; /* Mencegah pemisahan baris */
+    overflow: hidden; /* Menghindari overflow */
+    text-overflow: ellipsis; /* Tambahkan elipsis jika teks terlalu panjang */
+    font-size: 26px;
+    color: #09431f;
+    font-weight: bold;
+}
+
+.left-header .order-date {
+    font-family: "Nunito", Arial, sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #09431f;
+    flex-shrink: 0; /* Mencegah elemen ini mengecil */
+}
+
+
+.order-code {
+    font-family: "Poppins", sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    color: #805700;
+    margin: 10px 0;
+}
+
+.order-details p {
+    font-size: 0.9rem;
+    margin: 5px 0;
+}
+
+.order-details p strong {
+    color: #333;
+}
+
+/* Order Items */
+.order-items {
+    margin: 10px 0;
+    font-size: 0.9rem;
+}
+
+.order-items p {
+    display: flex;
+    justify-content: space-between;
+}
+
+.total {
+    font-family: "Signika", sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+    color: #09431f;
+    text-align: right;
+}
+
+/* Right Section */
+.right-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+    gap: 10px;
+    padding-left: 20px;
+    text-align: center;
+}
+
+.right-section .queue-number {
+    font-family: "Poppins", Arial, sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    color: #805700;
+}
+
+.right-section img {
+    width: 30px;
+    height: 30px;
+}
+
+.status-icon {
+    width: 100px;
+    height: auto;
+}
+.status {
+    font-size: 24px;
+    color: #09431f;
+    font-weight: bold;
+    font-family: "Signika", sans-serif;
+}
+
+.cancel-button {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+.cancel-button:hover {
+    background-color: #c82333;
+}
+
+/* Responsive Layout */
+@media (max-width: 768px) {
+
+    h4.pc {
+        display: none;
+    }
+    h4.phone {
+        margin: 0;
+    }
+    
+    .order-card {
+        flex-direction: column; /* Tata letak vertikal untuk layar kecil */
+        padding: 15px;
+    }
+
+    .left-section {
+        border-right: none; /* Hilangkan garis pembatas */
+        padding-right: 0;
+        margin-bottom: 15px; /* Berikan jarak antar section */
+    }
+
+    .right-section {
+        padding-left: 0;
+    }
+
+    .left-header {
+        flex-direction: column;
+        align-items: flex-start; /* Rata kiri */
+        gap: 5px;
+    }
+
+    .left-header .brand-logo img {
+        width: 40px;
+        height: 40px;
+    }
+
+    .left-header .brand-logo h4.phone {
+        font-size: 20px;
+    }
+
+    .status-icon {
+        width: 80px;
+        height: auto;
+    }
+}
+
+/* Left Section */
+.left-section {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+    border-bottom: 2px solid #ddd;
+}
+
+.left-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.left-header .brand-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+}
+
+.left-header .brand-logo img {
+    width: 50px;
+    height: 50px;
+}
+
+.left-header .brand-logo h4 {
+    font-family: "Signika", sans-serif;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 26px;
+    color: #09431f;
+    font-weight: bold;
+}
+
+.left-header .order-date {
+    font-family: "Nunito", Arial, sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #09431f;
+    flex-shrink: 0;
+}
+
+.order-code {
+    font-family: "Poppins", sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    color: #805700;
+    margin: 10px 0;
+    justify-content: center;
+}
+
+.order-details p {
+    font-size: 0.9rem;
+    margin: 5px 0;
+}
+
+.order-details p strong {
+    color: #333;
+}
+
+.order-items {
+    margin: 10px 0;
+    font-size: 0.9rem;
+}
+
+.order-items p {
+    display: flex;
+    justify-content: space-between;
+}
+
+.total {
+    font-family: "Signika", sans-serif;
+    font-weight: bold;
+    font-size: 20px;
+    color: #09431f;
+    text-align: right;
+}
+
+/* Right Section */
+.right-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+    gap: 10px;
+    padding-left: 20px;
+    text-align: center;
+}
+
+.right-section .queue-number {
+    font-family: "Poppins", Arial, sans-serif;
+    font-size: 20px;
+    font-weight: bold;
+    color: #805700;
+}
+
+.right-section .status {
+    font-size: 24px;
+    color: #09431f;
+    font-weight: bold;
+    font-family: "Signika", sans-serif;
+}
+
+.cancel-button {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-top: 10px;
+}
+
+.cancel-button:hover {
+    background-color: #c82333;
+}
