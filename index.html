@@ -62,7 +62,19 @@
 
         <nav class="nav-links">
           <a href="index.html"><i class="fa fa-house"></i> Beranda</a>
-          <a href=""><i class="fa-solid fa-list"></i> Kategori</a>
+          <div class="dropdown">
+            <a href="#" class="profile-icon dropdown-toggle d-flex align-items-center mx-2" id="profileDropdown"
+              role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <div class="d-flex align-items-center">
+                <i class="fa-solid fa-list"></i>
+                <span id="kategori">Kategori</span> 
+              </div>
+            </a>
+            <div class="dropdown-category">
+              <a href="#" class="dropdown-item logout-btn" id="logout-btn">
+                <i class="fa-solid fa-right-from-bracket"></i> Kos
+              </a>
+            </div>
           <button class="btn-login" onclick="login()">
             <i class="fa-solid fa-user"></i> Masuk
           </button>
@@ -92,7 +104,19 @@
 
       <nav class="nav-links">
         <a href="index.html"><i class="fa fa-house"></i> Beranda</a>
-        <a href="#"><i class="fa-solid fa-list"></i></i> Kategori</a>
+        <div class="dropdown">
+          <a href="#" class="profile-icon dropdown-toggle d-flex align-items-center mx-2" id="profileDropdown"
+            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            <div class="d-flex align-items-center">
+              <i class="fa-solid fa-list"></i>
+              <span id="kategori">Kategori</span> 
+            </div>
+          </a>
+          <div class="dropdown-menu">
+            <a href="#" class="dropdown-item logout-btn" id="logout-btn">
+              <i class="fa-solid fa-right-from-bracket"></i> Kos
+            </a>
+          </div>
         <a href="booking.html"><i class="fa-solid fa-receipt"></i> Pemesanan</a>
         <div class="dropdown">
           <a href="#" class="profile-icon dropdown-toggle d-flex align-items-center mx-2" id="profileDropdown"

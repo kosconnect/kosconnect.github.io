@@ -222,7 +222,7 @@
     display: none;
     position: absolute;
     top: 100%;
-    right: 0;
+    /* right: 0; */
     color: #20B2AA;
     background-color: #fff;
     border-radius: 8px;
@@ -257,6 +257,46 @@
 
 /* Hover Dropdown */
 .dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-category {
+    display: none;
+    position: absolute;
+    top: 100%;
+    color: #20B2AA;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 0;
+    /* Hilangkan padding untuk konsistensi */
+    z-index: 1000;
+}
+
+.dropdown-category a {
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    gap: 5px;
+    /* Jarak antara ikon dan teks */
+    text-decoration: none;
+    color: #005f73;
+    padding: 10px 12px;
+    /* Padding vertikal */
+    text-align: center;
+    /* Teks berada di tengah */
+    width: 100%;
+    /* Sesuaikan lebar dengan dropdown-menu */
+    transition: background-color 0.3s ease;
+}
+
+.dropdown-category a:hover {
+    background-color: #20B2AA;
+    color: #fff;
+}
+
+/* Hover Dropdown */
+.dropdown:hover .dropdown-category {
     display: block;
 }
 
