@@ -61,13 +61,13 @@ document.addEventListener("DOMContentLoaded", () => {
     headerDefault.style.display = "block";
     headerLogin.style.display = "none";
   }
-  function deleteCookie(name) {
-    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-  }
+  // function deleteCookie(name) {
+  //   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+  // }
   
-  // Hapus cookie yang tidak diperlukan
-  deleteCookie("authToken"); // Optional: ganti jika ada cookie duplikat
-  deleteCookie("userRole");
+  // // Hapus cookie yang tidak diperlukan
+  // deleteCookie("authToken"); // Optional: ganti jika ada cookie duplikat
+  // deleteCookie("userRole");
   
   // Logout button logic
   const logoutBtn = document.getElementById("logout-btn");
