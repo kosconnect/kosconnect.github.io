@@ -15,6 +15,12 @@ document.addEventListener("DOMContentLoaded", () => {
   const authToken = getCookie("authToken");
   const userRole = getCookie("userRole");
 
+  // Periksa apakah cookie ada
+  if (!authToken || !userRole) {
+    console.warn("Authentication cookies not set properly.");
+    return;
+  }
+
   // Elemen header
   const headerDefault = document.querySelector(".header");
   const headerLogin = document.querySelector(".header-login");
@@ -41,8 +47,8 @@ document.addEventListener("DOMContentLoaded", () => {
       .then((data) => {
         // Update nama pengguna di UI
         const user = data.user;
-        if (user && user.FullName) {
-          userNameElement.textContent = user.FullName;
+        if (user && user.fullname) {
+          userNameElement.textContent = user.fullname;
         } else {
           console.warn("User data is incomplete. Falling back to user role.");
           if (userRole) {
