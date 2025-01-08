@@ -1,56 +1,86 @@
-import { getCookie } from "https://cdn.jsdelivr.net/gh/jscroot/cookie@0.0.1/croot.js";
-import { deleteCookie } from "https://cdn.jsdelivr.net/gh/jscroot/cookie@0.0.1/croot.js";
-import { getJSON } from "https://cdn.jsdelivr.net/gh/jscroot/api@0.0.7/croot.js";
-
-// menampilkan nama user
-// cek cookie dengan header login ada ga?
-if (getCookie("login") === "") {
-  redirect("/");
-}
-
-// Ambil data pengguna menggunakan API
-getJSON(
-  "https://asia-southeast2-awangga.cloudfunctions.net/logiccoffee/data/user",
-  "login",
-  getCookie("login"),
-  responseFunction
-);
-
-function responseFunction(result) {
-  try {
-    if (result.status === 404) {
-      redirect("/register");
-      return;
+document.addEventListener("DOMContentLoaded", () => {
+  // Fungsi untuk membaca nilai cookie berdasarkan nama
+  function getCookie(name) {
+    const cookies = document.cookie.split("; ");
+    for (let cookie of cookies) {
+      const [key, value] = cookie.split("=");
+      if (key === name) {
+        return decodeURIComponent(value);
+      }
     }
-
-    // cek apakah name tersedia di response
-    console.log("Data pengguna:", result.data);
-
-    // get nama lengkap dari API
-    const fullName = result.data.name || "Nama Tidak Diketahui";
-
-    // pisahin nama depan(kata pertama)
-    const firstName = fullName.split(" ")[0]; //ambil data pertama sebagai nama depan
-
-    // munculin nama depan user di elemen yg sudah disediakan
-    const userNameElement = document.getElementById("user-name");
-    if (userNameElement) {
-      userNameElement.textContent = firstName;
-    }
-
-    // munculin nama lengkap user di elemen sidebar
-    const fullNameElement = document.getElementById("user-fullname");
-    if (fullNameElement) {
-      fullNameElement.textContent = fullName;
-    }
-
-    // menampilkan data lainnya(untuk debugging)
-    console.log("Nama depan yang ditampilkan:", firstName);
-    console.log("Nama lengkap yang ditampilkan:", fullName);
-  } catch (error) {
-    console.error("Terjadi kesalahan saat memproses respons:", error.message);
+    return null;
   }
-}
+
+  // Ambil token dan role dari cookie
+  const authToken = getCookie("authToken");
+  const userRole = getCookie("userRole");
+
+  // Elemen header
+  const headerDefault = document.querySelector(".header");
+  const headerLogin = document.querySelector(".header-login");
+  const userNameElement = document.getElementById("user-name");
+
+  // Logika mengganti header berdasarkan authToken
+  if (authToken) {
+    headerDefault.style.display = "none";
+    headerLogin.style.display = "block";
+
+    // Fetch user data dari endpoint backend
+    fetch("https://kosconnect-server.vercel.app/api/users/me", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch user data");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        // Update nama pengguna di UI
+        const user = data.user;
+        if (user && user.fullname) {
+          userNameElement.textContent = user.fullname;
+        } else {
+          console.warn("User data is incomplete. Falling back to user role.");
+          if (userRole) {
+            userNameElement.textContent = userRole;
+          }
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+        // Fallback to userRole from cookie if available
+        if (userRole) {
+          userNameElement.textContent = userRole;
+        }
+      });
+  } else {
+    headerDefault.style.display = "block";
+    headerLogin.style.display = "none";
+  }
+  function deleteCookie(name) {
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+  }
+  
+  // Hapus cookie yang tidak diperlukan
+  deleteCookie("authToken"); // Optional: ganti jika ada cookie duplikat
+  deleteCookie("userRole");
+  
+  // Logout button logic
+  const logoutBtn = document.getElementById("logout-btn");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", () => {
+      document.cookie =
+        "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      document.cookie =
+        "userRole=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      window.location.reload();
+    });
+  }
+});
 
 // get data order by user id
 getJSON(
