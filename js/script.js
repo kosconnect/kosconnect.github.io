@@ -15,12 +15,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const authToken = getCookie("authToken");
   const userRole = getCookie("userRole");
 
-  // Periksa apakah cookie ada
-  if (!authToken || !userRole) {
-    console.warn("Authentication cookies not set properly.");
-    return;
-  }
-
   // Elemen header
   const headerDefault = document.querySelector(".header");
   const headerLogin = document.querySelector(".header-login");
@@ -67,7 +61,6 @@ document.addEventListener("DOMContentLoaded", () => {
     headerDefault.style.display = "block";
     headerLogin.style.display = "none";
   }
-
   // Logout button logic
   const logoutBtn = document.getElementById("logout-btn");
   if (logoutBtn) {
