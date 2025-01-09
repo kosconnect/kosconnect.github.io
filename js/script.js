@@ -119,28 +119,36 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Fungsi untuk merender kategori ke dropdown
   function renderCategories(categories, categoryListElement) {
+    if (!categoryListElement) {
+      console.error("Category list element not found:", categoryListElement);
+      return;
+    }
+  
+    categoryListElement.innerHTML = ""; // Bersihkan elemen sebelumnya
+  
     categories.forEach((category) => {
       const categoryItem = document.createElement("a");
       categoryItem.classList.add("dropdown-item");
       categoryItem.textContent = category.name;
       categoryItem.setAttribute("data-id", category.id);
       categoryListElement.appendChild(categoryItem);
-
-      // Tambahkan event listener untuk setiap kategori
+  
+      console.log("Added category:", category.name, "to", categoryListElement.id);
+  
+      // Tambahkan event listener
       categoryItem.addEventListener("click", (e) => {
         e.preventDefault();
         const categoryId = e.target.getAttribute("data-id");
-        const categoryName = category.name;
-        filterDataByCategory(categoryId, categoryName);
+        filterDataByCategory(categoryId, category.name);
       });
     });
-  }
+  }  
 
   // Fungsi untuk memfilter data berdasarkan kategori
   function filterDataByCategory(categoryId, categoryName) {
     console.log(`Filter data untuk kategori: ${categoryName} (ID: ${categoryId})`);
     welcomeText.textContent = `Menampilkan hasil untuk kategori: ${categoryName}`;
-
+  
     fetch(`https://kosconnect-server.vercel.app/api/categories/${categoryId}`, {
       method: "GET",
     })
@@ -152,18 +160,25 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .then((categoryData) => {
         console.log("Filtered data:", categoryData);
-
-        // Kosongkan menuGrid dan render data baru
+  
+        // Kosongkan menuGrid sebelum merender data baru
         menuGrid.innerHTML = "";
-        categoryData.items.forEach((item) => {
-          const itemElement = document.createElement("div");
-          itemElement.classList.add("menu-item");
-          itemElement.textContent = item.name; // Sesuaikan dengan struktur data
-          menuGrid.appendChild(itemElement);
-        });
+  
+        // Sesuaikan rendering berdasarkan struktur data
+        if (categoryData.items && Array.isArray(categoryData.items)) {
+          categoryData.items.forEach((item) => {
+            const itemElement = document.createElement("div");
+            itemElement.classList.add("menu-item");
+            itemElement.textContent = item.name; // Sesuaikan dengan struktur data
+            menuGrid.appendChild(itemElement);
+          });
+        } else {
+          console.warn("No items found in category data.");
+          menuGrid.innerHTML = `<p>No items available for ${categoryName}</p>`;
+        }
       })
       .catch((error) => console.error("Error filtering category data:", error));
-  }
+  }  
 
   // Panggil fetchCategories saat halaman dimuat
   fetchCategories();
