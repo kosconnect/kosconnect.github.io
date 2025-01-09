@@ -91,44 +91,56 @@ function register() {
   window.location.href = "https://kosconnect.github.io/register/";
 }
 
-// kategori
+// kategori 
 document.addEventListener("DOMContentLoaded", () => {
-  // Elemen kategori
-  const categoryList = document.getElementById("category-list");
+  const headerCategoryList = document.getElementById("category-list-header");
+  const loginCategoryList = document.getElementById("category-list-login");
+  const welcomeText = document.getElementById("welcome-text"); //ganti sesuai kategori aktif
+  const menuGrid = document.getElementById("menuGrid");
 
-  // Fetch kategori dari backend
-  fetch("https://kosconnect-server.vercel.app/api/categories/", {
-    method: "GET",
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Failed to fetch categories");
-      }
-      return response.json();
+  // Fungsi fetch data kategori
+  function fetchCategories() {
+    fetch("https://kosconnect-server.vercel.app/api/categories/", {
+      method: "GET",
     })
-    .then((categories) => {
-      // Render kategori ke dropdown
-      categories.forEach((category) => {
-        const categoryItem = document.createElement("a");
-        categoryItem.classList.add("dropdown-item");
-        categoryItem.textContent = category.name;
-        categoryItem.setAttribute("data-id", category.id); // Set ID untuk filter berdasarkan ID
-        categoryList.appendChild(categoryItem);
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch categories");
+        }
+        return response.json();
+      })
+      .then((categories) => {
+        // Render kategori ke header dan header-login
+        renderCategories(categories, headerCategoryList);
+        renderCategories(categories, loginCategoryList);
+      })
+      .catch((error) => console.error("Error fetching categories:", error));
+  }
 
-        // Tambahkan event listener untuk setiap kategori
-        categoryItem.addEventListener("click", (e) => {
-          e.preventDefault();
-          const categoryId = e.target.getAttribute("data-id");
-          filterDataByCategory(categoryId, category.name);
-        });
+  // Fungsi untuk merender kategori ke dropdown
+  function renderCategories(categories, categoryListElement) {
+    categories.forEach((category) => {
+      const categoryItem = document.createElement("a");
+      categoryItem.classList.add("dropdown-item");
+      categoryItem.textContent = category.name;
+      categoryItem.setAttribute("data-id", category.id);
+      categoryListElement.appendChild(categoryItem);
+
+      // Tambahkan event listener untuk setiap kategori
+      categoryItem.addEventListener("click", (e) => {
+        e.preventDefault();
+        const categoryId = e.target.getAttribute("data-id");
+        const categoryName = category.name;
+        filterDataByCategory(categoryId, categoryName);
       });
-    })
-    .catch((error) => console.error("Error fetching categories:", error));
+    });
+  }
 
   // Fungsi untuk memfilter data berdasarkan kategori
   function filterDataByCategory(categoryId, categoryName) {
     console.log(`Filter data untuk kategori: ${categoryName} (ID: ${categoryId})`);
-    // Fetch data berdasarkan ID kategori
+    welcomeText.textContent = `Menampilkan hasil untuk kategori: ${categoryName}`;
+
     fetch(`https://kosconnect-server.vercel.app/api/categories/${categoryId}`, {
       method: "GET",
     })
@@ -137,13 +149,24 @@ document.addEventListener("DOMContentLoaded", () => {
           throw new Error("Failed to fetch category data");
         }
         return response.json();
-      })    
+      })
       .then((categoryData) => {
         console.log("Filtered data:", categoryData);
-        // Lakukan manipulasi DOM untuk menampilkan data kategori sesuai kebutuhan
+
+        // Kosongkan menuGrid dan render data baru
+        menuGrid.innerHTML = "";
+        categoryData.items.forEach((item) => {
+          const itemElement = document.createElement("div");
+          itemElement.classList.add("menu-item");
+          itemElement.textContent = item.name; // Sesuaikan dengan struktur data
+          menuGrid.appendChild(itemElement);
+        });
       })
       .catch((error) => console.error("Error filtering category data:", error));
   }
+
+  // Panggil fetchCategories saat halaman dimuat
+  fetchCategories();
 });
 
 
