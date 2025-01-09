@@ -176,6 +176,83 @@ document.addEventListener("DOMContentLoaded", () => {
   fetchCategories();
 });
 
+// search-bar
+document.addEventListener("DOMContentLoaded", () => {
+  const menuGrid = document.getElementById("menuGrid");
+  const searchInput = document.getElementById("search-input");
+
+  // Data contoh untuk kos (bisa diganti dengan data dari API)
+  let kosData = [];
+
+  // Fungsi untuk memuat data kos (dari API atau data lokal)
+  function loadKosData() {
+    fetch("https://kosconnect-server.vercel.app/api/kos", {
+      method: "GET",
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch kos data");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        kosData = data; // Simpan data kos ke variabel global
+        renderKos(data); // Render semua data kos
+      })
+      .catch((error) => console.error("Error loading kos data:", error));
+  }
+
+  // Fungsi untuk merender kos ke menuGrid
+  function renderKos(data) {
+    menuGrid.innerHTML = ""; // Kosongkan menuGrid
+
+    if (data.length === 0) {
+      menuGrid.innerHTML = "<p>Tidak ada hasil yang ditemukan.</p>";
+      return;
+    }
+
+    data.forEach((kos) => {
+      const kosElement = document.createElement("div");
+      kosElement.classList.add("menu-item");
+
+      // Sesuaikan dengan struktur data kos Anda
+      kosElement.innerHTML = `
+        <h3>${kos.name}</h3>
+        <p>Alamat: ${kos.address}</p>
+        <p>Harga: Rp${kos.price}</p>
+      `;
+
+      menuGrid.appendChild(kosElement);
+    });
+  }
+
+  // Fungsi untuk pencarian berdasarkan input
+  function searchKos() {
+    const query = searchInput.value.toLowerCase();
+
+    // Filter kosData berdasarkan query
+    const filteredKos = kosData.filter((kos) => {
+      return (
+        kos.name.toLowerCase().includes(query) || // Nama kos
+        kos.address.toLowerCase().includes(query) || // Alamat kos
+        kos.price.toString().includes(query) // Harga kos
+      );
+    });
+
+    renderKos(filteredKos); // Render hasil pencarian
+  }
+
+  // Event listener untuk pencarian dengan tombol Enter
+  searchInput.addEventListener("keyup", (e) => {
+    if (e.key === "Enter") {
+      searchKos();
+    }
+  });
+
+  // Panggil fungsi untuk memuat data kos saat halaman dimuat
+  loadKosData();
+});
+
 
 // Data kamar kos
 const roomsData = [
