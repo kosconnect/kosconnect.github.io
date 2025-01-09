@@ -64,7 +64,17 @@
 
       <nav class="nav-links">
         <a href="index.html"><i class="fa fa-house"></i> Beranda</a>
-        <a href="#"><i class="fa-solid fa-list"></i></i> Kategori</a>
+        <div class="dropdown" id="dropdown-category">
+          <a href="#" class="profile-icon dropdown-toggle d-flex align-items-center mx-2" role="button">
+            <div class="d-flex align-items-center">
+              <i class="fa-solid fa-list"></i>
+              <span id="kategori">Kategori</span>
+            </div>
+          </a>
+          <div class="dropdown-category" id="category-list-login">
+            <!-- Kategori akan dimuat di sini -->
+          </div>
+        </div>
         <a href="booking.html"><i class="fa-solid fa-receipt"></i> Pemesanan</a>
         <div class="dropdown">
           <a href="#" class="profile-icon dropdown-toggle d-flex align-items-center mx-2" id="profileDropdown"
@@ -138,6 +148,7 @@
 
   <!-- Memanggil file JS -->
   <script type="module" src="js/booking.js"></script>
+  <script type="module" src="js/script.js"></script>
 </body>
 
 </html>
