@@ -119,30 +119,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Fungsi untuk merender kategori ke dropdown
   function renderCategories(categories, categoryListElement) {
-    if (!categoryListElement) {
-      console.error("Category list element not found:", categoryListElement);
-      return;
-    }
-  
-    categoryListElement.innerHTML = ""; // Bersihkan elemen sebelumnya
-  
     categories.forEach((category) => {
       const categoryItem = document.createElement("a");
       categoryItem.classList.add("dropdown-item");
       categoryItem.textContent = category.name;
       categoryItem.setAttribute("data-id", category.id);
       categoryListElement.appendChild(categoryItem);
-  
-      console.log("Added category:", category.name, "to", categoryListElement.id);
-  
-      // Tambahkan event listener
+
+      // Tambahkan event listener untuk setiap kategori
       categoryItem.addEventListener("click", (e) => {
         e.preventDefault();
         const categoryId = e.target.getAttribute("data-id");
-        filterDataByCategory(categoryId, category.name);
+        const categoryName = category.name;
+        filterDataByCategory(categoryId, categoryName);
       });
     });
-  }  
+  } 
 
   // Fungsi untuk memfilter data berdasarkan kategori
   function filterDataByCategory(categoryId, categoryName) {
