@@ -296,9 +296,11 @@
 }
 
 /* Hover Dropdown */
-#dropdown-category:hover .dropdown-category {
+#dropdown-category:hover .dropdown-category,
+#dropdown-category-login:hover .dropdown-category {
     display: block;
-  }
+}
+
   
 
 
