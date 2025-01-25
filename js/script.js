@@ -200,9 +200,9 @@ function renderRooms() {
           card.appendChild(image);
 
           // Kategori kamar
-          const category = document.createElement("p");
+          const category = document.createElement("h4");
           category.textContent = room.category_name;
-          category.className = "text-sm font-semibold text-gray-500 mb-2";
+          category.className = "text-sm mb-2";
           card.appendChild(category);
 
           // Nama kos/room
@@ -218,7 +218,7 @@ function renderRooms() {
 
           // Jumlah kamar tersedia dengan ikon
           const available = document.createElement("p");
-          available.innerHTML = `<i class="fas fa-door-open"></i> ${room.status} Kamar Tersedia`;
+          available.innerHTML = `<i class="fas fa-door-open"></i> ${room.status}`;
           card.appendChild(available);
 
           // Harga kamar
