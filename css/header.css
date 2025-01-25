@@ -273,7 +273,7 @@
     z-index: 1000;
 }
 
-.dropdown-category a {
+.dropdown-category button {
     display: flex;
     align-items: center;
     justify-content: end;
@@ -290,7 +290,7 @@
     transition: background-color 0.3s ease;
 }
 
-.dropdown-category a:hover {
+.dropdown-category button:hover {
     background-color: #20B2AA;
     color: #fff;
 }
