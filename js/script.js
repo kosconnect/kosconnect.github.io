@@ -90,7 +90,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const loginCategoryList = document.getElementById("category-list-login");
 
   // Dropdown kategori dan elemen lainnya
-  const dropdownCategoryContainer = document.querySelector("#dropdown-category .dropdown-category");
+  const dropdownCategoryContainer = document.querySelector(
+    "#dropdown-category .dropdown-category"
+  );
   const welcomeText = document.getElementById("welcome-text");
   const menuGrid = document.getElementById("menuGrid");
   const searchInput = document.getElementById("search-input");
@@ -193,101 +195,139 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  let allRoomsData = []; // Variabel global untuk menyimpan semua data kamar
+  // Fungsi untuk mengambil data kamar dari backend dan render ke halaman
+  function renderRooms() {
+    const menuGrid = document.getElementById("menuGrid");
+    menuGrid.innerHTML = ""; // Bersihkan elemen grid
+    fetch("https://kosconnect-server.vercel.app/api/rooms/home")
+      .then((response) => response.json())
+      .then((roomsData) => {
+        if (Array.isArray(roomsData)) {
+          menuGrid.innerHTML = ""; // Bersihkan grid sebelum menambahkan kartu baru
+          roomsData.forEach((room) => {
+            // Elemen kartu kamar
+            const card = document.createElement("div");
+            card.className = "room-card";
 
-// Fungsi untuk mengambil data kamar dari backend dan render ke halaman
-function renderRooms(data = null) {
-  const menuGrid = document.getElementById("menuGrid");
-  menuGrid.innerHTML = ""; // Bersihkan elemen grid
+            // Gambar kamar
+            const image = document.createElement("img");
+            image.src = room.images[0] || "placeholder-image-url.jpg"; // Gunakan placeholder jika tidak ada gambar
+            image.alt = room.room_name;
+            card.appendChild(image);
 
-  // Gunakan data dari parameter jika ada, atau gunakan data global
-  const roomsData = data || allRoomsData;
+            // Kategori kamar
+            const category = document.createElement("h4");
+            category.textContent = room.category_name;
+            category.className = "text-sm mb-2";
+            card.appendChild(category);
 
-  roomsData.forEach((room) => {
-    // Elemen kartu kamar
-    const card = document.createElement("div");
-    card.className = "room-card";
+            // Nama kos/room
+            const type = document.createElement("h3");
+            type.textContent = room.room_name;
+            type.className = "font-bold text-lg";
+            card.appendChild(type);
 
-    // Gambar kamar
-    const image = document.createElement("img");
-    image.src = room.images[0] || "placeholder-image-url.jpg"; // Gunakan placeholder jika tidak ada gambar
-    image.alt = room.room_name;
-    card.appendChild(image);
+            // Alamat dengan ikon
+            const address = document.createElement("p");
+            address.innerHTML = `<i class="fas fa-map-marker-alt"></i> ${room.address}`;
+            card.appendChild(address);
 
-    // Kategori kamar
-    const category = document.createElement("h4");
-    category.textContent = room.category_name;
-    category.className = "text-sm mb-2";
-    card.appendChild(category);
+            // Jumlah kamar tersedia dengan ikon
+            const available = document.createElement("p");
+            available.innerHTML = `<i class="fas fa-door-open"></i> ${room.status}`;
+            card.appendChild(available);
 
-    // Nama kos/room
-    const type = document.createElement("h3");
-    type.textContent = room.room_name;
-    type.className = "font-bold text-lg";
-    card.appendChild(type);
+            // Harga kamar
+            const price = document.createElement("p");
+            let priceText = "";
+            if (room.price.quarterly) {
+              priceText = `Rp ${room.price.quarterly.toLocaleString(
+                "id-ID"
+              )} / 3 bulan`;
+            } else if (room.price.monthly) {
+              priceText = `Rp ${room.price.monthly.toLocaleString(
+                "id-ID"
+              )} / bulan`;
+            } else if (room.price.semi_annual) {
+              priceText = `Rp ${room.price.semi_annual.toLocaleString(
+                "id-ID"
+              )} / 6 bulan`;
+            } else if (room.price.yearly) {
+              priceText = `Rp ${room.price.yearly.toLocaleString(
+                "id-ID"
+              )} / tahun`;
+            }
+            price.textContent = priceText;
+            price.className = "price";
+            card.appendChild(price);
 
-    // Alamat dengan ikon
-    const address = document.createElement("p");
-    address.innerHTML = `<i class="fas fa-map-marker-alt"></i> ${room.address}`;
-    card.appendChild(address);
+            // Tambahkan event listener untuk handle booking
+            card.addEventListener("click", () => handleBooking(room.owner_id));
 
-    // Jumlah kamar tersedia dengan ikon
-    const available = document.createElement("p");
-    available.innerHTML = `<i class="fas fa-door-open"></i> ${room.status}`;
-    card.appendChild(available);
+            // Tambahkan kartu ke grid
+            menuGrid.appendChild(card);
+          });
+        } else {
+          console.error("Data kamar tidak dalam format array");
+        }
+      })
+      .catch((error) => console.error("Error fetching rooms data:", error));
+  }
 
-    // Harga kamar
-    const price = document.createElement("p");
-    let priceText = "";
-    if (room.price.quarterly) {
-      priceText = `Rp ${room.price.quarterly.toLocaleString("id-ID")} / 3 bulan`;
-    } else if (room.price.monthly) {
-      priceText = `Rp ${room.price.monthly.toLocaleString("id-ID")} / bulan`;
-    } else if (room.price.semi_annual) {
-      priceText = `Rp ${room.price.semi_annual.toLocaleString("id-ID")} / 6 bulan`;
-    } else if (room.price.yearly) {
-      priceText = `Rp ${room.price.yearly.toLocaleString("id-ID")} / tahun`;
+  let allKosData = []; // Variabel untuk menyimpan data kos
+
+  // Ambil data kos dari API saat halaman dimuat
+  window.onload = async () => {
+    try {
+      const response = await fetch(
+        "https://kosconnect-server.vercel.app/api/rooms/home"
+      );
+      allKosData = await response.json();
+      tampilkanDataKos(allKosData); // Tampilkan semua kos saat halaman pertama kali dimuat
+    } catch (error) {
+      console.error("Gagal mengambil data:", error);
     }
-    price.textContent = priceText;
-    price.className = "price";
-    card.appendChild(price);
+  };
 
-    // Tambahkan event listener untuk handle booking
-    card.addEventListener("click", () => handleBooking(room.owner_id));
+  // Fungsi untuk mencari kos berdasarkan nama atau kategori
+  function searchKos() {
+    const query = document.getElementById("search-input").value.toLowerCase();
+    const filteredData = allKosData.filter(
+      (kos) =>
+        kos.room_name.toLowerCase().includes(query) ||
+        kos.category_name.toLowerCase().includes(query)
+    );
+    tampilkanDataKos(filteredData); // Tampilkan data yang sudah difilter
+  }
 
-    // Tambahkan kartu ke grid
-    menuGrid.appendChild(card);
-  });
-}
+  // Fungsi untuk menampilkan data kos di dalam #menuGrid
+  function tampilkanDataKos(data) {
+    const menuGridElement = document.getElementById("menuGrid");
+    menuGridElement.innerHTML = ""; // Kosongkan elemen grid sebelum menambahkan data baru
 
-// Fungsi untuk memuat data dari API saat halaman dimuat
-function loadRooms() {
-  fetch("https://kosconnect-server.vercel.app/api/rooms/home")
-    .then((response) => response.json())
-    .then((roomsData) => {
-      if (Array.isArray(roomsData)) {
-        allRoomsData = roomsData; // Simpan data kamar ke variabel global
-        renderRooms(); // Render semua kamar
-      } else {
-        console.error("Data kamar tidak dalam format array");
-      }
-    })
-    .catch((error) => console.error("Error fetching rooms data:", error));
-}
+    data.forEach((kos) => {
+      const kosElement = document.createElement("div");
+      kosElement.classList.add("menu-item");
+      kosElement.innerHTML = `
+      <h3>${kos.room_name}</h3>
+      <p>${kos.category_name}</p>
+      <img src="${kos.images[0]}" alt="${kos.room_name}" />
+      <p>Alamat: ${kos.address}</p>
+      <p>Status: ${kos.status}</p>
+      <p>Harga: Rp ${getPrice(kos.price)}</p>
+    `;
+      menuGridElement.appendChild(kosElement);
+    });
+  }
 
-// Fungsi untuk mencari kos berdasarkan nama atau kategori
-function searchKos() {
-  const query = document.getElementById("search-input").value.toLowerCase();
-  const filteredRooms = allRoomsData.filter((room) =>
-    room.room_name.toLowerCase().includes(query) ||
-    room.category_name.toLowerCase().includes(query)
-  );
-  renderRooms(filteredRooms); // Render hanya data yang sesuai dengan pencarian
-}
-
-// Panggil loadRooms saat halaman dimuat
-document.addEventListener("DOMContentLoaded", loadRooms);
-
+  // Fungsi untuk menentukan harga sesuai dengan pembayaran yang dipilih
+  function getPrice(price) {
+    if (price.monthly) return price.monthly;
+    if (price.quarterly) return price.quarterly;
+    if (price.semi_annual) return price.semi_annual;
+    if (price.yearly) return price.yearly;
+    return "Harga tidak tersedia";
+  }
 
   // Panggil fetchCategories dan renderRooms saat halaman dimuat
   fetchCategories();
