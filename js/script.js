@@ -1,3 +1,35 @@
+// Variabel global untuk menyimpan semua data kos
+let allKosData = [];
+// Elemen search input
+const searchInput = document.getElementById("search-input");
+if (searchInput) {
+  searchInput.addEventListener("input", searchKos); // Tambahkan event listener
+}
+
+// Ambil data kos dari API saat halaman dimuat
+window.onload = async () => {
+  try {
+    const response = await fetch(
+      "https://kosconnect-server.vercel.app/api/rooms/home"
+    );
+    allKosData = await response.json(); // Simpan data global
+    renderRooms(allKosData); // Render semua kos saat halaman dimuat
+  } catch (error) {
+    console.error("Gagal mengambil data:", error);
+  }
+};
+// Fungsi untuk membaca nilai cookie berdasarkan nama
+function getCookie(name) {
+  const cookies = document.cookie.split("; ");
+  for (let cookie of cookies) {
+    const [key, value] = cookie.split("=");
+    if (key === name) {
+      return decodeURIComponent(value);
+    }
+  }
+  return null;
+}
+
 // Fungsi untuk mencari kos berdasarkan nama atau kategori
 function searchKos() {
   const query = document.getElementById("search-input").value.toLowerCase(); // Ambil input pencarian
@@ -76,38 +108,6 @@ function renderRooms(rooms) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Variabel global untuk menyimpan semua data kos
-  let allKosData = [];
-  // Elemen search input
-  const searchInput = document.getElementById("search-input");
-  if (searchInput) {
-    searchInput.addEventListener("input", searchKos); // Tambahkan event listener
-  }
-
-  // Ambil data kos dari API saat halaman dimuat
-  window.onload = async () => {
-    try {
-      const response = await fetch(
-        "https://kosconnect-server.vercel.app/api/rooms/home"
-      );
-      allKosData = await response.json(); // Simpan data global
-      renderRooms(allKosData); // Render semua kos saat halaman dimuat
-    } catch (error) {
-      console.error("Gagal mengambil data:", error);
-    }
-  };
-  // Fungsi untuk membaca nilai cookie berdasarkan nama
-  function getCookie(name) {
-    const cookies = document.cookie.split("; ");
-    for (let cookie of cookies) {
-      const [key, value] = cookie.split("=");
-      if (key === name) {
-        return decodeURIComponent(value);
-      }
-    }
-    return null;
-  }
-
   // Ambil token dan role dari cookie
   const authToken = getCookie("authToken");
   const userRole = getCookie("userRole");
@@ -267,24 +267,24 @@ document.addEventListener("DOMContentLoaded", () => {
   // Panggil fetchCategories dan renderRooms saat halaman dimuat
   fetchCategories();
 });
-  // Fungsi untuk menangani booking
-  function handleBooking(ownerId) {
-    const authToken = getCookie("authToken"); // Ambil authToken dari cookie
-    if (!authToken) {
-      Swal.fire({
-        title: "Login Diperlukan",
-        text: "Anda harus login terlebih dahulu untuk melakukan pemesanan.",
-        icon: "warning",
-        confirmButtonText: "Login",
-        showCancelButton: true,
-        cancelButtonText: "Batal",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          window.location.href = "https://kosconnect.github.io/login/";
-        }
-      });
-    } else {
-      console.log("Booking oleh user untuk owner ID:", ownerId);
-      window.location.href = `https://kosconnect.github.io/booking/${ownerId}`;
-    }
+// Fungsi untuk menangani booking
+function handleBooking(ownerId) {
+  const authToken = getCookie("authToken"); // Ambil authToken dari cookie
+  if (!authToken) {
+    Swal.fire({
+      title: "Login Diperlukan",
+      text: "Anda harus login terlebih dahulu untuk melakukan pemesanan.",
+      icon: "warning",
+      confirmButtonText: "Login",
+      showCancelButton: true,
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = "https://kosconnect.github.io/login/";
+      }
+    });
+  } else {
+    console.log("Booking oleh user untuk owner ID:", ownerId);
+    window.location.href = `https://kosconnect.github.io/booking/${ownerId}`;
   }
+}
