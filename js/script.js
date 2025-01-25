@@ -64,11 +64,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // function deleteCookie(name) {
   //   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
   // }
-  
+
   // // Hapus cookie yang tidak diperlukan
   // deleteCookie("authToken"); // Optional: ganti jika ada cookie duplikat
   // deleteCookie("userRole");
-  
+
   // Logout button logic
   const logoutBtn = document.getElementById("logout-btn");
   if (logoutBtn) {
@@ -91,7 +91,7 @@ function register() {
   window.location.href = "https://kosconnect.github.io/register/";
 }
 
-// kategori 
+// kategori
 document.addEventListener("DOMContentLoaded", () => {
   const headerCategoryList = document.getElementById("category-list-header");
   const loginCategoryList = document.getElementById("category-list-login");
@@ -134,13 +134,15 @@ document.addEventListener("DOMContentLoaded", () => {
         filterDataByCategory(categoryId, categoryName);
       });
     });
-  } 
+  }
 
   // Fungsi untuk memfilter data berdasarkan kategori
   function filterDataByCategory(categoryId, categoryName) {
-    console.log(`Filter data untuk kategori: ${categoryName} (ID: ${categoryId})`);
+    console.log(
+      `Filter data untuk kategori: ${categoryName} (ID: ${categoryId})`
+    );
     welcomeText.textContent = `Menampilkan hasil untuk kategori: ${categoryName}`;
-  
+
     fetch(`https://kosconnect-server.vercel.app/api/categories/${categoryId}`, {
       method: "GET",
     })
@@ -152,10 +154,10 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .then((categoryData) => {
         console.log("Filtered data:", categoryData);
-  
+
         // Kosongkan menuGrid sebelum merender data baru
         menuGrid.innerHTML = "";
-  
+
         // Sesuaikan rendering berdasarkan struktur data
         if (categoryData.items && Array.isArray(categoryData.items)) {
           categoryData.items.forEach((item) => {
@@ -170,7 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       })
       .catch((error) => console.error("Error filtering category data:", error));
-  }  
+  }
 
   // Panggil fetchCategories saat halaman dimuat
   fetchCategories();
@@ -253,46 +255,45 @@ document.addEventListener("DOMContentLoaded", () => {
 //   loadKosData();
 // });
 
-
 // Data kamar kos
-const roomsData = [
-  {
-    id: 1,
-    category: "Kos Campur",
-    type: "Single Room",
-    address: "Jl. Mawar No. 10, Bandung",
-    availableRooms: 3,
-    price: 1000000,
-    image: "img/kamar1.jpeg",
-  },
-  {
-    id: 2,
-    category: "Kost Putri",
-    type: "Deluxe Room",
-    address: "Jl. Melati No. 5, Bandung",
-    availableRooms: 2,
-    price: 1500000,
-    image: "img/kamar1.jpeg",
-  },
-  {
-    id: 3,
-    category: "Kost Putra",
-    type: "VIP Room",
-    address: "Jl. Kenanga No. 8, Bandung",
-    availableRooms: 5,
-    price: 2000000,
-    image: "img/kamar1.jpeg",
-  },
-  {
-    id: 4,
-    category: "Kos Campur",
-    type: "Studio Room",
-    address: "Jl. Anggrek No. 3, Bandung",
-    availableRooms: 1,
-    price: 3000000,
-    image: "img/kamar1.jpeg",
-  },
-];
+// const roomsData = [
+//   {
+//     id: 1,
+//     category: "Kos Campur",
+//     type: "Single Room",
+//     address: "Jl. Mawar No. 10, Bandung",
+//     availableRooms: 3,
+//     price: 1000000,
+//     image: "img/kamar1.jpeg",
+//   },
+//   {
+//     id: 2,
+//     category: "Kost Putri",
+//     type: "Deluxe Room",
+//     address: "Jl. Melati No. 5, Bandung",
+//     availableRooms: 2,
+//     price: 1500000,
+//     image: "img/kamar1.jpeg",
+//   },
+//   {
+//     id: 3,
+//     category: "Kost Putra",
+//     type: "VIP Room",
+//     address: "Jl. Kenanga No. 8, Bandung",
+//     availableRooms: 5,
+//     price: 2000000,
+//     image: "img/kamar1.jpeg",
+//   },
+//   {
+//     id: 4,
+//     category: "Kos Campur",
+//     type: "Studio Room",
+//     address: "Jl. Anggrek No. 3, Bandung",
+//     availableRooms: 1,
+//     price: 3000000,
+//     image: "img/kamar1.jpeg",
+//   },
+// ];
 
 // Fungsi untuk merender kamar kos ke dalam menuGrid
 function renderRooms() {
@@ -306,18 +307,13 @@ function renderRooms() {
 
     // Gambar kamar
     const image = document.createElement("img");
-    image.src = room.image; // Ambil gambar dari data
-    image.alt = room.type; // Alt text untuk gambar
+    image.src = room.images[0]; // Ambil gambar pertama dari data
+    image.alt = room.room_name; // Alt text untuk gambar
     card.appendChild(image);
 
-    // Kategori kamar
-    const category = document.createElement("p");
-    category.textContent = `Kategori: ${room.category}`;
-    card.appendChild(category);
-
-    // Tipe kamar
+    // Nama kamar (gabungan nama kos dan tipe kamar)
     const type = document.createElement("h3");
-    type.textContent = room.type;
+    type.textContent = room.room_name;
     card.appendChild(type);
 
     // Alamat
@@ -325,35 +321,70 @@ function renderRooms() {
     address.textContent = `Alamat: ${room.address}`;
     card.appendChild(address);
 
+    // Kategori kamar
+    const category = document.createElement("p");
+    category.textContent = `Kategori: ${room.category}`;
+    card.appendChild(category);
+
     // Jumlah kamar tersedia
     const available = document.createElement("p");
-    available.textContent = `Jumlah Kamar Tersedia: ${room.availableRooms}`;
+    available.textContent = `Jumlah Kamar Tersedia: ${room.status}`;
     card.appendChild(available);
 
     // Harga kamar
     const price = document.createElement("p");
-    price.textContent = `Harga: Rp ${room.price.toLocaleString()} / bulan`;
+    let priceText = "";
+    if (room.price.quarterly) {
+      priceText = `Rp ${room.price.quarterly.toLocaleString(
+        "id-ID"
+      )} / 3 bulan`;
+    } else if (room.price.monthly) {
+      priceText = `Rp ${room.price.monthly.toLocaleString("id-ID")} / bulan`;
+    } else if (room.price.semi_annual) {
+      priceText = `Rp ${room.price.semi_annual.toLocaleString(
+        "id-ID"
+      )} / 6 bulan`;
+    } else if (room.price.yearly) {
+      priceText = `Rp ${room.price.yearly.toLocaleString("id-ID")} / tahun`;
+    } else {
+      priceText = "Harga tidak tersedia";
+    }
+    price.textContent = `Harga: ${priceText}`;
     card.appendChild(price);
 
     // Tombol Pesan
     const button = document.createElement("button");
     button.textContent = "Booking";
     button.className = "order-button";
-    button.onclick = () => {
-      Swal.fire({
-        title: "Login Diperlukan",
-        text: "Anda harus login terlebih dahulu untuk melakukan pemesanan.",
-        icon: "warning",
-        confirmButtonText: "Login",
-        showCancelButton: true,
-        cancelButtonText: "Batal",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          // Arahkan pengguna ke halaman login
-          window.location.href = "/auth/login.html";
-        }
-      });
+    button.onclick = (event) => {
+      event.stopPropagation(); // Hentikan event card onclick
+      handleBooking(room.ownerId);
     };
+
+    // Fungsi untuk menangani booking
+    function handleBooking(ownerId) {
+      const authToken = getCookie("authToken"); // Ambil authToken dari cookie
+      if (!authToken) {
+        Swal.fire({
+          title: "Login Diperlukan",
+          text: "Anda harus login terlebih dahulu untuk melakukan pemesanan.",
+          icon: "warning",
+          confirmButtonText: "Login",
+          showCancelButton: true,
+          cancelButtonText: "Batal",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            // Arahkan pengguna ke halaman login
+            window.location.href = "https://kosconnect.github.io/login/";
+          }
+        });
+      } else {
+        // Logic untuk pengguna yang sudah login
+        console.log("Booking oleh user untuk owner ID:", ownerId);
+        // Misal arahkan ke halaman detail booking
+        window.location.href = `https://kosconnect.github.io/booking/${ownerId}`;
+      }
+    }
     card.appendChild(button);
 
     // Tambahkan kartu ke grid
