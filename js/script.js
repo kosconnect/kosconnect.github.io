@@ -300,96 +300,104 @@ function renderRooms() {
   const menuGrid = document.getElementById("menuGrid");
   menuGrid.innerHTML = ""; // Bersihkan elemen grid
 
-  roomsData.forEach((room) => {
-    // Elemen kartu kamar
-    const card = document.createElement("div");
-    card.className = "room-card";
-
-    // Gambar kamar
-    const image = document.createElement("img");
-    image.src = room.images[0]; // Ambil gambar pertama dari data
-    image.alt = room.room_name; // Alt text untuk gambar
-    card.appendChild(image);
-
-    // Nama kamar (gabungan nama kos dan tipe kamar)
-    const type = document.createElement("h3");
-    type.textContent = room.room_name;
-    card.appendChild(type);
-
-    // Alamat
-    const address = document.createElement("p");
-    address.textContent = `Alamat: ${room.address}`;
-    card.appendChild(address);
-
-    // Kategori kamar
-    const category = document.createElement("p");
-    category.textContent = `Kategori: ${room.category}`;
-    card.appendChild(category);
-
-    // Jumlah kamar tersedia
-    const available = document.createElement("p");
-    available.textContent = `Jumlah Kamar Tersedia: ${room.status}`;
-    card.appendChild(available);
-
-    // Harga kamar
-    const price = document.createElement("p");
-    let priceText = "";
-    if (room.price.quarterly) {
-      priceText = `Rp ${room.price.quarterly.toLocaleString(
-        "id-ID"
-      )} / 3 bulan`;
-    } else if (room.price.monthly) {
-      priceText = `Rp ${room.price.monthly.toLocaleString("id-ID")} / bulan`;
-    } else if (room.price.semi_annual) {
-      priceText = `Rp ${room.price.semi_annual.toLocaleString(
-        "id-ID"
-      )} / 6 bulan`;
-    } else if (room.price.yearly) {
-      priceText = `Rp ${room.price.yearly.toLocaleString("id-ID")} / tahun`;
-    } else {
-      priceText = "Harga tidak tersedia";
-    }
-    price.textContent = `Harga: ${priceText}`;
-    card.appendChild(price);
-
-    // Tombol Pesan
-    const button = document.createElement("button");
-    button.textContent = "Booking";
-    button.className = "order-button";
-    button.onclick = (event) => {
-      event.stopPropagation(); // Hentikan event card onclick
-      handleBooking(room.ownerId);
-    };
-
-    // Fungsi untuk menangani booking
-    function handleBooking(ownerId) {
-      const authToken = getCookie("authToken"); // Ambil authToken dari cookie
-      if (!authToken) {
-        Swal.fire({
-          title: "Login Diperlukan",
-          text: "Anda harus login terlebih dahulu untuk melakukan pemesanan.",
-          icon: "warning",
-          confirmButtonText: "Login",
-          showCancelButton: true,
-          cancelButtonText: "Batal",
-        }).then((result) => {
-          if (result.isConfirmed) {
-            // Arahkan pengguna ke halaman login
-            window.location.href = "https://kosconnect.github.io/login/";
-          }
-        });
-      } else {
-        // Logic untuk pengguna yang sudah login
-        console.log("Booking oleh user untuk owner ID:", ownerId);
-        // Misal arahkan ke halaman detail booking
-        window.location.href = `https://kosconnect.github.io/booking/${ownerId}`;
+  // Ambil data dari backend
+  fetch("https://kosconnect-server.vercel.app/api/rooms/home")
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Gagal mengambil data kamar");
       }
-    }
-    card.appendChild(button);
+      return response.json();
+    })
+    .then((data) => {
+      const roomsData = data.rooms; // Sesuaikan dengan struktur respons backend
+      roomsData.forEach((room) => {
+        // Elemen kartu kamar
+        const card = document.createElement("div");
+        card.className = "room-card";
 
-    // Tambahkan kartu ke grid
-    menuGrid.appendChild(card);
-  });
+        // Gambar kamar
+        const image = document.createElement("img");
+        image.src = room.images[0]; // Ambil gambar pertama dari data
+        image.alt = room.room_name; // Alt text untuk gambar
+        card.appendChild(image);
+
+        // Nama kamar (gabungan nama kos dan tipe kamar)
+        const type = document.createElement("h3");
+        type.textContent = room.room_name;
+        card.appendChild(type);
+
+        // Alamat
+        const address = document.createElement("p");
+        address.textContent = `Alamat: ${room.address}`;
+        card.appendChild(address);
+
+        // Kategori kamar
+        const category = document.createElement("p");
+        category.textContent = `Kategori: ${room.category}`;
+        card.appendChild(category);
+
+        // Jumlah kamar tersedia
+        const available = document.createElement("p");
+        available.textContent = `Jumlah Kamar Tersedia: ${room.status}`;
+        card.appendChild(available);
+
+        // Harga kamar
+        const price = document.createElement("p");
+        let priceText = "";
+        if (room.price.quarterly) {
+          priceText = `Rp ${room.price.quarterly.toLocaleString(
+            "id-ID"
+          )} / 3 bulan`;
+        } else if (room.price.monthly) {
+          priceText = `Rp ${room.price.monthly.toLocaleString("id-ID")} / bulan`;
+        } else if (room.price.semi_annual) {
+          priceText = `Rp ${room.price.semi_annual.toLocaleString(
+            "id-ID"
+          )} / 6 bulan`;
+        } else if (room.price.yearly) {
+          priceText = `Rp ${room.price.yearly.toLocaleString("id-ID")} / tahun`;
+        }
+        price.textContent = `Harga: ${priceText}`;
+        card.appendChild(price);
+
+        // Tombol Pesan
+        const button = document.createElement("button");
+        button.textContent = "Pesan Sekarang";
+        button.className = "btn-booking";
+        button.addEventListener("click", () => handleBooking(room.owner_id));
+        card.appendChild(button);
+
+        // Tambahkan kartu ke grid
+        menuGrid.appendChild(card);
+      });
+    })
+    .catch((error) => {
+      console.error("Error saat mengambil data kamar:", error);
+    });
+}
+
+// Fungsi untuk menangani booking
+function handleBooking(ownerId) {
+  const authToken = getCookie("authToken"); // Ambil authToken dari cookie
+  if (!authToken) {
+    Swal.fire({
+      title: "Login Diperlukan",
+      text: "Anda harus login terlebih dahulu untuk melakukan pemesanan.",
+      icon: "warning",
+      confirmButtonText: "Login",
+      showCancelButton: true,
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // Arahkan pengguna ke halaman login
+        window.location.href = "https://kosconnect.github.io/login/";
+      }
+    });
+  } else {
+    console.log("Booking oleh user untuk owner ID:", ownerId);
+    // Misal arahkan ke halaman detail booking
+    window.location.href = `https://kosconnect.github.io/booking/${ownerId}`;
+  }
 }
 
 // Panggil fungsi untuk merender kamar saat halaman dimuat
