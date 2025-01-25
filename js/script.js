@@ -10,6 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     return null;
   }
+
   // Ambil token dan role dari cookie
   const authToken = getCookie("authToken");
   const userRole = getCookie("userRole");
@@ -18,6 +19,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const headerDefault = document.querySelector(".header");
   const headerLogin = document.querySelector(".header-login");
   const userNameElement = document.getElementById("user-name");
+  const loginBtn = document.getElementById("login-btn");
+  const registerBtn = document.getElementById("register-btn");
+  const logoutBtn = document.getElementById("logout-btn");
 
   // Logika mengganti header berdasarkan authToken
   if (authToken) {
@@ -38,7 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
         return response.json();
       })
       .then((data) => {
-        // Update nama pengguna di UI
         const user = data.user;
         if (user && user.fullname) {
           userNameElement.textContent = user.fullname;
@@ -51,7 +54,6 @@ document.addEventListener("DOMContentLoaded", () => {
       })
       .catch((error) => {
         console.error("Error fetching user data:", error);
-        // Fallback to userRole from cookie if available
         if (userRole) {
           userNameElement.textContent = userRole;
         }
@@ -60,16 +62,8 @@ document.addEventListener("DOMContentLoaded", () => {
     headerDefault.style.display = "block";
     headerLogin.style.display = "none";
   }
-  // function deleteCookie(name) {
-  //   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
-  // }
-
-  // // Hapus cookie yang tidak diperlukan
-  // deleteCookie("authToken"); // Optional: ganti jika ada cookie duplikat
-  // deleteCookie("userRole");
 
   // Logout button logic
-  const logoutBtn = document.getElementById("logout-btn");
   if (logoutBtn) {
     logoutBtn.addEventListener("click", () => {
       document.cookie =
@@ -80,196 +74,96 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-
-// Login and Register Redirect Functions
-function login() {
-  window.location.href = "https://kosconnect.github.io/login/";
-}
-
-function register() {
-  window.location.href = "https://kosconnect.github.io/register/";
-}
-
-// kategori
-document.addEventListener("DOMContentLoaded", () => {
-  const headerCategoryList = document.getElementById("category-list-header");
-  const loginCategoryList = document.getElementById("category-list-login");
-  const welcomeText = document.getElementById("welcome-text"); //ganti sesuai kategori aktif
-  const menuGrid = document.getElementById("menuGrid");
-
-  // Fungsi fetch data kategori
-  function fetchCategories() {
-    fetch("https://kosconnect-server.vercel.app/api/categories/", {
-      method: "GET",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch categories");
-        }
-        return response.json();
-      })
-      .then((categories) => {
-        // Render kategori ke header dan header-login
-        renderCategories(categories, headerCategoryList);
-        renderCategories(categories, loginCategoryList);
-      })
-      .catch((error) => console.error("Error fetching categories:", error));
-  }
-
-  // Fungsi untuk merender kategori ke dropdown
-  function renderCategories(categories, categoryListElement) {
-    categories.forEach((category) => {
-      const categoryItem = document.createElement("a");
-      categoryItem.classList.add("dropdown-item");
-      categoryItem.textContent = category.name;
-      categoryItem.setAttribute("data-id", category.id);
-      categoryListElement.appendChild(categoryItem);
-
-      // Tambahkan event listener untuk setiap kategori
-      categoryItem.addEventListener("click", (e) => {
-        e.preventDefault();
-        const categoryId = e.target.getAttribute("data-id");
-        const categoryName = category.name;
-        filterDataByCategory(categoryId, categoryName);
-      });
+  // Login button logic
+  if (loginBtn) {
+    loginBtn.addEventListener("click", () => {
+      window.location.href = "https://kosconnect.github.io/login/";
     });
   }
 
-  // Fungsi untuk memfilter data berdasarkan kategori
-  function filterDataByCategory(categoryId, categoryName) {
-    console.log(
-      `Filter data untuk kategori: ${categoryName} (ID: ${categoryId})`
-    );
-    welcomeText.textContent = `Menampilkan hasil untuk kategori: ${categoryName}`;
-
-    fetch(`https://kosconnect-server.vercel.app/api/categories/${categoryId}`, {
-      method: "GET",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch category data");
-        }
-        return response.json();
-      })
-      .then((categoryData) => {
-        console.log("Filtered data:", categoryData);
-
-        // Kosongkan menuGrid sebelum merender data baru
-        menuGrid.innerHTML = "";
-
-        // Sesuaikan rendering berdasarkan struktur data
-        if (categoryData.items && Array.isArray(categoryData.items)) {
-          categoryData.items.forEach((item) => {
-            const itemElement = document.createElement("div");
-            itemElement.classList.add("menu-item");
-            itemElement.textContent = item.name; // Sesuaikan dengan struktur data
-            menuGrid.appendChild(itemElement);
-          });
-        } else {
-          console.warn("No items found in category data.");
-          menuGrid.innerHTML = `<p>No items available for ${categoryName}</p>`;
-        }
-      })
-      .catch((error) => console.error("Error filtering category data:", error));
+  // Register button logic
+  if (registerBtn) {
+    registerBtn.addEventListener("click", () => {
+      window.location.href = "https://kosconnect.github.io/register/";
+    });
   }
 
-  // Panggil fetchCategories saat halaman dimuat
-  fetchCategories();
-});
+  // Fungsi untuk fetch kategori
+  async function fetchCategories() {
+    try {
+      const response = await fetch(
+        "https://kosconnect-server.vercel.app/api/categories"
+      );
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Failed to fetch categories");
 
-  // Fungsi untuk menangani booking
+      const categoryDropdown = document.getElementById("categoryDropdown");
+      categoryDropdown.innerHTML = '<option value="">All Categories</option>';
+      data.forEach((category) => {
+        const option = document.createElement("option");
+        option.value = category.name;
+        option.textContent = category.name;
+        categoryDropdown.appendChild(option);
+      });
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  }
+
+  // Fungsi untuk fetch rooms
+  async function fetchRooms() {
+    try {
+      const response = await fetch(
+        "https://kosconnect-server.vercel.app/api/rooms/home"
+      );
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || "Failed to fetch rooms");
+      displayRooms(data);
+    } catch (error) {
+      console.error("Error fetching rooms:", error);
+    }
+  }
+
+  // Fungsi untuk menampilkan rooms di UI
+  function displayRooms(rooms) {
+    const roomContainer = document.getElementById("roomContainer");
+    roomContainer.innerHTML = ""; // Clear previous rooms
+    rooms.forEach((room) => {
+      const roomCard = document.createElement("div");
+      roomCard.className = "room-card";
+      roomCard.innerHTML = `
+        <img src="${room.images[0] || 'placeholder-image-url.jpg'}" alt="${room.room_name}">
+        <h3>${room.room_name}</h3>
+        <p>${room.description}</p>
+        <p><strong>Price:</strong> ${room.price}</p>
+        <p><strong>Category:</strong> ${room.category_name}</p>
+      `;
+      roomCard.addEventListener("click", () => handleBooking(room.owner_id));
+      roomContainer.appendChild(roomCard);
+    });
+  }
+
+  // Fungsi booking
   function handleBooking(ownerId) {
-    const authToken = getCookie("authToken"); // Ambil authToken dari cookie
     if (!authToken) {
       Swal.fire({
-        title: "Login Diperlukan",
-        text: "Anda harus login terlebih dahulu untuk melakukan pemesanan.",
+        title: "Login Required",
+        text: "You must log in first to book a room.",
         icon: "warning",
         confirmButtonText: "Login",
         showCancelButton: true,
-        cancelButtonText: "Batal",
+        cancelButtonText: "Cancel",
       }).then((result) => {
         if (result.isConfirmed) {
           window.location.href = "https://kosconnect.github.io/login/";
         }
       });
     } else {
-      console.log("Booking oleh user untuk owner ID:", ownerId);
       window.location.href = `https://kosconnect.github.io/booking/${ownerId}`;
     }
   }
 
-  // Fungsi untuk mengambil data kamar dari backend dan render ke halaman
-  function renderRooms() {
-    const menuGrid = document.getElementById("menuGrid");
-    menuGrid.innerHTML = ""; // Bersihkan elemen grid
-    fetch("https://kosconnect-server.vercel.app/api/rooms/home")
-      .then((response) => response.json())
-      .then((roomsData) => {
-        if (Array.isArray(roomsData)) {
-          menuGrid.innerHTML = ""; // Bersihkan grid sebelum menambahkan kartu baru
-          roomsData.forEach((room) => {
-            // Elemen kartu kamar
-            const card = document.createElement("div");
-            card.className = "room-card";
-
-            // Gambar kamar
-            const image = document.createElement("img");
-            image.src = room.images[0] || "placeholder-image-url.jpg"; // Gunakan placeholder jika tidak ada gambar
-            image.alt = room.room_name;
-            card.appendChild(image);
-
-            // Kategori kamar
-            const category = document.createElement("h4");
-            category.textContent = room.category_name;
-            category.className = "text-sm mb-2";
-            card.appendChild(category);
-
-            // Nama kos/room
-            const type = document.createElement("h3");
-            type.textContent = room.room_name;
-            type.className = "font-bold text-lg";
-            card.appendChild(type);
-
-            // Alamat dengan ikon
-            const address = document.createElement("p");
-            address.innerHTML = `<i class="fas fa-map-marker-alt"></i> ${room.address}`;
-            card.appendChild(address);
-
-            // Jumlah kamar tersedia dengan ikon
-            const available = document.createElement("p");
-            available.innerHTML = `<i class="fas fa-door-open"></i> ${room.status}`;
-            card.appendChild(available);
-
-            // Harga kamar
-            const price = document.createElement("p");
-            let priceText = "";
-            if (room.price.quarterly) {
-              priceText = `Rp ${room.price.quarterly.toLocaleString("id-ID")}`;
-            } else if (room.price.monthly) {
-              priceText = `Rp ${room.price.monthly.toLocaleString("id-ID")}`;
-            } else if (room.price.semi_annual) {
-              priceText = `Rp ${room.price.semi_annual.toLocaleString("id-ID")}`;
-            } else if (room.price.yearly) {
-              priceText = `Rp ${room.price.yearly.toLocaleString("id-ID")}`;
-            }
-            price.textContent = priceText;
-            price.className = "price";
-            card.appendChild(price);
-
-            // Tambahkan event listener untuk handle booking
-            card.addEventListener("click", () => handleBooking(room.owner_id));
-
-            // Tambahkan kartu ke grid
-            menuGrid.appendChild(card);
-          });
-        } else {
-          console.error("Data kamar tidak dalam format array");
-        }
-      })
-      .catch((error) => console.error("Error fetching rooms data:", error));
-  }
-
-  // Panggil fungsi untuk merender kamar saat halaman dimuat
-  renderRooms();
+  // Initialize categories and rooms
+  fetchCategories();
+  fetchRooms();
 });
