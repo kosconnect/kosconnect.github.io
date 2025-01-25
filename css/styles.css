@@ -85,10 +85,10 @@ h2 {
     color: #1b3446;
 }
 .room-card h4 {
-    font-size: 12px;
-    font-weight: 500;
+    font-size: 14px;
+    font-weight: 600;
     margin: 10px 0;
-    color: #1b3446;
+    color: #20B2AA;
 }
 
 .room-card p {
@@ -118,7 +118,7 @@ h2 {
 .room-card .price {
  font-weight: bold;
  font-size: large;
- color: #20B2AA;
+ color: #005f73;
 }
 
 /* Tablet (max-width: 768px) */
