@@ -167,46 +167,76 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 
-  // Render data kamar
-  function renderRooms(roomsData) {
-    menuGrid.innerHTML = "";
-    if (roomsData && Array.isArray(roomsData)) {
-      roomsData.forEach((room) => {
-        const card = document.createElement("div");
-        card.className = "room-card";
+  // Fungsi untuk mengambil data kamar dari backend dan render ke halaman
+  function renderRooms() {
+    const menuGrid = document.getElementById("menuGrid");
+    menuGrid.innerHTML = ""; // Bersihkan elemen grid
+    fetch("https://kosconnect-server.vercel.app/api/rooms/home")
+      .then((response) => response.json())
+      .then((roomsData) => {
+        if (Array.isArray(roomsData)) {
+          menuGrid.innerHTML = ""; // Bersihkan grid sebelum menambahkan kartu baru
+          roomsData.forEach((room) => {
+            // Elemen kartu kamar
+            const card = document.createElement("div");
+            card.className = "room-card";
 
-        const image = document.createElement("img");
-        image.src = room.images[0] || "placeholder-image-url.jpg";
-        image.alt = room.room_name;
-        card.appendChild(image);
+            // Gambar kamar
+            const image = document.createElement("img");
+            image.src = room.images[0] || "placeholder-image-url.jpg"; // Gunakan placeholder jika tidak ada gambar
+            image.alt = room.room_name;
+            card.appendChild(image);
 
-        const category = document.createElement("h4");
-        category.textContent = room.category_name;
-        category.className = "text-sm mb-2";
-        card.appendChild(category);
+            // Kategori kamar
+            const category = document.createElement("h4");
+            category.textContent = room.category_name;
+            category.className = "text-sm mb-2";
+            card.appendChild(category);
 
-        const type = document.createElement("h3");
-        type.textContent = room.room_name;
-        type.className = "font-bold text-lg";
-        card.appendChild(type);
+            // Nama kos/room
+            const type = document.createElement("h3");
+            type.textContent = room.room_name;
+            type.className = "font-bold text-lg";
+            card.appendChild(type);
 
-        const address = document.createElement("p");
-        address.innerHTML = `<i class="fas fa-map-marker-alt"></i> ${room.address}`;
-        card.appendChild(address);
+            // Alamat dengan ikon
+            const address = document.createElement("p");
+            address.innerHTML = `<i class="fas fa-map-marker-alt"></i> ${room.address}`;
+            card.appendChild(address);
 
-        const price = document.createElement("p");
-        price.textContent = `Rp ${room.price.monthly.toLocaleString("id-ID")}`;
-        card.className = "price";
-        card.appendChild(price);
+            // Jumlah kamar tersedia dengan ikon
+            const available = document.createElement("p");
+            available.innerHTML = `<i class="fas fa-door-open"></i> ${room.status}`;
+            card.appendChild(available);
 
-        card.addEventListener("click", () => handleBooking(room.owner_id));
-        menuGrid.appendChild(card);
-      });
-    } else {
-      menuGrid.innerHTML = "<p>No rooms available</p>";
-    }
+            // Harga kamar
+            const price = document.createElement("p");
+            let priceText = "";
+            if (room.price.quarterly) {
+              priceText = `Rp ${room.price.quarterly.toLocaleString("id-ID")}`;
+            } else if (room.price.monthly) {
+              priceText = `Rp ${room.price.monthly.toLocaleString("id-ID")}`;
+            } else if (room.price.semi_annual) {
+              priceText = `Rp ${room.price.semi_annual.toLocaleString("id-ID")}`;
+            } else if (room.price.yearly) {
+              priceText = `Rp ${room.price.yearly.toLocaleString("id-ID")}`;
+            }
+            price.textContent = priceText;
+            price.className = "price";
+            card.appendChild(price);
+
+            // Tambahkan event listener untuk handle booking
+            card.addEventListener("click", () => handleBooking(room.owner_id));
+
+            // Tambahkan kartu ke grid
+            menuGrid.appendChild(card);
+          });
+        } else {
+          console.error("Data kamar tidak dalam format array");
+        }
+      })
+      .catch((error) => console.error("Error fetching rooms data:", error));
   }
-
   // Fungsi untuk mencari kamar berdasarkan nama
   if (searchInput) {
     searchInput.addEventListener("input", (e) => {
