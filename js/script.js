@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const loginCategoryList = document.getElementById("category-list-login");
   const welcomeText = document.getElementById("welcome-text");
   const menuGrid = document.getElementById("menuGrid");
-  const searchInput = document.getElementById("searchInput");
+  const searchInput = document.getElementById("search-input");
 
   // Fungsi untuk mengambil data kategori
   function fetchCategories() {
@@ -269,37 +269,8 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch((error) => console.error("Error fetching rooms data:", error));
   }
 
-  // Fungsi untuk merender kamar ke elemen menuGrid
-  function renderRooms(rooms) {
-    const menuGrid = document.getElementById("menuGrid");
-    menuGrid.innerHTML = ""; // Bersihkan elemen menuGrid sebelum menampilkan hasil pencarian
-
-    if (rooms.length === 0) {
-      menuGrid.innerHTML = "<p>Tidak ada hasil ditemukan.</p>";
-      return;
-    }
-
-    rooms.forEach((room) => {
-      const roomCard = document.createElement("div");
-      roomCard.className = "room-card";
-
-      roomCard.innerHTML = `
-      <h3>${room.room_name}</h3>
-      <p>${room.address}</p>
-      <p>Harga: ${Object.values(room.price)[0]} / ${
-        Object.keys(room.price)[0]
-      }</p>
-      <p>Kategori: ${room.category_name}</p>
-      <p>Status: ${room.status}</p>
-    `;
-
-      menuGrid.appendChild(roomCard);
-    });
-  }
-
   // Fungsi untuk mencari kamar berdasarkan semua atribut
   function searchKos() {
-    const searchInput = document.getElementById("search-input");
     const query = searchInput.value.toLowerCase().trim();
 
     if (!query) {
@@ -327,37 +298,10 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch((error) => console.error("Error searching rooms:", error));
   }
 
-  // Fungsi untuk mengambil semua data kamar
-  function fetchRooms() {
-    fetch("https://kosconnect-server.vercel.app/api/rooms/home")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Gagal mengambil data kamar.");
-        }
-        return response.json();
-      })
-      .then((rooms) => renderRooms(rooms))
-      .catch((error) => console.error("Error fetching rooms:", error));
+  // Menambahkan event listener untuk input pencarian
+  if (searchInput) {
+    searchInput.addEventListener("input", searchKos); // Panggil searchKos saat ada input
   }
-
-  // Event listener untuk pencarian
-  document.addEventListener("DOMContentLoaded", () => {
-    const searchInput = document.getElementById("search-input");
-
-    // Ambil semua data kamar saat halaman dimuat
-    fetchRooms();
-
-    // Event listener untuk pencarian dengan tombol
-    const searchButton = document.querySelector(".search-button");
-    searchButton.addEventListener("click", searchKos);
-
-    // Event listener untuk pencarian dengan tombol Enter
-    searchInput.addEventListener("keydown", (e) => {
-      if (e.key === "Enter") {
-        searchKos();
-      }
-    });
-  });
 
   // Panggil fetchCategories dan renderRooms saat halaman dimuat
   fetchCategories();
