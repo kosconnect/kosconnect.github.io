@@ -182,13 +182,12 @@ document.addEventListener("DOMContentLoaded", () => {
 function renderRooms() {
   const menuGrid = document.getElementById("menuGrid");
   menuGrid.innerHTML = ""; // Bersihkan elemen grid
-
-  // Mengambil data kamar dari backend
   fetch("https://kosconnect-server.vercel.app/api/rooms/home")
-    .then((response) => response.json()) // Parse response sebagai JSON
+    .then((response) => response.json())
     .then((roomsData) => {
       if (Array.isArray(roomsData)) {
-        // Pastikan data yang diterima adalah array
+        const menuGrid = document.querySelector(".menu-grid"); // Elemen grid kartu
+        menuGrid.innerHTML = ""; // Bersihkan grid sebelum menambahkan kartu baru
         roomsData.forEach((room) => {
           // Elemen kartu kamar
           const card = document.createElement("div");
@@ -196,56 +195,52 @@ function renderRooms() {
 
           // Gambar kamar
           const image = document.createElement("img");
-          image.src = room.images[0]; // Ambil gambar pertama dari data
-          image.alt = room.room_name; // Alt text untuk gambar
+          image.src = room.images[0] || "placeholder-image-url.jpg"; // Gunakan placeholder jika tidak ada gambar
+          image.alt = room.room_name;
           card.appendChild(image);
-
-          // Nama kamar (gabungan nama kos dan tipe kamar)
-          const type = document.createElement("h3");
-          type.textContent = room.room_name;
-          card.appendChild(type);
-
-          // Alamat
-          const address = document.createElement("p");
-          address.textContent = `Alamat: ${room.address}`;
-          card.appendChild(address);
 
           // Kategori kamar
           const category = document.createElement("p");
-          category.textContent = `Kategori: ${room.category_name}`;
+          category.textContent = room.category_name;
+          category.className = "text-sm font-semibold text-gray-500 mb-2";
           card.appendChild(category);
 
-          // Jumlah kamar tersedia
+          // Nama kos/room
+          const type = document.createElement("h3");
+          type.textContent = room.room_name;
+          type.className = "font-bold text-lg";
+          card.appendChild(type);
+
+          // Alamat dengan ikon
+          const address = document.createElement("p");
+          address.innerHTML = `<i class="fas fa-map-marker-alt"></i> ${room.address}`;
+          card.appendChild(address);
+
+          // Jumlah kamar tersedia dengan ikon
           const available = document.createElement("p");
-          available.textContent = `Jumlah Kamar Tersedia: ${room.status}`;
+          available.innerHTML = `<i class="fas fa-door-open"></i> ${room.status} Kamar Tersedia`;
           card.appendChild(available);
 
           // Harga kamar
           const price = document.createElement("p");
           let priceText = "";
           if (room.price.quarterly) {
-            priceText = `Rp ${room.price.quarterly.toLocaleString(
-              "id-ID"
-            )} / 3 bulan`;
+            priceText = `Rp ${room.price.quarterly.toLocaleString("id-ID")}`;
           } else if (room.price.monthly) {
-            priceText = `Rp ${room.price.monthly.toLocaleString(
-              "id-ID"
-            )} / bulan`;
+            priceText = `Rp ${room.price.monthly.toLocaleString("id-ID")}`;
           } else if (room.price.semi_annual) {
-            priceText = `Rp ${room.price.semi_annual.toLocaleString(
-              "id-ID"
-            )} / 6 bulan`;
+            priceText = `Rp ${room.price.semi_annual.toLocaleString("id-ID")}`;
           } else if (room.price.yearly) {
-            priceText = `Rp ${room.price.yearly.toLocaleString(
-              "id-ID"
-            )} / tahun`;
+            priceText = `Rp ${room.price.yearly.toLocaleString("id-ID")}`;
           }
-          price.textContent = `Harga: ${priceText}`;
+          price.textContent = priceText;
+          price.className = "price"; //text-lg font-bold text-green-700
           card.appendChild(price);
 
           // Tombol Pesan
           const button = document.createElement("button");
           button.textContent = "Pesan Sekarang";
+          button.className = "order-button";
           button.onclick = () => handleBooking(room.owner_id);
           card.appendChild(button);
 
