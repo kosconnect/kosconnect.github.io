@@ -12,34 +12,45 @@ function renderOrderCards(orders) {
   orderHistoryElement.innerHTML = "";
 
   if (orders.length === 0) {
-    orderHistoryElement.innerHTML = "<p>Tidak ada transaksi yang ditemukan.</p>";
+    orderHistoryElement.innerHTML =
+      "<p>Tidak ada transaksi yang ditemukan.</p>";
     return;
   }
 
   // Render setiap transaksi
   orders.forEach((order) => {
-    const formattedCheckInDate = new Date(order.check_in_date).toLocaleDateString("id-ID", {
+    const formattedCheckInDate = new Date(
+      order.check_in_date
+    ).toLocaleDateString("id-ID", {
       day: "2-digit",
       month: "long",
       year: "numeric",
     });
 
-    const formattedCreatedAt = new Date(order.created_at).toLocaleDateString("id-ID", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
+    const formattedCreatedAt = new Date(order.created_at).toLocaleDateString(
+      "id-ID",
+      {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      }
+    );
 
-    const formattedUpdatedAt = new Date(order.updated_at).toLocaleDateString("id-ID", {
-      day: "2-digit",
-      month: "2-digit",
-      year: "numeric",
-    });
+    const formattedUpdatedAt = new Date(order.updated_at).toLocaleDateString(
+      "id-ID",
+      {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      }
+    );
 
     const customFacilities = order.custom_facilities
       .map(
         (facility) =>
-          `<p>${facility.name} <span>- Rp${facility.price.toLocaleString("id-ID")}</span></p>`
+          `<p>${facility.name} <span>- Rp${facility.price.toLocaleString(
+            "id-ID"
+          )}</span></p>`
       )
       .join("");
 
@@ -50,7 +61,8 @@ function renderOrderCards(orders) {
       deny: "Ditolak atau Gagal",
     };
 
-    const paymentStatus = paymentStatusMap[order.payment_status] || "Tidak Diketahui";
+    const paymentStatus =
+      paymentStatusMap[order.payment_status] || "Tidak Diketahui";
 
     // Buat elemen order-card
     const card = document.createElement("div");
@@ -146,17 +158,23 @@ function setStatusIcons() {
 
 // Ambil data kos saat halaman dimuat
 window.onload = async () => {
-    try {
-      const response = await fetch(
-        "https://kosconnect-server.vercel.app/api/rooms/home"
-      );
-      allKosData = await response.json();
-      renderOrderCards(allOrderData);
-  
-      const authToken = getCookie("authToken");
-      const userRole = getCookie("userRole");
-      renderHeader(authToken, userRole);
-    } catch (error) {
-      console.error("Gagal mengambil data:", error);
-    }
-  };
+  try {
+    const response = await fetch(
+      `https://kosconnect-server.vercel.app/api/transaction/user/${userID}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    allKosData = await response.json();
+    renderOrderCards(allOrderData);
+
+    const authToken = getCookie("authToken");
+    const userRole = getCookie("userRole");
+    renderHeader(authToken, userRole);
+  } catch (error) {
+    console.error("Gagal mengambil data:", error);
+  }
+};
