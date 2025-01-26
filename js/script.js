@@ -222,13 +222,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Kategori dan Search
   // Dropdown kategori dan elemen lainnya
-  const dropdownCategoryContainer = document.querySelector(
-    "#dropdown-category .dropdown-category"
-  );
   const welcomeText = document.getElementById("welcome-text");
+  let isFetchingCategories = false;
 
   // Fungsi untuk mengambil data kategori
   function fetchCategories() {
+    if (isFetchingCategories) return; // Cegah permintaan ulang
+    isFetchingCategories = true;
+  
     fetch("https://kosconnect-server.vercel.app/api/categories/", {
       method: "GET",
     })
@@ -248,8 +249,13 @@ document.addEventListener("DOMContentLoaded", () => {
       .catch((error) => console.error("Error fetching categories:", error));
   }
 
-  // Fungsi untuk merender kategori ke dropdown
   function renderCategories(categories) {
+    const dropdownCategoryContainer = document.querySelector("#category-list-header");
+    if (!dropdownCategoryContainer) {
+      console.error("Dropdown category container not found!");
+      return;
+    }
+  
     dropdownCategoryContainer.innerHTML = ""; // Bersihkan dropdown terlebih dahulu
     categories.forEach((category) => {
       const categoryLink = document.createElement("a");
@@ -263,6 +269,7 @@ document.addEventListener("DOMContentLoaded", () => {
       dropdownCategoryContainer.appendChild(categoryLink);
     });
   }
+  
 
   // Filter data berdasarkan kategori
   function filterDataByCategory(categoryId, categoryName) {
