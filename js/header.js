@@ -132,7 +132,7 @@ function renderLoggedInMenu(fullName) {
            <!-- Kategori akan dimuat di sini -->
          </div>
        </div>
-       <a href="booking.html"><i class="fa-solid fa-receipt"></i> Pemesanan</a>
+       <a href="history.html"><i class="fa-solid fa-receipt"></i> Pemesanan</a>
        <div class="dropdown">
          <a href="#" class="profile-icon dropdown-toggle d-flex align-items-center mx-2" id="profileDropdown" role="button">
            <div class="d-flex align-items-center">
