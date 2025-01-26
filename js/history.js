@@ -31,8 +31,10 @@ function renderOrderCards(orders) {
       "id-ID",
       {
         day: "2-digit",
-        month: "2-digit",
+        month: "long",
         year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
       }
     );
 
@@ -42,6 +44,8 @@ function renderOrderCards(orders) {
         day: "2-digit",
         month: "2-digit",
         year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
       }
     );
 
@@ -64,6 +68,21 @@ function renderOrderCards(orders) {
     const paymentStatus =
       paymentStatusMap[order.payment_status] || "Tidak Diketahui";
 
+    let paymentMethodElement = "";
+    if (
+      order.payment_status === "settlement" ||
+      order.payment_status === "deny"
+    ) {
+      paymentMethodElement = `<p><strong>Metode Pembayaran:</strong> ${order.payment_method}</p>`;
+    }
+
+    let updatedAtElement = "";
+    if (
+      new Date(order.updated_at).toISOString().slice(0, 16) !==
+      new Date(order.created_at).toISOString().slice(0, 16)
+    ) {
+      updatedAtElement = `<p class="updated-at">Diupdate: ${formattedUpdatedAt}</p>`;
+    }
     // Buat elemen order-card
     const card = document.createElement("div");
     card.className = "order-card";
@@ -72,19 +91,20 @@ function renderOrderCards(orders) {
       <div class="left-section">
         <div class="left-header">
           <h4 class="order-title">Kode Transaksi: ${order.transaction_code}</h4>
-          <p class="order-date">Tanggal Check-in: ${formattedCheckInDate}</p>
+          <p class="created-at">Dibuat: ${formattedCreatedAt}</p>
         </div>
         <div class="order-details">
           <p><strong>Nama Pemesan:</strong> ${order.personal_info.full_name}</p>
-          <p><strong>Alamat:</strong> ${order.personal_info.address}</p>
+          <p><strong>Email:</strong> ${order.personal_info.email}</p>
           <p><strong>Nomor HP:</strong> ${order.personal_info.phone_number}</p>
-          <p><strong>Metode Pembayaran:</strong> ${order.payment_method}</p>
+          <p><strong>Alamat:</strong> ${order.personal_info.address}</p>
+          <p class="order-date">Tanggal Check-in: ${formattedCheckInDate}</p>
+          ${paymentMethodElement} <!-- Hanya ditampilkan jika status settlement atau deny -->
           <p><strong>Fasilitas Custom:</strong></p>
           ${customFacilities}
         </div>
         <p class="total">Total: Rp${order.total.toLocaleString("id-ID")}</p>
-        <p class="created-at">Dibuat: ${formattedCreatedAt}</p>
-        <p class="updated-at">Diupdate: ${formattedUpdatedAt}</p>
+         ${updatedAtElement} <!-- Hanya ditampilkan jika waktu updated_at berbeda dengan created_at -->
       </div>
       <div class="right-section" data-status="${order.payment_status}">
         <i class="status-icon"></i>
