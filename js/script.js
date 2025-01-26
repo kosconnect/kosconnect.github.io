@@ -41,6 +41,86 @@ function searchKos() {
   renderRooms(filteredData); // Render hasil pencarian
 }
 
+// Fungsi untuk menangani data kategori
+function renderCategories(categories) {
+  const dropdownCategoryContainer = document.querySelector("#category-list-header");
+  if (!dropdownCategoryContainer) {
+    console.error("Dropdown category container not found!");
+    return;
+  }
+
+  dropdownCategoryContainer.innerHTML = ""; // Bersihkan dropdown terlebih dahulu
+  categories.forEach((category) => {
+    const categoryLink = document.createElement("a");
+    categoryLink.textContent = category.name;
+    categoryLink.dataset.categoryId = category.category_id; // Simpan ID kategori di dataset
+    categoryLink.href = "#";
+    categoryLink.addEventListener("click", (e) => {
+      e.preventDefault(); // Cegah reload halaman
+      filterDataByCategory(category.category_id, category.name);
+    });
+    dropdownCategoryContainer.appendChild(categoryLink);
+  });
+}
+
+function fetchCategories() {
+  fetch("https://kosconnect-server.vercel.app/api/categories/", {
+    method: "GET",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to fetch categories");
+      }
+      return response.json();
+    })
+    .then((categories) => {
+      if (categories && categories.length > 0) {
+        renderCategories(categories);
+      } else {
+        console.error("No categories found");
+      }
+    })
+    .catch((error) => console.error("Error fetching categories:", error));
+}
+
+function filterDataByCategory(categoryId, categoryName) {
+  if (!categoryId) {
+    console.error("Invalid categoryId passed to filterDataByCategory");
+    return;
+  }
+
+  // Perbarui teks sambutan
+  welcomeText.textContent = `Menampilkan hasil untuk kategori: ${categoryName}`;
+
+  // Fetch semua data kamar dari endpoint rooms/home
+  fetch("https://kosconnect-server.vercel.app/api/rooms/home", {
+    method: "GET",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to fetch rooms data");
+      }
+      return response.json();
+    })
+    .then((rooms) => {
+      // Filter data kamar berdasarkan category_id
+      const filteredRooms = rooms.filter(
+        (room) => room.category_id === categoryId
+      );
+
+      if (filteredRooms.length > 0) {
+        renderRooms(filteredRooms);
+      } else {
+        console.warn("No rooms found for the selected category");
+        welcomeText.textContent = `Tidak ada kamar yang ditemukan untuk kategori: ${categoryName}`;
+        renderRooms([]); // Bersihkan tampilan jika tidak ada kamar
+      }
+    })
+    .catch((error) =>
+      console.error("Error filtering rooms by category:", error)
+    );
+}
+
 // Fungsi untuk merender kamar ke halaman
 function renderRooms(rooms) {
   const menuGrid = document.getElementById("menuGrid");
@@ -157,8 +237,10 @@ document.addEventListener("DOMContentLoaded", () => {
         window.location.reload();
       });
     }
-    // Panggil kembali fetchCategories untuk menampilkan kategori
-    fetchCategories();
+    // Pastikan fetchCategories dipanggil setelah elemen dimasukkan ke DOM
+    setTimeout(() => {
+      fetchCategories();
+    }, 0);
   };
 
   // Logika mengganti elemen berdasarkan authToken
@@ -223,92 +305,88 @@ document.addEventListener("DOMContentLoaded", () => {
   // Kategori dan Search
   // Dropdown kategori dan elemen lainnya
   const welcomeText = document.getElementById("welcome-text");
-  let isFetchingCategories = false;
-
   // Fungsi untuk mengambil data kategori
-  function fetchCategories() {
-    if (isFetchingCategories) return; // Cegah permintaan ulang
-    isFetchingCategories = true;
-  
-    fetch("https://kosconnect-server.vercel.app/api/categories/", {
-      method: "GET",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch categories");
-        }
-        return response.json();
-      })
-      .then((categories) => {
-        if (categories && categories.length > 0) {
-          renderCategories(categories);
-        } else {
-          console.error("No categories found");
-        }
-      })
-      .catch((error) => console.error("Error fetching categories:", error));
-  }
+  // function fetchCategories() {
+  //   fetch("https://kosconnect-server.vercel.app/api/categories/", {
+  //     method: "GET",
+  //   })
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         throw new Error("Failed to fetch categories");
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((categories) => {
+  //       if (categories && categories.length > 0) {
+  //         renderCategories(categories);
+  //       } else {
+  //         console.error("No categories found");
+  //       }
+  //     })
+  //     .catch((error) => console.error("Error fetching categories:", error));
+  // }
 
-  function renderCategories(categories) {
-    const dropdownCategoryContainer = document.querySelector("#category-list-header");
-    if (!dropdownCategoryContainer) {
-      console.error("Dropdown category container not found!");
-      return;
-    }
-  
-    dropdownCategoryContainer.innerHTML = ""; // Bersihkan dropdown terlebih dahulu
-    categories.forEach((category) => {
-      const categoryLink = document.createElement("a");
-      categoryLink.textContent = category.name;
-      categoryLink.dataset.categoryId = category.category_id; // Simpan ID kategori di dataset
-      categoryLink.href = "#";
-      categoryLink.addEventListener("click", (e) => {
-        e.preventDefault(); // Cegah reload halaman
-        filterDataByCategory(category.category_id, category.name);
-      });
-      dropdownCategoryContainer.appendChild(categoryLink);
-    });
-  }
-  
+  // function renderCategories(categories) {
+  //   const dropdownCategoryContainer = document.querySelector(
+  //     "#category-list-header"
+  //   );
+  //   if (!dropdownCategoryContainer) {
+  //     console.error("Dropdown category container not found!");
+  //     return;
+  //   }
+
+  //   dropdownCategoryContainer.innerHTML = ""; // Bersihkan dropdown terlebih dahulu
+  //   categories.forEach((category) => {
+  //     const categoryLink = document.createElement("a");
+  //     categoryLink.textContent = category.name;
+  //     categoryLink.dataset.categoryId = category.category_id; // Simpan ID kategori di dataset
+  //     categoryLink.href = "#";
+  //     categoryLink.addEventListener("click", (e) => {
+  //       e.preventDefault(); // Cegah reload halaman
+  //       filterDataByCategory(category.category_id, category.name);
+  //     });
+  //     dropdownCategoryContainer.appendChild(categoryLink);
+  //   });
+  // }
 
   // Filter data berdasarkan kategori
-  function filterDataByCategory(categoryId, categoryName) {
-    if (!categoryId) {
-      console.error("Invalid categoryId passed to filterDataByCategory");
-      return;
-    }
+  // function filterDataByCategory(categoryId, categoryName) {
+  //   if (!categoryId) {
+  //     console.error("Invalid categoryId passed to filterDataByCategory");
+  //     return;
+  //   }
 
-    // Perbarui teks sambutan
-    welcomeText.textContent = `Menampilkan hasil untuk kategori: ${categoryName}`;
+  //   // Perbarui teks sambutan
+  //   welcomeText.textContent = `Menampilkan hasil untuk kategori: ${categoryName}`;
 
-    // Fetch semua data kamar dari endpoint rooms/home
-    fetch("https://kosconnect-server.vercel.app/api/rooms/home", {
-      method: "GET",
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch rooms data");
-        }
-        return response.json();
-      })
-      .then((rooms) => {
-        // Filter data kamar berdasarkan category_id
-        const filteredRooms = rooms.filter(
-          (room) => room.category_id === categoryId
-        );
+  //   // Fetch semua data kamar dari endpoint rooms/home
+  //   fetch("https://kosconnect-server.vercel.app/api/rooms/home", {
+  //     method: "GET",
+  //   })
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         throw new Error("Failed to fetch rooms data");
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((rooms) => {
+  //       // Filter data kamar berdasarkan category_id
+  //       const filteredRooms = rooms.filter(
+  //         (room) => room.category_id === categoryId
+  //       );
 
-        if (filteredRooms.length > 0) {
-          renderRooms(filteredRooms);
-        } else {
-          console.warn("No rooms found for the selected category");
-          welcomeText.textContent = `Tidak ada kamar yang ditemukan untuk kategori: ${categoryName}`;
-          renderRooms([]); // Bersihkan tampilan jika tidak ada kamar
-        }
-      })
-      .catch((error) =>
-        console.error("Error filtering rooms by category:", error)
-      );
-  }
+  //       if (filteredRooms.length > 0) {
+  //         renderRooms(filteredRooms);
+  //       } else {
+  //         console.warn("No rooms found for the selected category");
+  //         welcomeText.textContent = `Tidak ada kamar yang ditemukan untuk kategori: ${categoryName}`;
+  //         renderRooms([]); // Bersihkan tampilan jika tidak ada kamar
+  //       }
+  //     })
+  //     .catch((error) =>
+  //       console.error("Error filtering rooms by category:", error)
+  //     );
+  // }
   // Panggil fetchCategories dan renderRooms saat halaman dimuat
   fetchCategories();
 });
