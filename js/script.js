@@ -116,7 +116,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const welcomeText = document.getElementById("welcome-text");
 
   // Kategori dan Search
-  
 
   // Fungsi untuk mengambil data kategori
   function fetchCategories() {
@@ -199,16 +198,16 @@ document.addEventListener("DOMContentLoaded", () => {
     navLinks.innerHTML = `
       <a href="index.html"><i class="fa fa-house"></i> Beranda</a>
       <div class="dropdown" id="dropdown-category">
-        <a href="#" class="profile-icon dropdown-toggle d-flex align-items-center mx-2" role="button">
-          <div class="d-flex align-items-center">
-            <i class="fa-solid fa-list"></i>
-            <span id="kategori">Kategori</span>
+            <a href="#" class="profile-icon dropdown-toggle d-flex align-items-center mx-2" role="button">
+              <div class="d-flex align-items-center">
+                <i class="fa-solid fa-list"></i>
+                <span id="kategori">Kategori</span>
+              </div>
+            </a>
+            <div class="dropdown-category" id="category-list-header">
+              <!-- Kategori akan dimuat di sini -->
+            </div>
           </div>
-        </a>
-        <div class="dropdown-category" id="category-list-header">
-          <!-- Kategori akan dimuat di sini -->
-        </div>
-      </div>
       <a href="booking.html"><i class="fa-solid fa-receipt"></i> Pemesanan</a>
       <div class="dropdown">
         <a href="#" class="profile-icon dropdown-toggle d-flex align-items-center mx-2" id="profileDropdown" role="button">
@@ -227,8 +226,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Logout logic
     document.getElementById("logout-btn").addEventListener("click", () => {
-      document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      document.cookie = "userRole=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      document.cookie =
+        "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      document.cookie =
+        "userRole=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       window.location.reload();
     });
 
@@ -255,14 +256,16 @@ document.addEventListener("DOMContentLoaded", () => {
     navLinks.innerHTML = `
       <a href="index.html"><i class="fa fa-house"></i> Beranda</a>
       <div class="dropdown" id="dropdown-category">
-        <a href="#" class="profile-icon dropdown-toggle d-flex align-items-center mx-2" role="button">
-          <div class="d-flex align-items-center">
-            <i class="fa-solid fa-list"></i>
-            <span id="kategori">Kategori</span>
+            <a href="#" class="profile-icon dropdown-toggle d-flex align-items-center mx-2" role="button">
+              <div class="d-flex align-items-center">
+                <i class="fa-solid fa-list"></i>
+                <span id="kategori">Kategori</span>
+              </div>
+            </a>
+            <div class="dropdown-category" id="category-list-header">
+              <!-- Kategori akan dimuat di sini -->
+            </div>
           </div>
-        </a>
-        <div class="dropdown-category" id="category-list-header"></div>
-      </div>
       <button class="btn-login" id="login-btn"><i class="fa-solid fa-user"></i> Masuk</button>
       <button class="btn-login" id="register-btn"><i class="fa-solid fa-id-card"></i> Daftar</button>
     `;
