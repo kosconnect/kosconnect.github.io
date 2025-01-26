@@ -41,90 +41,90 @@ function searchKos() {
   renderRooms(filteredData); // Render hasil pencarian
 }
 // Kategori dan Search
-  // Dropdown kategori dan elemen lainnya
-  const dropdownCategoryContainer = document.querySelector(
-    "#dropdown-category .dropdown-category"
-  );
-  const welcomeText = document.getElementById("welcome-text");
+// Dropdown kategori dan elemen lainnya
+const dropdownCategoryContainer = document.querySelector(
+  "#dropdown-category .dropdown-category"
+);
+const welcomeText = document.getElementById("welcome-text");
 
-  // Fungsi untuk mengambil data kategori
-  function fetchCategories() {
-    fetch("https://kosconnect-server.vercel.app/api/categories/", {
-      method: "GET",
+// Fungsi untuk mengambil data kategori
+function fetchCategories() {
+  fetch("https://kosconnect-server.vercel.app/api/categories/", {
+    method: "GET",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to fetch categories");
+      }
+      return response.json();
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch categories");
-        }
-        return response.json();
-      })
-      .then((categories) => {
-        if (categories && categories.length > 0) {
-          renderCategories(categories);
-        } else {
-          console.error("No categories found");
-        }
-      })
-      .catch((error) => console.error("Error fetching categories:", error));
-  }
+    .then((categories) => {
+      if (categories && categories.length > 0) {
+        renderCategories(categories);
+      } else {
+        console.error("No categories found");
+      }
+    })
+    .catch((error) => console.error("Error fetching categories:", error));
+}
 
-  // Fungsi untuk merender kategori ke dropdown
-  function renderCategories(categories) {
-    dropdownCategoryContainer.innerHTML = ""; // Bersihkan dropdown terlebih dahulu
-    categories.forEach((category) => {
-      const categoryLink = document.createElement("a");
-      categoryLink.textContent = category.name;
-      categoryLink.dataset.categoryId = category.category_id; // Simpan ID kategori di dataset
-      categoryLink.href = "#";
-      categoryLink.addEventListener("click", (e) => {
-        e.preventDefault(); // Cegah reload halaman
-        filterDataByCategory(category.category_id, category.name);
-      });
-      dropdownCategoryContainer.appendChild(categoryLink);
+// Fungsi untuk merender kategori ke dropdown
+function renderCategories(categories) {
+  dropdownCategoryContainer.innerHTML = ""; // Bersihkan dropdown terlebih dahulu
+  categories.forEach((category) => {
+    const categoryLink = document.createElement("a");
+    categoryLink.textContent = category.name;
+    categoryLink.dataset.categoryId = category.category_id; // Simpan ID kategori di dataset
+    categoryLink.href = "#";
+    categoryLink.addEventListener("click", (e) => {
+      e.preventDefault(); // Cegah reload halaman
+      filterDataByCategory(category.category_id, category.name);
     });
+    dropdownCategoryContainer.appendChild(categoryLink);
+  });
+}
+
+// Filter data berdasarkan kategori
+function filterDataByCategory(categoryId, categoryName) {
+  if (!categoryId) {
+    console.error("Invalid categoryId passed to filterDataByCategory");
+    return;
   }
 
-  // Filter data berdasarkan kategori
-  function filterDataByCategory(categoryId, categoryName) {
-    if (!categoryId) {
-      console.error("Invalid categoryId passed to filterDataByCategory");
-      return;
-    }
+  // Perbarui teks sambutan
+  welcomeText.textContent = `Menampilkan hasil untuk kategori: ${categoryName}`;
 
-    // Perbarui teks sambutan
-    welcomeText.textContent = `Menampilkan hasil untuk kategori: ${categoryName}`;
-
-    // Fetch semua data kamar dari endpoint rooms/home
-    fetch("https://kosconnect-server.vercel.app/api/rooms/home", {
-      method: "GET",
+  // Fetch semua data kamar dari endpoint rooms/home
+  fetch("https://kosconnect-server.vercel.app/api/rooms/home", {
+    method: "GET",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Failed to fetch rooms data");
+      }
+      return response.json();
     })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch rooms data");
-        }
-        return response.json();
-      })
-      .then((rooms) => {
-        // Filter data kamar berdasarkan category_id
-        const filteredRooms = rooms.filter(
-          (room) => room.category_id === categoryId
-        );
-
-        if (filteredRooms.length > 0) {
-          renderRooms(filteredRooms);
-        } else {
-          console.warn("No rooms found for the selected category");
-          welcomeText.textContent = `Tidak ada kamar yang ditemukan untuk kategori: ${categoryName}`;
-          renderRooms([]); // Bersihkan tampilan jika tidak ada kamar
-        }
-      })
-      .catch((error) =>
-        console.error("Error filtering rooms by category:", error)
+    .then((rooms) => {
+      // Filter data kamar berdasarkan category_id
+      const filteredRooms = rooms.filter(
+        (room) => room.category_id === categoryId
       );
-  }
-  // Panggil fetchCategories dan renderRooms saat halaman dimuat
-  fetchCategories();
-  
+
+      if (filteredRooms.length > 0) {
+        renderRooms(filteredRooms);
+      } else {
+        console.warn("No rooms found for the selected category");
+        welcomeText.textContent = `Tidak ada kamar yang ditemukan untuk kategori: ${categoryName}`;
+        renderRooms([]); // Bersihkan tampilan jika tidak ada kamar
+      }
+    })
+    .catch((error) =>
+      console.error("Error filtering rooms by category:", error)
+    );
+}
+// Panggil fetchCategories dan renderRooms saat halaman dimuat
+fetchCategories();
+
 // Fungsi untuk merender kamar ke halaman
 function renderRooms(rooms) {
   const menuGrid = document.getElementById("menuGrid");
@@ -192,16 +192,32 @@ function renderRooms(rooms) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-   // Ambil token dan role dari cookie
-   const authToken = getCookie("authToken");
-   const userRole = getCookie("userRole");
- 
-   // Elemen-elemen yang perlu dimodifikasi
-   const navLinks = document.querySelector(".nav-links");
-   
-   // Fungsi untuk menampilkan menu setelah login
-   const renderLoggedInMenu = (username) => {
-     navLinks.innerHTML = `
+  // Ambil token dan role dari cookie
+  const authToken = getCookie("authToken");
+  const userRole = getCookie("userRole");
+
+  // Elemen-elemen yang perlu dimodifikasi
+  const navLinks = document.querySelector(".nav-links");
+
+  // Fungsi untuk menampilkan menu setelah login
+  const renderLoggedInMenu = (username) => {
+    navLinks.innerHTML = `
+     <a href="https://kosconnect.github.io/"><i class="fa fa-house"></i> Beranda</a>
+          <div class="dropdown" id="dropdown-category">
+            <a
+              href="#"
+              class="profile-icon dropdown-toggle d-flex align-items-center mx-2"
+              role="button"
+            >
+              <div class="d-flex align-items-center">
+                <i class="fa-solid fa-list"></i>
+                <span id="kategori">Kategori</span>
+              </div>
+            </a>
+            <div class="dropdown-category" id="category-list-header">
+              <!-- Kategori akan dimuat di sini -->
+            </div>
+          </div>
        <a href="booking.html"><i class="fa-solid fa-receipt"></i> Pemesanan</a>
        <div class="dropdown">
          <a href="#" class="profile-icon dropdown-toggle d-flex align-items-center mx-2" id="profileDropdown" role="button">
@@ -217,64 +233,82 @@ document.addEventListener("DOMContentLoaded", () => {
          </div>
        </div>
      `;
- 
-     // Logout logic
-     const logoutBtn = document.getElementById("logout-btn");
-     if (logoutBtn) {
-       logoutBtn.addEventListener("click", () => {
-         document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-         document.cookie = "userRole=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-         window.location.reload();
-       });
-     }
-   };
- 
-   // Logika mengganti elemen berdasarkan authToken
-   if (authToken) {
-     // Fetch user data untuk mendapatkan nama pengguna
-     fetch("https://kosconnect-server.vercel.app/api/users/me", {
-       method: "GET",
-       headers: {
-         Authorization: `Bearer ${authToken}`,
-       },
-     })
-       .then((response) => {
-         if (!response.ok) {
-           throw new Error("Failed to fetch user data");
-         }
-         return response.json();
-       })
-       .then((data) => {
-         const user = data.user;
-         renderLoggedInMenu(user?.fullname || userRole);
-       })
-       .catch((error) => {
-         console.error("Error fetching user data:", error);
-         renderLoggedInMenu(userRole);
-       });
-   } else {
-     // Tampilkan tombol login dan register jika belum login
-     navLinks.innerHTML = `
+
+    // Logout logic
+    const logoutBtn = document.getElementById("logout-btn");
+    if (logoutBtn) {
+      logoutBtn.addEventListener("click", () => {
+        document.cookie =
+          "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        document.cookie =
+          "userRole=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        window.location.reload();
+      });
+    }
+  };
+
+  // Logika mengganti elemen berdasarkan authToken
+  if (authToken) {
+    // Fetch user data untuk mendapatkan nama pengguna
+    fetch("https://kosconnect-server.vercel.app/api/users/me", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Failed to fetch user data");
+        }
+        return response.json();
+      })
+      .then((data) => {
+        const user = data.user;
+        renderLoggedInMenu(user?.fullname || userRole);
+      })
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+        renderLoggedInMenu(userRole);
+      });
+  } else {
+    // Tampilkan tombol login dan register jika belum login
+    navLinks.innerHTML = `
+    <a href="https://kosconnect.github.io/"><i class="fa fa-house"></i> Beranda</a>
+          <div class="dropdown" id="dropdown-category">
+            <a
+              href="#"
+              class="profile-icon dropdown-toggle d-flex align-items-center mx-2"
+              role="button"
+            >
+              <div class="d-flex align-items-center">
+                <i class="fa-solid fa-list"></i>
+                <span id="kategori">Kategori</span>
+              </div>
+            </a>
+            <div class="dropdown-category" id="category-list-header">
+              <!-- Kategori akan dimuat di sini -->
+            </div>
+          </div>
        <button class="btn-login" id="login-btn"><i class="fa-solid fa-user"></i> Masuk</button>
        <button class="btn-login" id="register-btn"><i class="fa-solid fa-id-card"></i> Daftar</button>
      `;
- 
-     // Login dan Register button logic
-     const loginBtn = document.getElementById("login-btn");
-     const registerBtn = document.getElementById("register-btn");
- 
-     if (loginBtn) {
-       loginBtn.addEventListener("click", () => {
-         window.location.href = "https://kosconnect.github.io/login/";
-       });
-     }
- 
-     if (registerBtn) {
-       registerBtn.addEventListener("click", () => {
-         window.location.href = "https://kosconnect.github.io/register/";
-       });
-     }
-   }
+
+    // Login dan Register button logic
+    const loginBtn = document.getElementById("login-btn");
+    const registerBtn = document.getElementById("register-btn");
+
+    if (loginBtn) {
+      loginBtn.addEventListener("click", () => {
+        window.location.href = "https://kosconnect.github.io/login/";
+      });
+    }
+
+    if (registerBtn) {
+      registerBtn.addEventListener("click", () => {
+        window.location.href = "https://kosconnect.github.io/register/";
+      });
+    }
+  }
 });
 // Fungsi untuk menangani booking
 function handleBooking(ownerId) {
