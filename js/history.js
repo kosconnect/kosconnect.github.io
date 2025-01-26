@@ -136,13 +136,13 @@ function setStatusIcons() {
 // Ambil data kos saat halaman dimuat
 window.onload = async () => {
   try {
-    const token = getCookie("authToken");
+    const authToken = getCookie("authToken");
     const response = await fetch(
       `https://kosconnect-server.vercel.app/api/transaction/user`,
       {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${authToken}`,
         },
       }
     );
