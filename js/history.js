@@ -110,27 +110,6 @@ async function fetchOrders(token, userID) {
   }
 }
 
-// Fungsi utama untuk menampilkan data transaksi
-async function displayOrders() {
-  const token = getCookie("authToken");
-  const userID = getCookie("userID");
-
-  if (!token || !userID) {
-    console.error("Token atau userID tidak ditemukan. Pengguna mungkin belum login.");
-    return;
-  }
-
-  try {
-    const orders = await fetchOrders(token, userID);
-    allOrderData = orders.data || [];
-    renderOrderCards(allOrderData);
-
-    renderHeader(token, getCookie("userRole"));
-  } catch (error) {
-    console.error("Gagal mengambil data transaksi:", error);
-  }
-}
-
 // Fungsi untuk mengatur ikon status pembayaran
 function setStatusIcons() {
   const rightSections = document.querySelectorAll(".right-section");
@@ -165,5 +144,19 @@ function setStatusIcons() {
   });
 }
 
-// Jalankan fungsi utama saat halaman dimuat
-window.onload = displayOrders;
+// Ambil data kos saat halaman dimuat
+window.onload = async () => {
+    try {
+      const response = await fetch(
+        "https://kosconnect-server.vercel.app/api/rooms/home"
+      );
+      allKosData = await response.json();
+      renderOrderCards(allOrderData);
+  
+      const authToken = getCookie("authToken");
+      const userRole = getCookie("userRole");
+      renderHeader(authToken, userRole);
+    } catch (error) {
+      console.error("Gagal mengambil data:", error);
+    }
+  };
