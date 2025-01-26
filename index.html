@@ -46,13 +46,33 @@
         </div>
 
         <div class="search-bar">
-          <input type="text" id="search-input" placeholder="Cari di halaman ini..." />
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Cari di halaman ini..."
+          />
           <button class="search-button" onclick="searchKos()">
             <i class="fa-solid fa-magnifying-glass"></i>
           </button>
         </div>
 
         <div class="nav-links" id="navLinks">
+          <a href="index.html"><i class="fa fa-house"></i> Beranda</a>
+          <div class="dropdown" id="dropdown-category">
+            <a
+              href="#"
+              class="profile-icon dropdown-toggle d-flex align-items-center mx-2"
+              role="button"
+            >
+              <div class="d-flex align-items-center">
+                <i class="fa-solid fa-list"></i>
+                <span id="kategori">Kategori</span>
+              </div>
+            </a>
+            <div class="dropdown-category" id="category-list-header">
+              <!-- Kategori akan dimuat di sini -->
+            </div>
+          </div>
           <!-- Navbar links will be dynamically populated based on login status -->
         </div>
       </div>
@@ -69,7 +89,9 @@
 
     <footer class="site-footer" id="kontak">
       <div class="footer-content">
-        <p class="footer-intro">-Cari Kos-Kosan sesuai dengan Preferensimu di KosConnect-</p>
+        <p class="footer-intro">
+          -Cari Kos-Kosan sesuai dengan Preferensimu di KosConnect-
+        </p>
         <div class="footer-links">
           <!-- <span class="about searchable">
             <a href=""> <i class="fa-solid fa-info-circle"></i> Tentang </a>
