@@ -109,8 +109,14 @@ function renderRooms(rooms) {
 
 document.addEventListener("DOMContentLoaded", () => {
   const navLinks = document.querySelector(".nav-links");
-  const dropdownCategoryContainer = document.querySelector("#dropdown-category .dropdown-category");
+  // Dropdown kategori dan elemen lainnya
+  const dropdownCategoryContainer = document.querySelector(
+    "#dropdown-category .dropdown-category"
+  );
   const welcomeText = document.getElementById("welcome-text");
+
+  // Kategori dan Search
+  
 
   // Fungsi untuk mengambil data kategori
   function fetchCategories() {
@@ -151,8 +157,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Filter data berdasarkan kategori
   function filterDataByCategory(categoryId, categoryName) {
+    if (!categoryId) {
+      console.error("Invalid categoryId passed to filterDataByCategory");
+      return;
+    }
+
+    // Perbarui teks sambutan
     welcomeText.textContent = `Menampilkan hasil untuk kategori: ${categoryName}`;
 
+    // Fetch semua data kamar dari endpoint rooms/home
     fetch("https://kosconnect-server.vercel.app/api/rooms/home", {
       method: "GET",
     })
@@ -163,6 +176,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return response.json();
       })
       .then((rooms) => {
+        // Filter data kamar berdasarkan category_id
         const filteredRooms = rooms.filter(
           (room) => room.category_id === categoryId
         );
@@ -170,6 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (filteredRooms.length > 0) {
           renderRooms(filteredRooms);
         } else {
+          console.warn("No rooms found for the selected category");
           welcomeText.textContent = `Tidak ada kamar yang ditemukan untuk kategori: ${categoryName}`;
           renderRooms([]); // Bersihkan tampilan jika tidak ada kamar
         }
