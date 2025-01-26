@@ -108,14 +108,120 @@ function renderRooms(rooms) {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  const navLinks = document.querySelector(".nav-links");
+   // Ambil token dan role dari cookie
+   const authToken = getCookie("authToken");
+   const userRole = getCookie("userRole");
+ 
+   // Elemen-elemen yang perlu dimodifikasi
+   const navLinks = document.querySelector(".nav-links");
+   
+   // Fungsi untuk menampilkan menu setelah login
+   const renderLoggedInMenu = (username) => {
+     navLinks.innerHTML = `
+       <a href="index.html"><i class="fa fa-house"></i> Beranda</a>
+       <div class="dropdown" id="dropdown-category">
+         <a href="#" class="profile-icon dropdown-toggle d-flex align-items-center mx-2" role="button">
+           <div class="d-flex align-items-center">
+             <i class="fa-solid fa-list"></i>
+             <span id="kategori">Kategori</span>
+           </div>
+         </a>
+         <div class="dropdown-category" id="category-list-header">
+           <!-- Kategori akan dimuat di sini -->
+         </div>
+       </div>
+       <a href="booking.html"><i class="fa-solid fa-receipt"></i> Pemesanan</a>
+       <div class="dropdown">
+         <a href="#" class="profile-icon dropdown-toggle d-flex align-items-center mx-2" id="profileDropdown" role="button">
+           <div class="d-flex align-items-center">
+             <i class="fa-solid fa-user me-2"></i>
+             <span id="user-name">${username || "Pengguna"}</span>
+           </div>
+         </a>
+         <div class="dropdown-menu">
+           <a href="#" class="dropdown-item logout-btn" id="logout-btn">
+             <i class="fa-solid fa-right-from-bracket"></i> Logout
+           </a>
+         </div>
+       </div>
+     `;
+ 
+     // Logout logic
+     const logoutBtn = document.getElementById("logout-btn");
+     if (logoutBtn) {
+       logoutBtn.addEventListener("click", () => {
+         document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+         document.cookie = "userRole=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+         window.location.reload();
+       });
+     }
+   };
+ 
+   // Logika mengganti elemen berdasarkan authToken
+   if (authToken) {
+     // Fetch user data untuk mendapatkan nama pengguna
+     fetch("https://kosconnect-server.vercel.app/api/users/me", {
+       method: "GET",
+       headers: {
+         Authorization: `Bearer ${authToken}`,
+       },
+     })
+       .then((response) => {
+         if (!response.ok) {
+           throw new Error("Failed to fetch user data");
+         }
+         return response.json();
+       })
+       .then((data) => {
+         const user = data.user;
+         renderLoggedInMenu(user?.fullname || userRole);
+       })
+       .catch((error) => {
+         console.error("Error fetching user data:", error);
+         renderLoggedInMenu(userRole);
+       });
+   } else {
+     // Tampilkan tombol login dan register jika belum login
+     navLinks.innerHTML = `
+       <a href="index.html"><i class="fa fa-house"></i> Beranda</a>
+       <div class="dropdown" id="dropdown-category">
+         <a href="#" class="profile-icon dropdown-toggle d-flex align-items-center mx-2" role="button">
+           <div class="d-flex align-items-center">
+             <i class="fa-solid fa-list"></i>
+             <span id="kategori">Kategori</span>
+           </div>
+         </a>
+         <div class="dropdown-category" id="category-list-header">
+           <!-- Kategori akan dimuat di sini -->
+         </div>
+       </div>
+       <button class="btn-login" id="login-btn"><i class="fa-solid fa-user"></i> Masuk</button>
+       <button class="btn-login" id="register-btn"><i class="fa-solid fa-id-card"></i> Daftar</button>
+     `;
+ 
+     // Login dan Register button logic
+     const loginBtn = document.getElementById("login-btn");
+     const registerBtn = document.getElementById("register-btn");
+ 
+     if (loginBtn) {
+       loginBtn.addEventListener("click", () => {
+         window.location.href = "https://kosconnect.github.io/login/";
+       });
+     }
+ 
+     if (registerBtn) {
+       registerBtn.addEventListener("click", () => {
+         window.location.href = "https://kosconnect.github.io/register/";
+       });
+     }
+   }
+
+  // Kategori dan Search
   // Dropdown kategori dan elemen lainnya
   const dropdownCategoryContainer = document.querySelector(
     "#dropdown-category .dropdown-category"
   );
   const welcomeText = document.getElementById("welcome-text");
-
-  // Kategori dan Search
 
   // Fungsi untuk mengambil data kategori
   function fetchCategories() {
@@ -192,95 +298,9 @@ document.addEventListener("DOMContentLoaded", () => {
         console.error("Error filtering rooms by category:", error)
       );
   }
-
-  // Fungsi untuk menampilkan menu setelah login
-  const renderLoggedInMenu = (username) => {
-    navLinks.innerHTML = `
-      <a href="index.html"><i class="fa fa-house"></i> Beranda</a>
-      <div class="dropdown" id="dropdown-category">
-            <a href="#" class="profile-icon dropdown-toggle d-flex align-items-center mx-2" role="button">
-              <div class="d-flex align-items-center">
-                <i class="fa-solid fa-list"></i>
-                <span id="kategori">Kategori</span>
-              </div>
-            </a>
-            <div class="dropdown-category" id="category-list-header">
-              <!-- Kategori akan dimuat di sini -->
-            </div>
-          </div>
-      <a href="booking.html"><i class="fa-solid fa-receipt"></i> Pemesanan</a>
-      <div class="dropdown">
-        <a href="#" class="profile-icon dropdown-toggle d-flex align-items-center mx-2" id="profileDropdown" role="button">
-          <div class="d-flex align-items-center">
-            <i class="fa-solid fa-user me-2"></i>
-            <span id="user-name">${username || "Pengguna"}</span>
-          </div>
-        </a>
-        <div class="dropdown-menu">
-          <a href="#" class="dropdown-item logout-btn" id="logout-btn">
-            <i class="fa-solid fa-right-from-bracket"></i> Logout
-          </a>
-        </div>
-      </div>
-    `;
-
-    // Logout logic
-    document.getElementById("logout-btn").addEventListener("click", () => {
-      document.cookie =
-        "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      document.cookie =
-        "userRole=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      window.location.reload();
-    });
-
-    fetchCategories(); // Panggil fetch kategori setelah login
-  };
-
-  // Logika mengganti elemen berdasarkan authToken
-  const authToken = getCookie("authToken");
-  if (authToken) {
-    fetch("https://kosconnect-server.vercel.app/api/users/me", {
-      method: "GET",
-      headers: { Authorization: `Bearer ${authToken}` },
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error("Failed to fetch user data");
-        return response.json();
-      })
-      .then((data) => {
-        renderLoggedInMenu(data.user.fullname);
-      })
-      .catch(() => renderLoggedInMenu("Pengguna"));
-  } else {
-    // Tampilkan tombol login dan register jika belum login
-    navLinks.innerHTML = `
-      <a href="index.html"><i class="fa fa-house"></i> Beranda</a>
-      <div class="dropdown" id="dropdown-category">
-            <a href="#" class="profile-icon dropdown-toggle d-flex align-items-center mx-2" role="button">
-              <div class="d-flex align-items-center">
-                <i class="fa-solid fa-list"></i>
-                <span id="kategori">Kategori</span>
-              </div>
-            </a>
-            <div class="dropdown-category" id="category-list-header">
-              <!-- Kategori akan dimuat di sini -->
-            </div>
-          </div>
-      <button class="btn-login" id="login-btn"><i class="fa-solid fa-user"></i> Masuk</button>
-      <button class="btn-login" id="register-btn"><i class="fa-solid fa-id-card"></i> Daftar</button>
-    `;
-
-    document.getElementById("login-btn").addEventListener("click", () => {
-      window.location.href = "https://kosconnect.github.io/login/";
-    });
-    document.getElementById("register-btn").addEventListener("click", () => {
-      window.location.href = "https://kosconnect.github.io/register/";
-    });
-
-    fetchCategories(); // Panggil fetch kategori untuk non-login
-  }
+  // Panggil fetchCategories dan renderRooms saat halaman dimuat
+  fetchCategories();
 });
-
 // Fungsi untuk menangani booking
 function handleBooking(ownerId) {
   const authToken = getCookie("authToken"); // Ambil authToken dari cookie
