@@ -4,8 +4,19 @@ import { getCookie, renderHeader } from "./header.js";
 // Variabel global untuk menyimpan semua data orders
 let allOrderData = [];
 
+// Fungsi untuk mendapatkan data detail dari berbagai endpoint
+async function fetchDetailData(endpoint, id) {
+  try {
+    const response = await fetch(`${endpoint}/${id}`);
+    return await response.json();
+  } catch (error) {
+    console.error(`Gagal mengambil data dari ${endpoint}/${id}:`, error);
+    return null;
+  }
+}
+
 // Fungsi untuk merender kartu transaksi ke halaman
-function renderOrderCards(orders) {
+async function renderOrderCards(orders) {
   const orderHistoryElement = document.getElementById("orderHistory");
 
   // Bersihkan elemen sebelumnya
@@ -17,8 +28,26 @@ function renderOrderCards(orders) {
     return;
   }
 
-  // Render setiap transaksi
-  orders.data.forEach((order) => {
+  for (const order of orders.data) {
+    // Ambil detail data dari berbagai endpoint
+    const boardingHouse = await fetchDetailData(
+      "https://kosconnect-server.vercel.app/api/boardingHouses",
+      order.boarding_house_id
+    );
+    const room = await fetchDetailData(
+      "https://kosconnect-server.vercel.app/api/rooms",
+      order.room_id
+    );
+    const category = await fetchDetailData(
+      "https://kosconnect-server.vercel.app/api/categories",
+      boardingHouse?.category_id
+    );
+    const owner = await fetchDetailData(
+      "https://kosconnect-server.vercel.app/api/users",
+      boardingHouse?.owner_id
+    );
+
+    // Format tanggal
     const formattedCheckInDate = new Date(
       order.check_in_date
     ).toLocaleDateString("id-ID", {
@@ -26,17 +55,6 @@ function renderOrderCards(orders) {
       month: "long",
       year: "numeric",
     });
-
-    const formattedCreatedAt = new Date(order.created_at).toLocaleDateString(
-      "id-ID",
-      {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-        hour: "2-digit",
-        minute: "2-digit",
-      }
-    );
 
     const formattedUpdatedAt = new Date(order.updated_at).toLocaleDateString(
       "id-ID",
@@ -68,21 +86,36 @@ function renderOrderCards(orders) {
     const paymentStatus =
       paymentStatusMap[order.payment_status] || "Tidak Diketahui";
 
-    let paymentMethodElement = "";
-    if (
-      order.payment_status === "settlement" ||
-      order.payment_status === "deny"
-    ) {
-      paymentMethodElement = `<p><strong>Metode Pembayaran:</strong> ${order.payment_method}</p>`;
+    // Komponen informasi kos
+    const kosDetails = `
+      <p><strong>Nama Kos:</strong> ${boardingHouse?.name || "Tidak Diketahui"}</p>
+      <p><strong>Tipe Kamar:</strong> ${room?.room_type || "Tidak Diketahui"}</p>
+      <p><strong>Kategori:</strong> ${category?.name || "Tidak Diketahui"}</p>
+      <p><strong>Alamat:</strong> ${boardingHouse?.address || "Tidak Diketahui"}</p>
+      <p><strong>Nama Pemilik:</strong> ${owner?.fullname || "Tidak Diketahui"}</p>
+    `;
+
+    // Komponen rincian biaya
+    const biayaDetails = `
+      <p><strong>Harga Sewa:</strong> Rp${order.price.toLocaleString("id-ID")} / ${order.payment_term}</p>
+      <p><strong>Biaya Fasilitas:</strong> Rp${order.facilities_price.toLocaleString("id-ID")}</p>
+      <p><strong>PPN:</strong> Rp${order.ppn.toLocaleString("id-ID")}</p>
+      <p class="total"><strong>Total:</strong> Rp${order.total.toLocaleString("id-ID")}</p>
+    `;
+
+    // Tombol bayar sekarang (jika status pending)
+    let actionElement = "";
+    if (order.payment_status === "pending") {
+      actionElement = `
+        <a href="https://kosconnect-server.vercel.app/transactions/${order.transaction_id}/payment" class="pay-now-button">
+          Bayar Sekarang
+        </a>`;
+    } else if (order.payment_status === "settlement") {
+      actionElement = `
+        <p><strong>Metode Pembayaran:</strong> ${order.payment_method}</p>
+        <p class="updated-at">Diupdate: ${formattedUpdatedAt}</p>`;
     }
 
-    let updatedAtElement = "";
-    if (
-      new Date(order.updated_at).toISOString().slice(0, 16) !==
-      new Date(order.created_at).toISOString().slice(0, 16)
-    ) {
-      updatedAtElement = `<p class="updated-at">Diupdate: ${formattedUpdatedAt}</p>`;
-    }
     // Buat elemen order-card
     const card = document.createElement("div");
     card.className = "order-card";
@@ -90,30 +123,33 @@ function renderOrderCards(orders) {
     card.innerHTML = `
       <div class="left-section">
         <div class="left-header">
-          <h4 class="order-title">Kode Transaksi: ${order.transaction_code}</h4>
-          <p class="created-at">Dibuat: ${formattedCreatedAt}</p>
+          <div class="brand-logo">
+            <img src="/img/logokos.png" alt="Logo">
+            <h4>KosConnect</h4>
+          </div>
+          <h4 class="order-title">${order.transaction_code}</h4>
         </div>
         <div class="order-details">
-          <p><strong>Nama Pemesan:</strong> ${order.personal_info.full_name}</p>
-          <p><strong>Email:</strong> ${order.personal_info.email}</p>
-          <p><strong>Nomor HP:</strong> ${order.personal_info.phone_number}</p>
-          <p><strong>Alamat:</strong> ${order.personal_info.address}</p>
-          <p class="order-date">Tanggal Check-in: ${formattedCheckInDate}</p>
-          ${paymentMethodElement} <!-- Hanya ditampilkan jika status settlement atau deny -->
-          <p><strong>Fasilitas Custom:</strong></p>
-          ${customFacilities}
+          <div class="kos-details">${kosDetails}</div>
+          <div class="user-details">
+            <p><strong>Nama Pemesan:</strong> ${order.personal_info.full_name}</p>
+            <p><strong>Jenis Kelamin:</strong> ${order.personal_info.gender}</p>
+            <p><strong>Email:</strong> ${order.personal_info.email}</p>
+            <p><strong>Nomor HP:</strong> ${order.personal_info.phone_number}</p>
+            <p><strong>Alamat:</strong> ${order.personal_info.address}</p>
+          </div>
+          <div class="biaya-details">${biayaDetails}</div>
         </div>
-        <p class="total">Total: Rp${order.total.toLocaleString("id-ID")}</p>
-         ${updatedAtElement} <!-- Hanya ditampilkan jika waktu updated_at berbeda dengan created_at -->
       </div>
       <div class="right-section" data-status="${order.payment_status}">
         <i class="status-icon"></i>
         <p class="status">${paymentStatus}</p>
+        ${actionElement}
       </div>
     `;
 
     orderHistoryElement.appendChild(card);
-  });
+  }
 
   // Atur ikon status setelah rendering
   setStatusIcons();
@@ -167,7 +203,7 @@ window.onload = async () => {
       }
     );
     allOrderData = await response.json();
-    renderOrderCards(allOrderData);
+    await renderOrderCards(allOrderData);
 
     const userRole = getCookie("userRole");
     renderHeader(authToken, userRole);
