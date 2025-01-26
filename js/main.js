@@ -68,7 +68,28 @@ function renderRooms(rooms) {
     menuGrid.appendChild(card);
   });
 }
-
+// Fungsi untuk menangani booking
+function handleBooking(ownerId) {
+    const authToken = getCookie("authToken"); // Ambil authToken dari cookie
+    if (!authToken) {
+      Swal.fire({
+        title: "Login Diperlukan",
+        text: "Anda harus login terlebih dahulu untuk melakukan pemesanan.",
+        icon: "warning",
+        confirmButtonText: "Login",
+        showCancelButton: true,
+        cancelButtonText: "Batal",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          window.location.href = "https://kosconnect.github.io/login/";
+        }
+      });
+    } else {
+      console.log("Booking oleh user untuk owner ID:", ownerId);
+      window.location.href = `https://kosconnect.github.io/booking/${ownerId}`;
+    }
+  }
+  
 // Fungsi pencarian
 function searchKos(query) {
     const filteredData = allKosData.filter(
