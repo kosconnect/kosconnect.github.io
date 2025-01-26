@@ -99,29 +99,6 @@ function renderOrderCards(orders) {
   setStatusIcons();
 }
 
-// Fungsi untuk fetch data transaksi dari server
-async function fetchOrders(token, userID) {
-  try {
-    const response = await fetch(
-      `https://kosconnect-server.vercel.app/api/transaction/user/${userID}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    throw error;
-  }
-}
-
 // Fungsi untuk mengatur ikon status pembayaran
 function setStatusIcons() {
   const rightSections = document.querySelectorAll(".right-section");
@@ -168,7 +145,7 @@ window.onload = async () => {
         },
       }
     );
-    allKosData = await response.json();
+    allOrderData = await response.json();
     renderOrderCards(allOrderData);
 
     const authToken = getCookie("authToken");
