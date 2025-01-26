@@ -41,6 +41,9 @@ function searchKos() {
   renderRooms(filteredData); // Render hasil pencarian
 }
 
+// welcometext buat segala macem
+const welcomeText = document.getElementById("welcome-text");
+
 // Fungsi untuk menangani data kategori
 function renderCategories(categories) {
   const dropdownCategoryContainer = document.querySelector("#category-list-header");
@@ -304,7 +307,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Kategori dan Search
   // Dropdown kategori dan elemen lainnya
-  const welcomeText = document.getElementById("welcome-text");
+  // const welcomeText = document.getElementById("welcome-text");
   // Fungsi untuk mengambil data kategori
   // function fetchCategories() {
   //   fetch("https://kosconnect-server.vercel.app/api/categories/", {
