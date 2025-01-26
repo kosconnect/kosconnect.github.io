@@ -46,101 +46,17 @@
         </div>
 
         <div class="search-bar">
-          <input
-            type="text"
-            id="search-input"
-            placeholder="Cari di halaman ini..."
-            oninput="searchKos()"
-          />
+          <input type="text" id="search-input" placeholder="Cari di halaman ini..." />
           <button class="search-button" onclick="searchKos()">
             <i class="fa-solid fa-magnifying-glass"></i>
           </button>
         </div>
 
-        <!-- <div class="hamburger" onclick="toggleMenu()" style="display: none">
-          ☰
-        </div> -->
-
-        <nav class="nav-links">
-          <a href="index.html"><i class="fa fa-house"></i> Beranda</a>
-          <div class="dropdown" id="dropdown-category">
-            <a href="#" class="profile-icon dropdown-toggle d-flex align-items-center mx-2" role="button">
-              <div class="d-flex align-items-center">
-                <i class="fa-solid fa-list"></i>
-                <span id="kategori">Kategori</span>
-              </div>
-            </a>
-            <div class="dropdown-category" id="category-list-header">
-              <!-- Kategori akan dimuat di sini -->
-            </div>
-          </div>
-          <!-- Tombol Login -->
-<button class="btn-login" id="login-btn">
-  <i class="fa-solid fa-user"></i> Masuk
-</button>
-
-<!-- Tombol Register -->
-<button class="btn-login" id="register-btn">
-  <i class="fa-solid fa-id-card"></i> Daftar
-</button>
-        </nav>
+        <div class="nav-links" id="navLinks">
+          <!-- Navbar links will be dynamically populated based on login status -->
+        </div>
       </div>
     </header>
-
-     <!-- Header after login -->
-  <header class="header-login">
-    <div class="navbar">
-      <div class="brand">
-        <img src="img/logokos.png" alt="Brand Logo" class="brand-logo" />
-          <h1 class="brand-name" data-jscroot="fade-in">KosConnect</h1>
-      </div>
-
-      
-      <div class="search-bar">
-        <input
-          type="text"
-          id="search-input"
-          placeholder="Cari di halaman ini..."
-          oninput="searchKos()"
-        />
-        <button class="search-button" onclick="searchKos()">
-          <i class="fa-solid fa-magnifying-glass"></i>
-        </button>
-      </div>
-            
-      <!-- <div class="hamburger" onclick="toggleMenu()" style="display: none;">☰</div> -->
-
-      <nav class="nav-links">
-        <a href="index.html"><i class="fa fa-house"></i> Beranda</a>
-        <div class="dropdown" id="dropdown-category">
-          <a href="#" class="profile-icon dropdown-toggle d-flex align-items-center mx-2" role="button">
-            <div class="d-flex align-items-center">
-              <i class="fa-solid fa-list"></i>
-              <span id="kategori">Kategori</span>
-            </div>
-          </a>
-          <div class="dropdown-category" id="category-list-login">
-            <!-- Kategori akan dimuat di sini -->
-          </div>
-        </div>
-        <a href="booking.html"><i class="fa-solid fa-receipt"></i> Pemesanan</a>
-        <div class="dropdown">
-          <a href="#" class="profile-icon dropdown-toggle d-flex align-items-center mx-2" id="profileDropdown"
-            role="button" data-bs-toggle="dropdown" aria-expanded="false">
-            <div class="d-flex align-items-center">
-              <i class="fa-solid fa-user me-2"></i>
-              <span id="user-name">Pengguna</span>
-            </div>
-          </a>
-          <div class="dropdown-menu">
-            <a href="#" class="dropdown-item logout-btn" id="logout-btn">
-              <i class="fa-solid fa-right-from-bracket"></i> Logout
-            </a>
-          </div>
-        </div>
-      </nav>      
- 
-  </header>
     <div class="container-wrapper">
       <main class="main-container">
         <h2 id="welcome-text">Selamat Datang di KosConnect!</h2>
