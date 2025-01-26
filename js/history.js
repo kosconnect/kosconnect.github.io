@@ -18,7 +18,7 @@ function renderOrderCards(orders) {
   }
 
   // Render setiap transaksi
-  orders.forEach((order) => {
+  orders.data.forEach((order) => {
     const formattedCheckInDate = new Date(
       order.check_in_date
     ).toLocaleDateString("id-ID", {
