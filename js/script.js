@@ -109,7 +109,7 @@ function renderRooms(rooms) {
 
 document.addEventListener("DOMContentLoaded", () => {
   const navLinks = document.querySelector(".nav-links");
-  const dropdownCategoryContainer = document.querySelector("#category-list-header");
+  const dropdownCategoryContainer = document.querySelector("#dropdown-category .dropdown-category");
   const welcomeText = document.getElementById("welcome-text");
 
   // Fungsi untuk mengambil data kategori
