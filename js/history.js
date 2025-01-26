@@ -160,7 +160,7 @@ function setStatusIcons() {
 window.onload = async () => {
   try {
     const response = await fetch(
-      `https://kosconnect-server.vercel.app/api/transaction/user/${userID}`,
+      `https://kosconnect-server.vercel.app/api/transaction/user`,
       {
         method: "GET",
         headers: {
