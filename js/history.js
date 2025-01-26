@@ -136,6 +136,7 @@ function setStatusIcons() {
 // Ambil data kos saat halaman dimuat
 window.onload = async () => {
   try {
+    const token = getCookie("authToken");
     const response = await fetch(
       `https://kosconnect-server.vercel.app/api/transaction/user`,
       {
@@ -148,7 +149,6 @@ window.onload = async () => {
     allOrderData = await response.json();
     renderOrderCards(allOrderData);
 
-    const authToken = getCookie("authToken");
     const userRole = getCookie("userRole");
     renderHeader(authToken, userRole);
   } catch (error) {
