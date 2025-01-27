@@ -39,19 +39,29 @@ async function renderOrderCards(orders, authToken) {
   }
 
   for (const order of orders.data) {
-    // Ambil detail boarding house, room, kategori, owner berdasarkan ID
-    const boardingHouse = await fetchDetailData("https://kosconnect-server.vercel.app/api/boardingHouses", order.boarding_house_id, authToken);
-    const room = await fetchDetailData("https://kosconnect-server.vercel.app/api/rooms", order.room_id, authToken);
-    const category = boardingHouse ? await fetchDetailData("https://kosconnect-server.vercel.app/api/categories", boardingHouse.category_id, authToken) : null;
-    const owner = boardingHouse ? boardingHouse.owner : null;
+    // Ambil detail kos menggunakan room_id yang ada di transaksi
+    const roomDetail = await fetchDetailData(
+      `https://kosconnect-server.vercel.app/api/rooms/${order.room_id}/detail`,
+      order.room_id,
+      authToken
+    );
+
+    if (!roomDetail) {
+      continue; // Lewati jika detail kos tidak ditemukan
+    }
+
+    // Data boarding house, room, category, owner langsung diambil dari roomDetail
+    const { boarding_house, owner, room_type } = roomDetail[0];
+    const category = boarding_house?.category || null;
 
     // Format tanggal
-    const formattedCheckInDate = new Date(order.check_in_date)
-      .toLocaleDateString("id-ID", {
-        day: "2-digit",
-        month: "long",
-        year: "numeric",
-      });
+    const formattedCheckInDate = new Date(
+      order.check_in_date
+    ).toLocaleDateString("id-ID", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    });
 
     const formattedUpdatedAt = new Date(order.updated_at).toLocaleDateString(
       "id-ID",
@@ -91,35 +101,38 @@ async function renderOrderCards(orders, authToken) {
       yearly: "Tahunan",
     };
 
-    // Gunakan mapping untuk menampilkan payment term
     const paymentTermText =
       paymentTermMapping[order.payment_term] || "Tidak Diketahui";
 
     // Komponen informasi kos
     const kosDetails = `
-      <p><strong>Nama Kos:</strong> ${
-        boardingHouse?.name || "Tidak Diketahui"
-      }</p>
-      <p><strong>Tipe Kamar:</strong> ${
-        room?.room_type || "Tidak Diketahui"
-      }</p>
-      <p><strong>Kategori:</strong> ${category?.name || "Tidak Diketahui"}</p>
-      <p><strong>Alamat:</strong> ${
-        boardingHouse?.address || "Tidak Diketahui"
-      }</p>
-      <p><strong>Nama Pemilik:</strong> ${owner?.fullname || "Tidak Diketahui"}</p>
-    `;
+<p><strong>Nama Kos:</strong> ${
+      roomDetail[0]?.boarding_house?.name || "Tidak Diketahui"
+    }</p>
+<p><strong>Tipe Kamar:</strong> ${
+      roomDetail[0]?.room_type || "Tidak Diketahui"
+    }</p>
+<p><strong>Kategori:</strong> ${
+      roomDetail[0]?.boarding_house?.category?.name || "Tidak Diketahui"
+    }</p>
+<p><strong>Alamat:</strong> ${
+      roomDetail[0]?.boarding_house?.address || "Tidak Diketahui"
+    }</p>
+<p><strong>Nama Pemilik:</strong> ${
+      roomDetail[0]?.owner?.fullname || "Tidak Diketahui"
+    }</p>
+`;
 
     // Komponen rincian biaya
-    const biayaDetails = `
-      <p><strong>Harga Sewa:</strong> Rp${order.price.toLocaleString(
+    const biayaDetails = ` 
+      <p><strong>Harga Sewa:</strong> Rp ${order.price.toLocaleString(
         "id-ID"
       )} / ${paymentTermText}</p>
-      <p><strong>Biaya Fasilitas:</strong> Rp${order.facilities_price.toLocaleString(
+      <p><strong>Biaya Fasilitas:</strong> Rp ${order.facilities_price.toLocaleString(
         "id-ID"
       )}</p>
-      <p><strong>PPN:</strong> Rp${order.ppn.toLocaleString("id-ID")}</p>
-      <p class="total"><strong>Total:</strong> Rp${order.total.toLocaleString(
+      <p><strong>PPN 11%:</strong> Rp ${order.ppn.toLocaleString("id-ID")}</p>
+      <p class="total"><strong>Total:</strong> Rp ${order.total.toLocaleString(
         "id-ID"
       )}</p>
     `;
@@ -127,12 +140,12 @@ async function renderOrderCards(orders, authToken) {
     // Tombol bayar sekarang (jika status pending)
     let actionElement = "";
     if (order.payment_status === "pending") {
-      actionElement = `
+      actionElement = ` 
         <a href="https://kosconnect-server.vercel.app/transactions/${order.transaction_id}/payment" class="pay-now-button">
           Bayar Sekarang
         </a>`;
     } else if (order.payment_status === "settlement") {
-      actionElement = `
+      actionElement = ` 
         <p><strong>Metode Pembayaran:</strong> ${order.payment_method}</p>
         <p class="updated-at">Diupdate: ${formattedUpdatedAt}</p>`;
     }
