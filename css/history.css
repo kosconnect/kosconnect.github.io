@@ -155,7 +155,7 @@ h4 {
     /* Menghindari overflow */
     text-overflow: ellipsis;
     /* Tambahkan elipsis jika teks terlalu panjang */
-    font-size: 24px;
+    font-size: 20px;
     color: #005f73;
     font-weight: bold;
 }
@@ -168,7 +168,7 @@ h4 {
     /* Menghindari overflow */
     text-overflow: ellipsis;
     /* Tambahkan elipsis jika teks terlalu panjang */
-    font-size: 24px;
+    font-size: 20px;
     color: #20B2AA;
     font-weight: bold;
 }
@@ -270,174 +270,3 @@ h4 {
     background-color: #c82333;
 }
 
-/* Responsive Layout */
-@media (max-width: 768px) {
-
-    h4.pc {
-        display: none;
-    }
-
-    h4.phone {
-        margin: 0;
-    }
-
-    .order-card {
-        flex-direction: column;
-        /* Tata letak vertikal untuk layar kecil */
-        padding: 15px;
-    }
-
-    .left-section {
-        border-right: none;
-        /* Hilangkan garis pembatas */
-        padding-right: 0;
-        margin-bottom: 15px;
-        /* Berikan jarak antar section */
-    }
-
-    .right-section {
-        padding-left: 0;
-    }
-
-    .left-header {
-        flex-direction: column;
-        align-items: flex-start;
-        /* Rata kiri */
-        gap: 5px;
-    }
-
-    .left-header .brand-logo img {
-        width: 40px;
-        height: 40px;
-    }
-
-    .left-header .brand-logo h4.phone {
-        font-size: 20px;
-    }
-
-    .status-icon {
-        width: 80px;
-        height: auto;
-    }
-}
-
-/* Left Section */
-.left-section {
-    flex: 2;
-    display: flex;
-    flex-direction: column;
-}
-
-.left-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100%;
-}
-
-.left-header .brand-logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    flex: 1;
-}
-
-.left-header .brand-logo img {
-    width: 50px;
-    height: 50px;
-}
-
-.left-header .brand-logo h4 {
-    font-family: 'Merriweather', serif;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 26px;
-    color: #09431f;
-    font-weight: bold;
-}
-
-.left-header .order-date {
-    font-family: "Nunito", Arial, sans-serif;
-    font-size: 0.9rem;
-    font-weight: 500;
-    color: #09431f;
-    flex-shrink: 0;
-}
-
-.order-code {
-    font-family: 'Merriweather Sans', serif;
-    font-size: 20px;
-    font-weight: bold;
-    color: #805700;
-    margin: 10px 0;
-    justify-content: center;
-}
-
-.order-details p {
-    font-size: 0.9rem;
-    margin: 5px 0;
-}
-
-.order-details p strong {
-    color: #333;
-}
-
-.order-items {
-    margin: 10px 0;
-    font-size: 0.9rem;
-}
-
-.order-items p {
-    display: flex;
-    justify-content: space-between;
-}
-
-.total {
-    font-family: 'Merriweather', serif;
-    font-weight: bold;
-    font-size: 20px;
-    color: #09431f;
-    text-align: right;
-}
-
-/* Right Section */
-.right-section {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 30px;
-    gap: 10px;
-    padding-left: 20px;
-    text-align: center;
-}
-
-.right-section .queue-number {
-    font-family: "Poppins", Arial, sans-serif;
-    font-size: 20px;
-    font-weight: bold;
-    color: #805700;
-}
-
-.right-section .status {
-    font-size: 24px;
-    color: #09431f;
-    font-weight: bold;
-    font-family: 'Merriweather', serif;
-}
-
-.cancel-button {
-    background-color: #dc3545;
-    color: #fff;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    margin-top: 10px;
-}
-
-.cancel-button:hover {
-    background-color: #c82333;
-}
