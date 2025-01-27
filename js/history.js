@@ -5,18 +5,28 @@ import { getCookie, renderHeader } from "./header.js";
 let allOrderData = [];
 
 // Fungsi untuk mendapatkan data detail dari berbagai endpoint
-async function fetchDetailData(endpoint, id) {
+const fetchDetailData = async (url, id, authToken) => {
   try {
-    const response = await fetch(`${endpoint}/${id}`);
+    const response = await fetch(`${url}/${id}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${authToken}`, // Tambahkan Authorization header
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
     return await response.json();
   } catch (error) {
-    console.error(`Gagal mengambil data dari ${endpoint}/${id}:`, error);
-    return null;
+    console.error(`Error fetching data from ${url}/${id}:`, error);
+    return null; // Return null untuk penanganan error
   }
-}
+};
 
 // Fungsi untuk merender kartu transaksi ke halaman
-async function renderOrderCards(orders) {
+async function renderOrderCards(orders, authToken) {
   const orderHistoryElement = document.getElementById("orderHistory");
 
   // Bersihkan elemen sebelumnya
@@ -29,32 +39,19 @@ async function renderOrderCards(orders) {
   }
 
   for (const order of orders.data) {
-    // Ambil detail data dari berbagai endpoint
-    const boardingHouse = await fetchDetailData(
-      "https://kosconnect-server.vercel.app/api/boardingHouses",
-      order.boarding_house_id
-    );
-    const room = await fetchDetailData(
-      "https://kosconnect-server.vercel.app/api/rooms",
-      order.room_id
-    );
-    const category = await fetchDetailData(
-      "https://kosconnect-server.vercel.app/api/categories",
-      boardingHouse?.category_id
-    );
-    const owner = await fetchDetailData(
-      "https://kosconnect-server.vercel.app/api/users",
-      boardingHouse?.owner_id
-    );
+    // Ambil detail boarding house, room, kategori, owner berdasarkan ID
+    const boardingHouse = await fetchDetailData("https://kosconnect-server.vercel.app/api/boardingHouses", order.boarding_house_id, authToken);
+    const room = await fetchDetailData("https://kosconnect-server.vercel.app/api/rooms", order.room_id, authToken);
+    const category = boardingHouse ? await fetchDetailData("https://kosconnect-server.vercel.app/api/categories", boardingHouse.category_id, authToken) : null;
+    const owner = boardingHouse ? boardingHouse.owner : null;
 
     // Format tanggal
-    const formattedCheckInDate = new Date(
-      order.check_in_date
-    ).toLocaleDateString("id-ID", {
-      day: "2-digit",
-      month: "long",
-      year: "numeric",
-    });
+    const formattedCheckInDate = new Date(order.check_in_date)
+      .toLocaleDateString("id-ID", {
+        day: "2-digit",
+        month: "long",
+        year: "numeric",
+      });
 
     const formattedUpdatedAt = new Date(order.updated_at).toLocaleDateString(
       "id-ID",
@@ -86,21 +83,45 @@ async function renderOrderCards(orders) {
     const paymentStatus =
       paymentStatusMap[order.payment_status] || "Tidak Diketahui";
 
+    // Mapping untuk payment term ke bahasa Indonesia
+    const paymentTermMapping = {
+      monthly: "Bulanan",
+      quarterly: "Per 3 Bulan",
+      semi_annual: "Per 6 Bulan",
+      yearly: "Tahunan",
+    };
+
+    // Gunakan mapping untuk menampilkan payment term
+    const paymentTermText =
+      paymentTermMapping[order.payment_term] || "Tidak Diketahui";
+
     // Komponen informasi kos
     const kosDetails = `
-      <p><strong>Nama Kos:</strong> ${boardingHouse?.name || "Tidak Diketahui"}</p>
-      <p><strong>Tipe Kamar:</strong> ${room?.room_type || "Tidak Diketahui"}</p>
+      <p><strong>Nama Kos:</strong> ${
+        boardingHouse?.name || "Tidak Diketahui"
+      }</p>
+      <p><strong>Tipe Kamar:</strong> ${
+        room?.room_type || "Tidak Diketahui"
+      }</p>
       <p><strong>Kategori:</strong> ${category?.name || "Tidak Diketahui"}</p>
-      <p><strong>Alamat:</strong> ${boardingHouse?.address || "Tidak Diketahui"}</p>
+      <p><strong>Alamat:</strong> ${
+        boardingHouse?.address || "Tidak Diketahui"
+      }</p>
       <p><strong>Nama Pemilik:</strong> ${owner?.fullname || "Tidak Diketahui"}</p>
     `;
 
     // Komponen rincian biaya
     const biayaDetails = `
-      <p><strong>Harga Sewa:</strong> Rp${order.price.toLocaleString("id-ID")} / ${order.payment_term}</p>
-      <p><strong>Biaya Fasilitas:</strong> Rp${order.facilities_price.toLocaleString("id-ID")}</p>
+      <p><strong>Harga Sewa:</strong> Rp${order.price.toLocaleString(
+        "id-ID"
+      )} / ${paymentTermText}</p>
+      <p><strong>Biaya Fasilitas:</strong> Rp${order.facilities_price.toLocaleString(
+        "id-ID"
+      )}</p>
       <p><strong>PPN:</strong> Rp${order.ppn.toLocaleString("id-ID")}</p>
-      <p class="total"><strong>Total:</strong> Rp${order.total.toLocaleString("id-ID")}</p>
+      <p class="total"><strong>Total:</strong> Rp${order.total.toLocaleString(
+        "id-ID"
+      )}</p>
     `;
 
     // Tombol bayar sekarang (jika status pending)
@@ -127,17 +148,11 @@ async function renderOrderCards(orders) {
             <img src="/img/logokos.png" alt="Logo">
             <h4>KosConnect</h4>
           </div>
+          <h4> - </h4>
           <h4 class="order-title">${order.transaction_code}</h4>
         </div>
         <div class="order-details">
           <div class="kos-details">${kosDetails}</div>
-          <div class="user-details">
-            <p><strong>Nama Pemesan:</strong> ${order.personal_info.full_name}</p>
-            <p><strong>Jenis Kelamin:</strong> ${order.personal_info.gender}</p>
-            <p><strong>Email:</strong> ${order.personal_info.email}</p>
-            <p><strong>Nomor HP:</strong> ${order.personal_info.phone_number}</p>
-            <p><strong>Alamat:</strong> ${order.personal_info.address}</p>
-          </div>
           <div class="biaya-details">${biayaDetails}</div>
         </div>
       </div>
@@ -203,7 +218,7 @@ window.onload = async () => {
       }
     );
     allOrderData = await response.json();
-    await renderOrderCards(allOrderData);
+    await renderOrderCards(allOrderData, authToken);
 
     const userRole = getCookie("userRole");
     renderHeader(authToken, userRole);
