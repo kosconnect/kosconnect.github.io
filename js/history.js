@@ -20,7 +20,7 @@ async function renderOrderCards(orders) {
   for (const order of orders.data) {
     // Ambil detail kos langsung dari endpoint
     const response = await fetch(
-      `https://kosconnect-server.vercel.app/api/rooms/${order.room_id}/detail`
+      `https://kosconnect-server.vercel.app/api/rooms/${order.room_id}/pages`
     );
 
     if (!response.ok) {

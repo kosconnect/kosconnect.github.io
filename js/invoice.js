@@ -16,7 +16,7 @@ async function renderTransactionDetail(order) {
 
   // Ambil detail kos langsung dari endpoint
   const response = await fetch(
-    `https://kosconnect-server.vercel.app/api/rooms/${order.room_id}/detail`
+    `https://kosconnect-server.vercel.app/api/rooms/${order.room_id}/pages`
   );
 
   if (!response.ok) {
