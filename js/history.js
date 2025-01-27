@@ -163,7 +163,7 @@ async function renderOrderCards(orders) {
     // Menambahkan event listener untuk klik kartu
     card.addEventListener("click", () => {
       // Arahkan ke halaman detail transaksi dengan ID transaksi
-      window.location.href = `https://kosconnect-server.vercel.app/transactions/${order.transaction_id}`;
+      window.location.href = `https://kosconnect.github.io/invoice.html?transaction_id=${order.transaction_id}`;
     });
 
     orderHistoryElement.appendChild(card);
