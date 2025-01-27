@@ -4,29 +4,8 @@ import { getCookie, renderHeader } from "./header.js";
 // Variabel global untuk menyimpan semua data orders
 let allOrderData = [];
 
-// Fungsi untuk mendapatkan data detail dari berbagai endpoint
-const fetchDetailData = async (url, id, authToken) => {
-  try {
-    const response = await fetch(`${url}/${id}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${authToken}`, // Tambahkan Authorization header
-      },
-    });
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    return await response.json();
-  } catch (error) {
-    console.error(`Error fetching data from ${url}/${id}:`, error);
-    return null; // Return null untuk penanganan error
-  }
-};
-
 // Fungsi untuk merender kartu transaksi ke halaman
-async function renderOrderCards(orders, authToken) {
+async function renderOrderCards(orders) {
   const orderHistoryElement = document.getElementById("orderHistory");
 
   // Bersihkan elemen sebelumnya
@@ -39,16 +18,17 @@ async function renderOrderCards(orders, authToken) {
   }
 
   for (const order of orders.data) {
-    // Ambil detail kos menggunakan room_id yang ada di transaksi
-    const roomDetail = await fetchDetailData(
-      `https://kosconnect-server.vercel.app/api/rooms/${order.room_id}/detail`,
-      order.room_id,
-      authToken
+    // Ambil detail kos langsung dari endpoint
+    const response = await fetch(
+      `https://kosconnect-server.vercel.app/api/rooms/${order.room_id}/detail`
     );
 
-    if (!roomDetail) {
+    if (!response.ok) {
+      console.error(`Error fetching room detail for room_id ${order.room_id}`);
       continue; // Lewati jika detail kos tidak ditemukan
     }
+
+    const roomDetail = await response.json();
 
     // Data boarding house, room, category, owner langsung diambil dari roomDetail
     const { boarding_house, owner, room_type } = roomDetail[0];
@@ -160,9 +140,10 @@ async function renderOrderCards(orders, authToken) {
           <div class="brand-logo">
             <img src="/img/logokos.png" alt="Logo">
             <h4>KosConnect</h4>
-          </div>
-          <h4> - </h4>
+            <h4> - </h4>
           <h4 class="order-title">${order.transaction_code}</h4>
+          </div>
+          
         </div>
         <div class="order-details">
           <div class="kos-details">${kosDetails}</div>
