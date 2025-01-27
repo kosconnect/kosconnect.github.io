@@ -220,7 +220,8 @@ window.onload = async () => {
     }
 
     const transactionData = await response.json();
-    await renderTransactionDetail(transactionData);
+    console.log("Transaction Data:", transactionData.data); // Log untuk debugging
+    await renderTransactionDetail(transactionData.data);
 
     const userRole = getCookie("userRole");
     renderHeader(authToken, userRole);
