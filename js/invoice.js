@@ -1,6 +1,19 @@
 // Import getCookie dan renderHeader dari header.js
 import { getCookie, renderHeader } from "./header.js";
 
+// Menangkap parameter transaction_id dari URL
+const urlParams = new URLSearchParams(window.location.search);
+const transactionId = urlParams.get('transaction_id');
+
+// Gunakan transactionId untuk mengambil dan menampilkan detail transaksi
+fetch(`https://kosconnect-server.vercel.app/api/transaction/${transactionId}`)
+  .then(response => response.json())
+  .then(data => {
+    // Render detail transaksi di halaman invoice
+    console.log(data); // Anda dapat menggantinya dengan logika untuk menampilkan data di halaman
+  })
+  .catch(error => console.error("Gagal mengambil detail transaksi:", error));
+
 // Variabel global untuk menyimpan semua data orders
 let allOrderData = [];
 
