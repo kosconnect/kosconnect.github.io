@@ -101,20 +101,8 @@ h4 {
     position: relative;
     padding: 20px;
     margin-bottom: 20px;
+    border-left: 10px solid #005f73;
   }
-  
-  /* Elemen garis biru */
-  .order-card::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: -10px; /* Adjust this value to control the offset */
-    width: 10px;
-    height: 100%;
-    background-color: #005f73; /* Blue color */
-    z-index: -1; /* Place it behind the card */
-  }
-
 /* Left Section */
 .left-section {
     position: relative;
