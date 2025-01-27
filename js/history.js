@@ -53,6 +53,16 @@ async function renderOrderCards(orders) {
         minute: "2-digit",
       }
     );
+    const formattedCreatedAt = new Date(order.created_at).toLocaleDateString(
+      "id-ID",
+      {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      }
+    );
 
     const customFacilities = order.custom_facilities
       .map(
@@ -86,14 +96,11 @@ async function renderOrderCards(orders) {
 
     // Komponen informasi kos
     const kosDetails = `
-<p><strong>Nama Kos:</strong> ${
-      roomDetail[0]?.boarding_house?.name || "Tidak Diketahui"
-    }</p>
-<p><strong>Tipe Kamar:</strong> ${
-      roomDetail[0]?.room_type || "Tidak Diketahui"
-    }</p>
+<p><strong> ${
+      roomDetail[0]?.room_name || "Tidak Diketahui"
+    }</strong></p>
 <p><strong>Kategori:</strong> ${
-      roomDetail[0]?.boarding_house?.category?.name || "Tidak Diketahui"
+      roomDetail[0]?.category_name || "Tidak Diketahui"
     }</p>
 <p><strong>Alamat:</strong> ${
       roomDetail[0]?.boarding_house?.address || "Tidak Diketahui"
@@ -143,7 +150,7 @@ async function renderOrderCards(orders) {
             <h4> - </h4>
           <h4 class="order-title">${order.transaction_code}</h4>
           </div>
-          
+          <p class="created-at">${formattedCreatedAt}</p>
         </div>
         <div class="order-details">
           <div class="kos-details">${kosDetails}</div>
