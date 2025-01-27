@@ -16,13 +16,16 @@ import { getCookie, renderHeader } from "./header.js";
 
 // Fungsi untuk merender kartu transaksi ke halaman
 async function renderTransactionDetail(orders) {
-    const orderHistoryElement = document.getElementById("orderHistory");
+  const orderHistoryElement = document.getElementById("orderHistory");
 
-    if (!transaction) {
-      orderHistoryElement.innerHTML = "<p>Tidak ada transaksi yang ditemukan.</p>";
-      return;
-    }
+  // Bersihkan elemen sebelumnya
+  orderHistoryElement.innerHTML = "";
 
+  if (orders.length === 0) {
+    orderHistoryElement.innerHTML =
+      "<p>Tidak ada transaksi yang ditemukan.</p>";
+    return;
+  }
   for (const order of orders.data) {
     // Ambil detail kos langsung dari endpoint
     const response = await fetch(
@@ -214,26 +217,26 @@ function setStatusIcons() {
 }
 // Ambil data kos saat halaman dimuat
 window.onload = async () => {
-    try {
-      const authToken = getCookie("authToken");
-      const urlParams = new URLSearchParams(window.location.search);
-      const transactionId = urlParams.get("transaction_id");
-      const response = await fetch(
-        `https://kosconnect-server.vercel.app/api/transaction/${transactionId}`,
-        {
-          method: "GET",
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }
-      );
-      const transactionData = await response.json(); 
-  
-      await renderTransactionDetail(transactionData); 
-  
-      const userRole = getCookie("userRole");
-      renderHeader(authToken, userRole);
-    } catch (error) {
-      console.error("Gagal mengambil data:", error);
-    }
-  };
+  try {
+    const authToken = getCookie("authToken");
+    const urlParams = new URLSearchParams(window.location.search);
+    const transactionId = urlParams.get("transaction_id");
+    const response = await fetch(
+      `https://kosconnect-server.vercel.app/api/transaction/${transactionId}`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
+    );
+    const transactionData = await response.json();
+
+    await renderTransactionDetail(transactionData);
+
+    const userRole = getCookie("userRole");
+    renderHeader(authToken, userRole);
+  } catch (error) {
+    console.error("Gagal mengambil data:", error);
+  }
+};
