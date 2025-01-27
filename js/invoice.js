@@ -198,7 +198,7 @@ function setStatusIcons() {
     }
   });
 }
-
+//a
 // Ambil data kos saat halaman dimuat
 window.onload = async () => {
   try {
