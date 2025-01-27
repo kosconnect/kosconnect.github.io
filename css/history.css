@@ -185,7 +185,7 @@ h4 {
 }
 
 .order-details p strong {
-    color: #333;
+    color: #1b3446;
 }
 
 /* Order Items */
@@ -215,7 +215,7 @@ h4 {
     align-items: center;
     margin-top: 30px;
     gap: 10px;
-    padding-left: 20px;
+    padding-left: 10px;
     text-align: center;
 }
 
@@ -232,7 +232,7 @@ h4 {
 }
 
 .status-icon {
-    width: 100px;
+    width: 90px;
     height: auto;
 }
 

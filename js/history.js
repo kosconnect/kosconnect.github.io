@@ -57,7 +57,7 @@ async function renderOrderCards(orders) {
       "id-ID",
       {
         day: "2-digit",
-        month: "2-digit",
+        month: "long",
         year: "numeric",
         hour: "2-digit",
         minute: "2-digit",
@@ -150,7 +150,6 @@ async function renderOrderCards(orders) {
             <h4> - </h4>
           <h4 class="order-title">${order.transaction_code}</h4>
           </div>
-          <p class="created-at">${formattedCreatedAt}</p>
         </div>
         <div class="order-details">
           <div class="kos-details">${kosDetails}</div>
