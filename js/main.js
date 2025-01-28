@@ -69,7 +69,7 @@ function renderRooms(rooms) {
   });
 }
 // Fungsi untuk menangani booking
-function handleBooking(ownerId) {
+function handleBooking(roomId) {
   const authToken = getCookie("authToken"); // Ambil authToken dari cookie
   if (!authToken) {
     Swal.fire({
@@ -85,8 +85,8 @@ function handleBooking(ownerId) {
       }
     });
   } else {
-    console.log("Booking oleh user untuk owner ID:", ownerId);
-    window.location.href = `https://kosconnect.github.io/detail.html?room_id=${room.room_id}`;
+    console.log("Booking oleh user:", roomId);
+    window.location.href = `https://kosconnect.github.io/detail.html?room_id=${roomId}`;
   }
 }
 
