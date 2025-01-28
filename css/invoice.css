@@ -65,7 +65,7 @@ h4 {
     font-weight: bold;
 }
 
-h4 .order-title {
+.right-header {
     font-family: 'Merriweather Sans', serif;
     text-align: right;
     white-space: nowrap;
@@ -87,7 +87,8 @@ h4 .order-title {
 .left-bottom,
 .center,
 .right {
-    flex: 1;
+    background-color: #fff;
+    border-radius: 10px;
 }
 
 .order-date {
@@ -102,12 +103,9 @@ h4 .order-title {
 /* Left Section */
 .left-section {
     position: relative;
-    flex: 2;
+    flex: 1.5;
     display: flex;
     flex-direction: column;
-    padding-right: 20px;
-    /* Garis putus-putus di sisi kanan */
-    border-right: 2px dotted #d9d9d9;
 }
 
 
@@ -130,13 +128,13 @@ h4 .order-title {
     color: #1b3446;
 }
 
-/* Order Items */
-.order-items {
+/* rincian pesanan */
+.center {
     margin: 10px 0;
     font-size: 0.9rem;
 }
 
-.order-items p {
+.center p {
     display: flex;
     justify-content: space-between;
 }
@@ -168,6 +166,14 @@ h4 .order-title {
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 30px;
+    gap: 10px;
+    padding-left: 10px;
+    text-align: center;
 }
 
 .right-section {
@@ -188,7 +194,7 @@ h4 .order-title {
     color: #005f73;
 }
 
-.right-section img {
+.right img {
     width: 30px;
     height: 30px;
 }
