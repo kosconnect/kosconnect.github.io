@@ -157,6 +157,9 @@ h5 {
     color: #20B2AA;
     border-top: 1px solid #1b3446;
 }
+span .total {
+    font-family: 'Merriweather', serif;
+}
 
 p.notice {
     position: absolute;

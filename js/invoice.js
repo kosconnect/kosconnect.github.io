@@ -125,7 +125,9 @@ async function renderTransactionDetail(order) {
       <p style="margin-top:5px;"><strong>PPN 11%</strong> Rp ${order.ppn.toLocaleString(
         "id-ID"
       )}</p>
-      <h5>Total <span>Rp ${order.total.toLocaleString("id-ID")}</span></h5>
+      <h5>Total <span class="total">Rp ${order.total.toLocaleString(
+        "id-ID"
+      )}</span></h5>
     `;
 
   // Tombol bayar sekarang (jika status pending)
