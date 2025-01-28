@@ -2,12 +2,12 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
+    font-family: 'Merriweather Sans', serif;
 }
 
 /* Main Header Styling */
 .header {
-    font-family: "Signika", Arial, sans-serif;
+    font-family: 'Merriweather', serif;
     background-color: #ffffff;
     padding: 15px 20px;
     border-bottom-left-radius: 20px;
@@ -150,7 +150,7 @@
 }
 
 .search-button:hover {
-    background-color: #FFBD59 ;
+    background-color: #FFBD59;
 }
 
 .profile {
@@ -158,26 +158,38 @@
 }
 
 .btn-login {
-    background-color: #005f73; /* Warna tombol */
-    color: #ffffff; /* Warna teks */
-    border: none; /* Menghilangkan border */
-    border-radius: 5px; /* Membuat sudut tombol melengkung */
-    padding: 10px 20px; /* Jarak di dalam tombol */
-    font-size: 14px; /* Ukuran teks */
-    cursor: pointer; /* Mengubah kursor menjadi pointer saat hover */
-    display: inline-flex; /* Untuk ikon dan teks sejajar */
-    align-items: center; /* Menyelaraskan ikon dan teks secara vertikal */
-    gap: 5px; /* Memberi jarak antara ikon dan teks */
-    font-family: "Poppins", serif;
+    background-color: #005f73;
+    /* Warna tombol */
+    color: #ffffff;
+    /* Warna teks */
+    border: none;
+    /* Menghilangkan border */
+    border-radius: 5px;
+    /* Membuat sudut tombol melengkung */
+    padding: 10px 20px;
+    /* Jarak di dalam tombol */
+    font-size: 14px;
+    /* Ukuran teks */
+    cursor: pointer;
+    /* Mengubah kursor menjadi pointer saat hover */
+    display: inline-flex;
+    /* Untuk ikon dan teks sejajar */
+    align-items: center;
+    /* Menyelaraskan ikon dan teks secara vertikal */
+    gap: 5px;
+    /* Memberi jarak antara ikon dan teks */
+    font-family: "Poppins", serif;
     margin-left: 10px;
 }
 
 .btn-login:hover {
-    background-color: #20B2AA; /* Warna saat tombol di-hover */
+    background-color: #20B2AA;
+    /* Warna saat tombol di-hover */
 }
 
 .btn-login i {
-    font-size: 16px; /* Ukuran ikon */
+    font-size: 16px;
+    /* Ukuran ikon */
 }
 
 
@@ -296,15 +308,16 @@
 }
 
 /* Hover Dropdown */
-#dropdown-category:hover .dropdown-category{
+#dropdown-category:hover .dropdown-category {
     display: block;
 }
 
-  
+
 
 
 /* Responsive Styling */
 @media (max-width: 768px) {
+
     /* Adjust navbar layout */
     .navbar {
         flex-direction: row;
@@ -342,7 +355,7 @@
     .dropdown {
         order: 2;
         /* Tempatkan dropdown setelah nama */
-         margin-left: 10px; 
+        margin-left: 10px;
         /* Tambahkan spasi kecil antara nama dan dropdown */
     }
 
