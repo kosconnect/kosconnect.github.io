@@ -64,65 +64,65 @@ function renderRooms(rooms) {
     card.appendChild(price);
 
     // Event handler untuk booking
-    card.addEventListener("click", () => handleBooking(room.owner_id));
+    card.addEventListener("click", () => handleBooking(room.room_id));
     menuGrid.appendChild(card);
   });
 }
 // Fungsi untuk menangani booking
 function handleBooking(ownerId) {
-    const authToken = getCookie("authToken"); // Ambil authToken dari cookie
-    if (!authToken) {
-      Swal.fire({
-        title: "Login Diperlukan",
-        text: "Anda harus login terlebih dahulu untuk melakukan pemesanan.",
-        icon: "warning",
-        confirmButtonText: "Login",
-        showCancelButton: true,
-        cancelButtonText: "Batal",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          window.location.href = "https://kosconnect.github.io/login/";
-        }
-      });
-    } else {
-      console.log("Booking oleh user untuk owner ID:", ownerId);
-      window.location.href = `https://kosconnect.github.io/booking/${ownerId}`;
-    }
+  const authToken = getCookie("authToken"); // Ambil authToken dari cookie
+  if (!authToken) {
+    Swal.fire({
+      title: "Login Diperlukan",
+      text: "Anda harus login terlebih dahulu untuk melakukan pemesanan.",
+      icon: "warning",
+      confirmButtonText: "Login",
+      showCancelButton: true,
+      cancelButtonText: "Batal",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        window.location.href = "https://kosconnect.github.io/login/";
+      }
+    });
+  } else {
+    console.log("Booking oleh user untuk owner ID:", ownerId);
+    window.location.href = `https://kosconnect.github.io/detail.html?room_id=${roomId}`;
   }
-  
+}
+
 // Fungsi pencarian
 function searchKos(query) {
-    const filteredData = allKosData.filter(
-      (room) =>
-        room.room_name.toLowerCase().includes(query) ||
-        room.category_name.toLowerCase().includes(query)
-    );
-    renderRooms(filteredData);
-  }
+  const filteredData = allKosData.filter(
+    (room) =>
+      room.room_name.toLowerCase().includes(query) ||
+      room.category_name.toLowerCase().includes(query)
+  );
+  renderRooms(filteredData);
+}
 
 // Fungsi filter kategori
 function filterDataByCategory(categoryId, categoryName) {
-    const welcomeText = document.getElementById("welcome-text");
-    welcomeText.textContent = `Menampilkan hasil untuk kategori: ${categoryName}`;
-    const filteredData = allKosData.filter(
-      (room) => room.category_id === categoryId
-    );
-    renderRooms(filteredData);
-  }
+  const welcomeText = document.getElementById("welcome-text");
+  welcomeText.textContent = `Menampilkan hasil untuk kategori: ${categoryName}`;
+  const filteredData = allKosData.filter(
+    (room) => room.category_id === categoryId
+  );
+  renderRooms(filteredData);
+}
 
 // Ambil data kos saat halaman dimuat
 window.onload = async () => {
-    try {
-      const response = await fetch(
-        "https://kosconnect-server.vercel.app/api/rooms/home"
-      );
-      allKosData = await response.json();
-      renderRooms(allKosData);
-  
-      const authToken = getCookie("authToken");
-      const userRole = getCookie("userRole");
-      renderHeader(authToken, userRole, searchKos, filterDataByCategory);
-    } catch (error) {
-      console.error("Gagal mengambil data:", error);
-    }
-  };
+  try {
+    const response = await fetch(
+      "https://kosconnect-server.vercel.app/api/rooms/home"
+    );
+    allKosData = await response.json();
+    renderRooms(allKosData);
+
+    const authToken = getCookie("authToken");
+    const userRole = getCookie("userRole");
+    renderHeader(authToken, userRole, searchKos, filterDataByCategory);
+  } catch (error) {
+    console.error("Gagal mengambil data:", error);
+  }
+};
