@@ -138,7 +138,7 @@ h4 {
 /* rincian pesanan */
 .center {
     font-size: 0.9rem;
-    width: 40%;
+    flex: 1.5;
 }
 .center p strong .title {
     text-align: center;
