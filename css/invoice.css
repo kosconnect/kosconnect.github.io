@@ -65,8 +65,9 @@ h4 {
     font-weight: bold;
 }
 
-.right-header h4 .order-title {
+h4 .order-title {
     font-family: 'Merriweather Sans', serif;
+    text-align: right;
     white-space: nowrap;
     /* Mencegah pemisahan baris */
     overflow: hidden;

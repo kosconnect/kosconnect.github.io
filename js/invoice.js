@@ -109,6 +109,7 @@ async function renderTransactionDetail(order) {
 
   // Komponen rincian biaya
   const biayaDetails = ` 
+  <p><strong>Check-in:</strong> ${formattedCheckInDate}</p>
     <p><strong>Fasilitas Custom</strong> 
       ${customFacilities}</p>
       <p><strong>Biaya Fasilitas:</strong> Rp ${order.facilities_price.toLocaleString(
@@ -153,11 +154,14 @@ async function renderTransactionDetail(order) {
     </div>
   </div>
   <div class="order-details">
+  <div class="left-section">
     <div class="left-top">
+      <p><strong>Informasi Kos</strong></p>
       <div class="kos-details">${kosDetails}</div>
     </div>
     <div class="left-bottom">
       <div class="user-details">
+      <p><strong>Informasi Pemesan</strong></p>
         <p><strong>Nama Pemesan:</strong> ${order.personal_info.full_name}</p>
         <p><strong>Jenis Kelamin:</strong> ${order.personal_info.gender}</p>
         <p><strong>Email:</strong> ${order.personal_info.email}</p>
@@ -165,10 +169,16 @@ async function renderTransactionDetail(order) {
         <p><strong>Alamat:</strong> ${order.personal_info.address}</p>
       </div>
     </div>
+    </div>
     <div class="center">
+    <p><strong>Rincian Pesanan</strong></p>
       <div class="biaya-details">${biayaDetails}</div>
     </div>
-    <div class="right" data-status="${order.payment_status}">
+    <div class="right">
+    <p><strong>Rincian Pembayaran</strong></p>
+    <p><strong>Waktu Pemesanan:</strong> ${formattedCreatedAt}</p>
+    <div data-status="${order.payment_status}"> </div>
+    
     <i class="status-icon"></i>
     <p class="status">${paymentStatus}</p>
     ${actionElement}
