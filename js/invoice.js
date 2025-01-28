@@ -66,7 +66,7 @@ async function renderTransactionDetail(order) {
   const customFacilities = order.custom_facilities
     .map(
       (facility) =>
-        `<p class="fcustom">${facility.name} <span> Rp ${facility.price.toLocaleString(
+        `<p>${facility.name} <span> Rp ${facility.price.toLocaleString(
           "id-ID"
         )}</span></p>`
     )
@@ -110,22 +110,22 @@ async function renderTransactionDetail(order) {
   // Komponen rincian biaya
   const biayaDetails = ` 
   <p><strong>Tanggal Masuk</strong> <strong>${formattedCheckInDate}</strong></p>
-    <p><strong>Fasilitas Custom</strong> 
+    <p style="margin-top:5px;"><strong>Fasilitas Custom</strong> 
       ${customFacilities}</p>
       <p class="fctotal"><strong>Biaya Fasilitas</strong> Rp ${order.facilities_price.toLocaleString(
         "id-ID"
       )}</p>
-      <p><strong>Harga Sewa</strong></p>
+      <p style="margin-top:5px;"><strong>Harga Sewa</strong></p>
       <p>${paymentTermText} <span> Rp ${order.price.toLocaleString(
     "id-ID"
   )}</span></p>
-      <p class="subtotal"><strong>Subtotal</strong> Rp ${order.subtotal.toLocaleString(
+      <p class="subtotal" style="margin-top:5px;"><strong>Subtotal</strong> Rp ${order.subtotal.toLocaleString(
         "id-ID"
       )}</p>
-      <p><strong>PPN 11%</strong> Rp ${order.ppn.toLocaleString("id-ID")}</p>
-      <h5 class="total">Total <span class="total"> Rp ${order.total.toLocaleString(
+      <p style="margin-top:5px;"><strong>PPN 11%</strong> Rp ${order.ppn.toLocaleString(
         "id-ID"
-      )}</></h5>
+      )}</p>
+      <h5>Total <span> Rp ${order.total.toLocaleString("id-ID")}</></h5>
       <p class="notice">*Harga Fasilitas Custom merupakan harga bulanan</p>
     `;
 
@@ -161,12 +161,12 @@ async function renderTransactionDetail(order) {
   <div class="order-details">
   <div class="left-section">
     <div class="left-top">
-      <p><strong class="title">Informasi Kos</strong></p>
+      <h6><strong>Informasi Kos</strong></h6>
       <div class="kos-details">${kosDetails}</div>
     </div>
     <div class="left-bottom">
       <div class="user-details">
-      <p><strong class="title">Informasi Pemesan</strong></p>
+      <h6><strong>Informasi Pemesan</strong></h6>
         <p><strong>${order.personal_info.full_name}</strong> </p>
         <p>${order.personal_info.gender}</p>
         <p>${order.personal_info.email}</p>
@@ -176,11 +176,11 @@ async function renderTransactionDetail(order) {
     </div>
     </div>
     <div class="center">
-    <p><strong class="title">Rincian Pesanan</strong></p>
+    <h6><strong>Rincian Pesanan</strong></h6>
       <div class="biaya-details">${biayaDetails}</div>
     </div>
     <div class="right">
-    <p><strong class="title">Rincian Pembayaran</strong></p>
+    <h6><strong>Rincian Pembayaran</strong></h6>
     <p><strong>Dibuat: ${formattedCreatedAt}</strong></p>
     <div class="img" data-status="${order.payment_status}"> 
     <i class="status-icon"></i>
