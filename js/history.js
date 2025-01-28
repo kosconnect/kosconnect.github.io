@@ -118,9 +118,7 @@ async function renderOrderCards(orders) {
       <p><strong>Harga Sewa:</strong> Rp ${order.price.toLocaleString(
         "id-ID"
       )} / ${paymentTermText}</p>
-      <p><strong>Subtotal</strong> Rp ${order.subtotal.toLocaleString(
-        "id-ID"
-      )}</p>
+      
       <p><strong>PPN 11%:</strong> Rp ${order.ppn.toLocaleString("id-ID")}</p>
       <p class="total"><strong>Total:</strong> Rp ${order.total.toLocaleString(
         "id-ID"
