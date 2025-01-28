@@ -40,10 +40,12 @@ body {
 .back-button {
     color: #005f73;
     text-decoration: none;
+    font-size: 15px;
+    background-color: none;
     position: absolute;
     top: 10px;
     /* Jarak dari atas */
-    right: 10px;
+    left: 10px;
     /* Jarak dari kanan */
 }
 
