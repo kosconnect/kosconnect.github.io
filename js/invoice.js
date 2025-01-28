@@ -141,7 +141,7 @@ async function renderTransactionDetail(order) {
   card.className = "order-card";
 
   card.innerHTML = `
-  <div class="header">
+  <div class="invoice-header">
     <div class="left-header">
       <div class="brand-logo">
         <img src="/img/logokos.png" alt="Logo">
