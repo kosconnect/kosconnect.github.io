@@ -99,10 +99,10 @@ async function renderTransactionDetail(order) {
 <p><strong>Kategori:</strong> ${
     roomDetail[0]?.category_name || "Tidak Diketahui"
   }</p>
-<p><strong>Alamat:</strong> ${
+<p><strong></strong> ${
     roomDetail[0]?.boarding_house?.address || "Tidak Diketahui"
   }</p>
-<p><strong>Nama Pemilik:</strong> ${
+<p><strong>Pemilik:</strong> ${
     roomDetail[0]?.owner?.fullname || "Tidak Diketahui"
   }</p>
 `;
@@ -193,7 +193,7 @@ async function renderTransactionDetail(order) {
 
 // Fungsi untuk mengatur ikon status pembayaran
 function setStatusIcons() {
-  const rightSections = document.querySelectorAll(".right-section");
+  const rightSections = document.querySelectorAll(".right");
 
   rightSections.forEach((section) => {
     const statusIcon = section.querySelector(".status-icon");
