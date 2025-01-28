@@ -93,6 +93,13 @@ h4 {
     padding: 10px;
 }
 
+p.title {
+    font-family: 'Merriweather Sans', serif;
+    font-size: 18px;
+    font-weight: bold;
+    color: #1b3446;
+    margin-bottom: 15px;
+}
 .order-date {
     font-family: "Nunito", Arial, sans-serif;
     font-size: 0.9rem;
@@ -126,34 +133,42 @@ h4 {
     color: #005f73;
 }
 
-.order-details p .title{
+/* .order-details p .title {
     color: #1b3446;
     margin-bottom: 10px;
-}
+} */
+
 .order-details p strong {
     color: #005f73;
 }
 
 /* rincian pesanan */
 .center {
+    position: relative;
     font-size: 0.9rem;
     flex: 1.5;
 }
+
 .center .title {
+    align-items: center;
     text-align: center;
 }
 
+h5,
 .center p {
     display: flex;
     justify-content: space-between;
 }
- .fcustom{
+
+.fcustom {
     margin-top: 0px;
 }
-.fctotal{
+
+.fctotal {
     border-top: 1px solid #1b3446;
 }
-.subtotal{
+
+.subtotal {
     border-top: 1px solid #1b3446;
 }
 
@@ -162,16 +177,18 @@ h4 {
     font-weight: bold;
     font-size: 20px;
     color: #20B2AA;
-    text-align: right;
+    /* text-align: right; */
     border-top: 1px solid #1b3446;
+    justify-content: space-between;
 }
 
-.notice {
-    position: absolute;
+p.notice {
+    position: relative;
     margin-bottom: 0;
+    font-size: 10px;
+    bottom: 10px;
 }
 
-/* Right Section */
 .left-top {
     margin-bottom: 16px;
 }

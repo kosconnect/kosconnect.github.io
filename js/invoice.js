@@ -57,7 +57,7 @@ async function renderTransactionDetail(order) {
     {
       day: "2-digit",
       month: "long",
-      year: "numeric",
+      year: "2-digit",
       hour: "2-digit",
       minute: "2-digit",
     }
@@ -123,7 +123,7 @@ async function renderTransactionDetail(order) {
         "id-ID"
       )}</p>
       <p><strong>PPN 11%</strong> Rp ${order.ppn.toLocaleString("id-ID")}</p>
-      <h5 class="total">Total <span> Rp ${order.total.toLocaleString(
+      <h5 class="total">Total <span class="total"> Rp ${order.total.toLocaleString(
         "id-ID"
       )}</></h5>
       <p class="notice">*Harga Fasilitas Custom merupakan harga bulanan</p>
@@ -181,8 +181,8 @@ async function renderTransactionDetail(order) {
     </div>
     <div class="right">
     <p><strong class="title">Rincian Pembayaran</strong></p>
-    <p><strong>${formattedCreatedAt}</strong></p>
-    <div data-status="${order.payment_status}"> 
+    <p><strong>Dibuat: ${formattedCreatedAt}</strong></p>
+    <div class="img" data-status="${order.payment_status}"> 
     <i class="status-icon"></i>
     <p class="status">${paymentStatus}</p>
     ${actionElement}
@@ -200,7 +200,7 @@ async function renderTransactionDetail(order) {
 
 // Fungsi untuk mengatur ikon status pembayaran
 function setStatusIcons() {
-  const rightSections = document.querySelectorAll(".right");
+  const rightSections = document.querySelectorAll(".img");
 
   rightSections.forEach((section) => {
     const statusIcon = section.querySelector(".status-icon");
