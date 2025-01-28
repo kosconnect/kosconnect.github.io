@@ -110,10 +110,15 @@ async function renderOrderCards(orders) {
 
     // Komponen rincian biaya
     const biayaDetails = ` 
+      <p><strong>Fasilitas Custom</strong> 
+      ${customFacilities}</p>
+      <p><strong>Biaya Fasilitas:</strong> Rp ${order.facilities_price.toLocaleString(
+        "id-ID"
+      )}</p>
       <p><strong>Harga Sewa:</strong> Rp ${order.price.toLocaleString(
         "id-ID"
       )} / ${paymentTermText}</p>
-      <p><strong>Biaya Fasilitas:</strong> Rp ${order.facilities_price.toLocaleString(
+      <p><strong>Subtotal</strong> Rp ${order.subtotal.toLocaleString(
         "id-ID"
       )}</p>
       <p><strong>PPN 11%:</strong> Rp ${order.ppn.toLocaleString("id-ID")}</p>
@@ -123,17 +128,18 @@ async function renderOrderCards(orders) {
     `;
 
     // Tombol bayar sekarang (jika status pending)
-    let actionElement = "";
-    if (order.payment_status === "pending") {
-      actionElement = ` 
-        <a href="https://kosconnect-server.vercel.app/transactions/${order.transaction_id}/payment" class="pay-now-button">
-          Bayar Sekarang
-        </a>`;
-    } else if (order.payment_status === "settlement") {
-      actionElement = ` 
-        <p><strong>Metode Pembayaran:</strong> ${order.payment_method}</p>
-        <p class="updated-at">Diupdate: ${formattedUpdatedAt}</p>`;
+    let actionElement = `
+  <form action="https://kosconnect-server.vercel.app/transactions/${
+    order.transaction_id
+  }/payment" method="POST">
+    ${
+      order.payment_status === "pending"
+        ? `<button type="submit" class="pay-now-button">Bayar Sekarang</button>`
+        : `<p><strong>Metode Pembayaran:</strong> ${order.payment_method}</p>
+       <p class="updated-at">Diupdate: ${formattedUpdatedAt}</p>`
     }
+  </form>
+`;
 
     // Buat elemen order-card
     const card = document.createElement("div");
@@ -151,6 +157,13 @@ async function renderOrderCards(orders) {
         </div>
         <div class="order-details">
           <div class="kos-details">${kosDetails}</div>
+          <div class="user-details">
+            <p><strong>Nama Pemesan:</strong> ${order.personal_info.full_name}</p>
+            <p><strong>Jenis Kelamin:</strong> ${order.personal_info.gender}</p>
+            <p><strong>Email:</strong> ${order.personal_info.email}</p>
+            <p><strong>Nomor HP:</strong> ${order.personal_info.phone_number}</p>
+            <p><strong>Alamat:</strong> ${order.personal_info.address}</p>
+          </div>
           <div class="biaya-details">${biayaDetails}</div>
         </div>
       </div>
