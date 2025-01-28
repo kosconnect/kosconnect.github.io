@@ -66,7 +66,7 @@ async function renderTransactionDetail(order) {
   const customFacilities = order.custom_facilities
     .map(
       (facility) =>
-        `<p>${facility.name} <span>- Rp${facility.price.toLocaleString(
+        `<p>${facility.name} <span> Rp${facility.price.toLocaleString(
           "id-ID"
         )}</span></p>`
     )
@@ -109,17 +109,16 @@ async function renderTransactionDetail(order) {
 
   // Komponen rincian biaya
   const biayaDetails = ` 
-  <p><strong>Check-in:</strong> ${formattedCheckInDate}</p>
+  <p><strong>Tanggal Masuk ${formattedCheckInDate}</strong></p>
     <p><strong>Fasilitas Custom</strong> 
       ${customFacilities}</p>
-      <p><strong>Biaya Fasilitas:</strong> Rp ${order.facilities_price.toLocaleString(
+      <p><strong>Biaya Fasilitas</strong> Rp ${order.facilities_price.toLocaleString(
         "id-ID"
       )}</p>
-      <p><strong>Harga Sewa:</strong> Rp ${order.price.toLocaleString(
-        "id-ID"
-      )} / ${paymentTermText}</p>
-      <p><strong>PPN 11%:</strong> Rp ${order.ppn.toLocaleString("id-ID")}</p>
-      <p class="total"><strong>Total:</strong> Rp ${order.total.toLocaleString(
+      <p><strong>Harga Sewa</strong>
+      ${paymentTermText} Rp ${order.price.toLocaleString("id-ID")}</p>
+      <p><strong>PPN 11%</strong> Rp ${order.ppn.toLocaleString("id-ID")}</p>
+      <p class="total"><strong>Total</strong> Rp ${order.total.toLocaleString(
         "id-ID"
       )}</p>
     `;
@@ -156,29 +155,28 @@ async function renderTransactionDetail(order) {
   <div class="order-details">
   <div class="left-section">
     <div class="left-top">
-      <p><strong>Informasi Kos</strong></p>
+      <p><strong class="title">Informasi Kos</strong></p>
       <div class="kos-details">${kosDetails}</div>
     </div>
     <div class="left-bottom">
       <div class="user-details">
-      <p><strong>Informasi Pemesan</strong></p>
-        <p><strong>Nama Pemesan:</strong> ${order.personal_info.full_name}</p>
-        <p><strong>Jenis Kelamin:</strong> ${order.personal_info.gender}</p>
-        <p><strong>Email:</strong> ${order.personal_info.email}</p>
-        <p><strong>Nomor HP:</strong> ${order.personal_info.phone_number}</p>
-        <p><strong>Alamat:</strong> ${order.personal_info.address}</p>
+      <p><strong class="title">Informasi Pemesan</strong></p>
+        <p><strong>${order.personal_info.full_name}</strong> </p>
+        <p>${order.personal_info.gender}</p>
+        <p>${order.personal_info.email}</p>
+        <p>${order.personal_info.phone_number}</p>
+        <p>${order.personal_info.address}</p>
       </div>
     </div>
     </div>
     <div class="center">
-    <p><strong>Rincian Pesanan</strong></p>
+    <p><strong class="title">Rincian Pesanan</strong></p>
       <div class="biaya-details">${biayaDetails}</div>
     </div>
     <div class="right">
-    <p><strong>Rincian Pembayaran</strong></p>
-    <p><strong>Waktu Pemesanan:</strong> ${formattedCreatedAt}</p>
+    <p><strong class="title">Rincian Pembayaran</strong></p>
+    <p><strong>${formattedCreatedAt}</strong></p>
     <div data-status="${order.payment_status}"> </div>
-    
     <i class="status-icon"></i>
     <p class="status">${paymentStatus}</p>
     ${actionElement}

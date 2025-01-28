@@ -35,7 +35,7 @@ h4 {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%;
+    width: 80%;
     /* Memastikan elemen memenuhi seluruh lebar */
 }
 
@@ -81,6 +81,7 @@ h4 {
 
 .order-details {
     display: flex;
+    gap: 10px;
 }
 
 .left-top,
@@ -89,6 +90,7 @@ h4 {
 .right {
     background-color: #fff;
     border-radius: 10px;
+    padding: 10px;
 }
 
 .order-date {
@@ -124,14 +126,18 @@ h4 {
     color: #005f73;
 }
 
-.order-details p strong {
+.order-details p strong .title{
     color: #1b3446;
+}
+.order-details p strong {
+    color: #005f73;
+    margin-bottom: 10px;
 }
 
 /* rincian pesanan */
 .center {
-    margin: 10px 0;
     font-size: 0.9rem;
+    width: 100%;
 }
 
 .center p {
@@ -163,16 +169,11 @@ h4 {
 }
 
 .right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 30px;
     gap: 10px;
-    padding-left: 10px;
     text-align: center;
 }
 
