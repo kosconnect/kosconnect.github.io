@@ -33,13 +33,14 @@ async function renderTransactionDetail(order) {
   const category = boarding_house?.category || null;
 
   // Format tanggal
-  const formattedCheckInDate = new Date(
-    order.check_in_date
-  ).toLocaleDateString("id-ID", {
-    day: "2-digit",
-    month: "long",
-    year: "numeric",
-  });
+  const formattedCheckInDate = new Date(order.check_in_date).toLocaleDateString(
+    "id-ID",
+    {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    }
+  );
 
   const formattedUpdatedAt = new Date(order.updated_at).toLocaleDateString(
     "id-ID",
@@ -108,12 +109,14 @@ async function renderTransactionDetail(order) {
 
   // Komponen rincian biaya
   const biayaDetails = ` 
-      <p><strong>Harga Sewa:</strong> Rp ${order.price.toLocaleString(
-        "id-ID"
-      )} / ${paymentTermText}</p>
+    <p><strong>Fasilitas Custom</strong> 
+      ${customFacilities}</p>
       <p><strong>Biaya Fasilitas:</strong> Rp ${order.facilities_price.toLocaleString(
         "id-ID"
       )}</p>
+      <p><strong>Harga Sewa:</strong> Rp ${order.price.toLocaleString(
+        "id-ID"
+      )} / ${paymentTermText}</p>
       <p><strong>PPN 11%:</strong> Rp ${order.ppn.toLocaleString("id-ID")}</p>
       <p class="total"><strong>Total:</strong> Rp ${order.total.toLocaleString(
         "id-ID"
@@ -138,26 +141,41 @@ async function renderTransactionDetail(order) {
   card.className = "order-card";
 
   card.innerHTML = `
-      <div class="left-section">
-        <div class="left-header">
-          <div class="brand-logo">
-            <img src="/img/logokos.png" alt="Logo">
-            <h4>KosConnect</h4>
-            <h4> - </h4>
-          <h4 class="order-title">${order.transaction_code}</h4>
-          </div>
-        </div>
-        <div class="order-details">
-          <div class="kos-details">${kosDetails}</div>
-          <div class="biaya-details">${biayaDetails}</div>
-        </div>
+  <div class="header">
+    <div class="left-header">
+      <div class="brand-logo">
+        <img src="/img/logokos.png" alt="Logo">
+        <h4>KosConnect</h4>
       </div>
-      <div class="right-section" data-status="${order.payment_status}">
-        <i class="status-icon"></i>
-        <p class="status">${paymentStatus}</p>
-        ${actionElement}
+    </div>
+    <div class="right-header">
+      <h4 class="order-title">${order.transaction_code}</h4>
+    </div>
+  </div>
+  <div class="order-details">
+    <div class="left-top">
+      <div class="kos-details">${kosDetails}</div>
+    </div>
+    <div class="left-bottom">
+      <div class="user-details">
+        <p><strong>Nama Pemesan:</strong> ${order.personal_info.full_name}</p>
+        <p><strong>Jenis Kelamin:</strong> ${order.personal_info.gender}</p>
+        <p><strong>Email:</strong> ${order.personal_info.email}</p>
+        <p><strong>Nomor HP:</strong> ${order.personal_info.phone_number}</p>
+        <p><strong>Alamat:</strong> ${order.personal_info.address}</p>
       </div>
-    `;
+    </div>
+    <div class="center">
+      <div class="biaya-details">${biayaDetails}</div>
+    </div>
+    <div class="right" data-status="${order.payment_status}">
+    <i class="status-icon"></i>
+    <p class="status">${paymentStatus}</p>
+    ${actionElement}
+  </div>
+  </div>
+  
+`;
 
   orderHistoryElement.appendChild(card);
 
