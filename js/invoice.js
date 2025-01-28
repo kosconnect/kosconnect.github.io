@@ -66,7 +66,7 @@ async function renderTransactionDetail(order) {
   const customFacilities = order.custom_facilities
     .map(
       (facility) =>
-        `<p>${facility.name} <span> Rp${facility.price.toLocaleString(
+        `<p class="fcustom">${facility.name} <span> Rp ${facility.price.toLocaleString(
           "id-ID"
         )}</span></p>`
     )
@@ -109,14 +109,17 @@ async function renderTransactionDetail(order) {
 
   // Komponen rincian biaya
   const biayaDetails = ` 
-  <p><strong>Tanggal Masuk ${formattedCheckInDate}</strong></p>
-    <p><strong>Fasilitas Custom</strong> 
+  <p><strong>Tanggal Masuk</strong> <strong>${formattedCheckInDate}</strong></p>
+    <p ><strong>Fasilitas Custom</strong> 
       ${customFacilities}</p>
-      <p><strong>Biaya Fasilitas</strong> Rp ${order.facilities_price.toLocaleString(
+      <p class="="fctotal"><strong>Biaya Fasilitas</strong> Rp ${order.facilities_price.toLocaleString(
         "id-ID"
       )}</p>
-      <p><strong>Harga Sewa</strong>
-      ${paymentTermText} Rp ${order.price.toLocaleString("id-ID")}</p>
+      <p><strong>Harga Sewa</strong></p>
+      <p>${paymentTermText} Rp ${order.price.toLocaleString("id-ID")}</p>
+      <p class="subtotal"><strong>Subtotal</strong> Rp ${order.subtotal.toLocaleString(
+        "id-ID"
+      )}</p>
       <p><strong>PPN 11%</strong> Rp ${order.ppn.toLocaleString("id-ID")}</p>
       <p class="total"><strong>Total</strong> Rp ${order.total.toLocaleString(
         "id-ID"
@@ -176,10 +179,11 @@ async function renderTransactionDetail(order) {
     <div class="right">
     <p><strong class="title">Rincian Pembayaran</strong></p>
     <p><strong>${formattedCreatedAt}</strong></p>
-    <div data-status="${order.payment_status}"> </div>
+    <div data-status="${order.payment_status}"> 
     <i class="status-icon"></i>
     <p class="status">${paymentStatus}</p>
     ${actionElement}
+    </div>
   </div>
   </div>
   
