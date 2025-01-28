@@ -64,15 +64,6 @@ async function renderOrderCards(orders) {
       }
     );
 
-    const customFacilities = order.custom_facilities
-      .map(
-        (facility) =>
-          `<p>${facility.name} <span>- Rp${facility.price.toLocaleString(
-            "id-ID"
-          )}</span></p>`
-      )
-      .join("");
-
     const paymentStatusMap = {
       pending: "Menunggu",
       settlement: "Lunas",
@@ -109,21 +100,24 @@ async function renderOrderCards(orders) {
 `;
 
     // Komponen rincian biaya
-    const biayaDetails = ` 
-      <p><strong>Fasilitas Custom</strong> 
-      ${customFacilities}</p>
-      <p><strong>Biaya Fasilitas:</strong> Rp ${order.facilities_price.toLocaleString(
-        "id-ID"
-      )}</p>
-      <p><strong>Harga Sewa:</strong> Rp ${order.price.toLocaleString(
-        "id-ID"
-      )} / ${paymentTermText}</p>
-      
-      <p><strong>PPN 11%:</strong> Rp ${order.ppn.toLocaleString("id-ID")}</p>
-      <p class="total"><strong>Total:</strong> Rp ${order.total.toLocaleString(
-        "id-ID"
-      )}</p>
-    `;
+    // Komponen rincian biaya
+    let biayaDetails = `
+<p><strong>Harga Sewa:</strong> Rp ${order.price.toLocaleString(
+      "id-ID"
+    )} / ${paymentTermText}</p>
+<p><strong>PPN 11%:</strong> Rp ${order.ppn.toLocaleString("id-ID")}</p>
+<p class="total"><strong>Total:</strong> Rp ${order.total.toLocaleString(
+      "id-ID"
+    )}</p>
+`;
+
+    // Tambahkan biaya fasilitas jika ada
+    if (order.facilities_price) {
+      biayaDetails =
+        `<p><strong>Biaya Fasilitas:</strong> Rp ${order.facilities_price.toLocaleString(
+          "id-ID"
+        )}</p>` + biayaDetails;
+    }
 
     // Tombol bayar sekarang (jika status pending)
     let actionElement = `
@@ -155,13 +149,6 @@ async function renderOrderCards(orders) {
         </div>
         <div class="order-details">
           <div class="kos-details">${kosDetails}</div>
-          <div class="user-details">
-            <p><strong>Nama Pemesan:</strong> ${order.personal_info.full_name}</p>
-            <p><strong>Jenis Kelamin:</strong> ${order.personal_info.gender}</p>
-            <p><strong>Email:</strong> ${order.personal_info.email}</p>
-            <p><strong>Nomor HP:</strong> ${order.personal_info.phone_number}</p>
-            <p><strong>Alamat:</strong> ${order.personal_info.address}</p>
-          </div>
           <div class="biaya-details">${biayaDetails}</div>
         </div>
       </div>
