@@ -2,7 +2,7 @@
 * {
     margin: 0;
     padding: 0;
-    
+
 }
 
 body {
@@ -10,7 +10,7 @@ body {
     color: #1b3446;
     background-color: #ffffff;
     box-sizing: border-box;
-    
+
 }
 
 .container-wrapper {
@@ -33,18 +33,19 @@ body {
     margin: 20px auto;
     /* Menggunakan margin auto untuk membuat elemen di tengah */
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-    /* Tambahkan bayangan untuk efek visual */
     border-radius: 10px;
-    /* Opsional: menambahkan border-radius untuk tampilan lebih lembut */
+    position: relative;
 }
 
-/* .main-container,
-.receipt-container {
-    padding: 20px;
-    background-color: #ffffff;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-} */
+.back-button {
+    color: #005f73;
+    text-decoration: none;
+    position: absolute;
+    top: 10px;
+    /* Jarak dari atas */
+    right: 10px;
+    /* Jarak dari kanan */
+}
 
 /* Menu */
 .menu-grid {
@@ -52,7 +53,8 @@ body {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 16px;
     padding: 20px;
-    text-align: center; /* Menempatkan teks menu di tengah */
+    text-align: center;
+    /* Menempatkan teks menu di tengah */
 }
 
 .room-card {
@@ -65,16 +67,23 @@ body {
 }
 
 .room-card img {
-    width: 100%;           /* Gambar mengambil lebar penuh kartu */
-    height: 200px;         /* Tetapkan tinggi gambar tetap */
-    object-fit: cover;     /* Gambar akan dipotong untuk mengisi area yang ditentukan tanpa merubah proporsi */
-    border-radius: 4px;    /* Agar gambar memiliki sudut membulat, sesuai dengan border */
+    width: 100%;
+    /* Gambar mengambil lebar penuh kartu */
+    height: 200px;
+    /* Tetapkan tinggi gambar tetap */
+    object-fit: cover;
+    /* Gambar akan dipotong untuk mengisi area yang ditentukan tanpa merubah proporsi */
+    border-radius: 4px;
+    /* Agar gambar memiliki sudut membulat, sesuai dengan border */
 }
 
 h2 {
-    text-align: center;  /* Menempatkan teks judul di tengah */
-    font-size: 25px;      /* Ukuran font judul */
-    margin-bottom: 20px; /* Spasi di bawah judul */
+    text-align: center;
+    /* Menempatkan teks judul di tengah */
+    font-size: 25px;
+    /* Ukuran font judul */
+    margin-bottom: 20px;
+    /* Spasi di bawah judul */
     color: #1b3446;
 }
 
@@ -84,6 +93,7 @@ h2 {
     margin: 10px 0;
     color: #1b3446;
 }
+
 .room-card h4 {
     font-size: 14px;
     font-weight: 600;
@@ -106,8 +116,9 @@ h2 {
     border-radius: 4px;
     cursor: pointer;
     font-size: 1em;
-    transition:  0.3s ease;
-    text-align: center; /* Tombol tetap rata tengah */
+    transition: 0.3s ease;
+    text-align: center;
+    /* Tombol tetap rata tengah */
     float: right;
 }
 
@@ -116,277 +127,7 @@ h2 {
 }
 
 .room-card .price {
- font-weight: bold;
- font-size: large;
- color: #005f73;
-}
-
-/* Tablet (max-width: 768px) */
-@media (max-width: 768px) {
-        .product-card {
-        flex: 0 0 33.33%; /* Default: 5 produk per baris */
-        box-sizing: border-box;
-        text-align: center;
-        border: 0px solid white;
-        border-radius: 1px;
-        background-color: transparent; /* Tidak ada latar belakang saat tidak di-hover */
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease;
-        max-width: 1200px;
-    }
-        .hero-image {
-            flex: 1;
-            text-align: right;
-        }
-        .hero-image img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 9px;
-        }
-        .hero-content {
-            flex: 1;
-            color: #805700;
-        }
-        
-        .hero-content h2 {
-            font-size: 10px;
-            color: #004e12;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            margin-bottom: 10px;
-        }
-        
-        .hero-content h1 {
-            font-size: 30px;
-            line-height: 1.2;
-            margin-bottom: 20px;
-        }
-        
-        .hero-content p {
-            font-size: 10px;
-            margin-bottom: 30px;
-            line-height: 1.5;
-        }
-        .hero-buttons a {
-            display: inline-block;
-            text-decoration: none;
-            color: #ffffff;
-            padding: 6px 12px;
-            margin: 0 5px;
-            border-radius: 5px;
-            transition: background 0.3s ease;
-        }
-        
-        .btn-primary {
-            background-color: #006e2a;
-        }
-        
-        .btn-primary:hover {
-            background-color: #00401a;
-        }
-        
-        .btn-secondary {
-            background-color: transparent;
-            border: 2px solid #004d1e;
-        }
-        
-        .btn-secondary:hover {
-            background-color: #2fa45b;
-        }
-        .carousel-container {
-            position: relative;
-            max-width: 1200px;
-           /* overflow: visible; / */
-        
-            margin: 20px auto;
-            gap: 20px; 
-            overflow: visible; /* Agar bayangan tidak terpotong */
-            max-width: 1200px;
-        }
-        
-        
-        .carousel-track-container {
-            /* overflow: hidden; */
-            width: 100%;
-            overflow: visible; /* Agar bayangan tidak terpotong */
-            max-width: 1px;
-        }
-        
-        
-        .carousel-track {
-            display: flex;
-            transition: transform 0.3s ease-in-out;
-            width: fit-content;
-            display: flex;
-            gap: 20px; /* Jarak antar product-card */
-            /* Properti lainnya untuk carousel, jika ada */
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
-            max-width: 1200px;
-        }
-        
-        .carousel-item {
-            flex: 0 0 0%; /* Default 5 items per row */
-            margin: 0 10px;
-            text-align: center;
-            box-sizing: border-box;
-            max-width: 1200px;
-        }
-        
-        .carousel-item img {
-            width: 100%;
-            border-radius: 10px;
-            transition: transform 0.3s ease;
-        }
-        
-        .carousel-item img:hover {
-            transform: scale(1.05);
-        }
-        .product-card {
-            flex: 0 0 9%;
-            box-sizing: border-box;
-            text-align: center;
-            border: 1px solid white;
-            border-radius: 10px;
-            background-color: transparent;
-            box-shadow: 0 1px 10px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s ease;
-            max-width: 100px;
-        }
-        .product-card:hover {
-            background-color: white; /* Latar belakang putih saat di-hover */
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2); /* Bayangan saat di-hover */
-            transform: translateY(-5px); /* Efek angkat saat di-hover */
-        }
-        .product-image img {
-            width: 70%;
-            height: auto;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-bottom: 10px;
-            transition: transform 0.3s ease;
-        }
-        .product-image img:hover {
-            transform: scale(1.05);
-        }
-        
-        .product-info h2 {
-            font-size: 10px;
-            font-weight: bold;
-            color: #4a3c31;
-            margin: 10px 0;
-            text-transform: capitalize;
-        }
-        
-        .product-info p {
-            font-size: 9px;
-            color: #7d6e64;
-            margin-bottom: 15px;
-            line-height: 1.5;
-            text-align: center;
-        }
-        
-        .read-more {
-            display: inline-block;
-            margin-top: 10px; /* Jarak vertikal dengan elemen atas */
-            margin-bottom: 5px; /* Jarak vertikal dengan elemen bawah */
-            margin-right:5px; /* Jarak kanan agar tidak terlalu menempel */
-            padding: 8px 16px;
-            background-color: #c9994c; /* Warna tombol */
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-            text-align: center;
-        }
-        
-        
-        
-        .read-more:hover {
-            background-color: #a57b32;
-            color: white;
-        }
-        
-        .carousel-btn {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: #4a3c31;
-            color: #fff;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            z-index: 10;
-            border-radius: 50%;
-        }
-        
-        .prev-btn {
-            left: 10px;
-        }
-        
-        .next-btn {
-            right: 10px;
-        }
-        
-        .carousel-btn:hover {
-            background: #a9825c;
-        }
-
-        .menu {
-            position: relative;
-            padding: 15px 5%;
-            text-align: center;
-            background-color: #ffffff;
-        }
-        
-        .menu h2 {
-            position: relative;
-            font-size: 16px;
-            margin-bottom: 15px;
-            color: #4f3b3b;
-        }
-        
-        .menu-container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-        
-        .menu-card img {
-            width: 70px;
-            height: 70px;
-            border-radius: 50%; /* Tetap bulat */
-            background-color: #fefefe;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            margin-bottom: 15px;
-            transition: transform 0.3s, box-shadow 0.3s;
-            object-fit: cover; /* Pastikan gambar tidak gepeng */
-        }
-        
-        
-        .menu-card:hover img {
-            transform: translateY(-10px) scale(1.1);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-        }
-        
-        .menu-card h3 {
-            font-size: 9px;
-            margin-bottom: 5px;
-            color: #333;
-        }
-        
-        .menu-card .rating {
-            font-size: 16px;
-            margin-bottom: 10px;
-            color: #ffcc00;
-        }
-        
-        .menu-card p {
-            font-size: 8px;
-            color: #2fa45b;
-            font-weight: bold;
-        }
-        
-
-        
-    
+    font-weight: bold;
+    font-size: large;
+    color: #005f73;
 }

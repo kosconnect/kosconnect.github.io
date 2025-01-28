@@ -3,13 +3,13 @@ import { getCookie, renderHeader } from "./header.js";
 
 // Fungsi untuk merender detail transaksi ke halaman
 async function renderTransactionDetail(order) {
-  const orderHistoryElement = document.getElementById("orderHistory");
+  const invoiceElement = document.getElementById("invoice");
 
   // Bersihkan elemen sebelumnya
-  orderHistoryElement.innerHTML = "";
+  invoiceElement.innerHTML = "";
 
   if (!order) {
-    orderHistoryElement.innerHTML =
+    invoiceElement.innerHTML =
       "<p>Transaksi tidak ditemukan atau data kosong.</p>";
     return;
   }
@@ -21,7 +21,7 @@ async function renderTransactionDetail(order) {
 
   if (!response.ok) {
     console.error(`Error fetching room detail for room_id ${order.room_id}`);
-    orderHistoryElement.innerHTML =
+    invoiceElement.innerHTML =
       "<p>Gagal mengambil detail kos untuk transaksi ini.</p>";
     return;
   }
@@ -125,8 +125,7 @@ async function renderTransactionDetail(order) {
       <p style="margin-top:5px;"><strong>PPN 11%</strong> Rp ${order.ppn.toLocaleString(
         "id-ID"
       )}</p>
-      <h5>Total <span> Rp ${order.total.toLocaleString("id-ID")}</></h5>
-      <p class="notice">*Harga Fasilitas Custom merupakan harga bulanan</p>
+      <h5>Total <span>Rp ${order.total.toLocaleString("id-ID")}</span></h5>
     `;
 
   // Tombol bayar sekarang (jika status pending)
@@ -178,6 +177,7 @@ async function renderTransactionDetail(order) {
     <div class="center">
     <h6><strong>Rincian Pesanan</strong></h6>
       <div class="biaya-details">${biayaDetails}</div>
+      <p class="notice">*Harga Fasilitas Custom merupakan harga bulanan</p>
     </div>
     <div class="right">
     <h6><strong>Rincian Pembayaran</strong></h6>
@@ -192,7 +192,7 @@ async function renderTransactionDetail(order) {
   
 `;
 
-  orderHistoryElement.appendChild(card);
+  invoiceElement.appendChild(card);
 
   // Atur ikon status setelah rendering
   setStatusIcons();
@@ -231,7 +231,14 @@ function setStatusIcons() {
     }
   });
 }
-//a
+
+//button back
+const backButton = document.querySelector(".back-button");
+
+backButton.addEventListener("click", () => {
+  window.history.back();
+});
+
 // Ambil data kos saat halaman dimuat
 window.onload = async () => {
   try {
