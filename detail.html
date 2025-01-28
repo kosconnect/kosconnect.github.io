@@ -80,61 +80,109 @@
     <div class="container-wrapper">
       <main class="container">
         <h2>Nama & Tipe Kamar Kos</h2>
-        <p class="alamat">Jl. Sariasih No. 121, Sarijadi, Bandung, Jawa Barat</p>
-        
+
         <div class="galeri-container">
-            <img id="gambarUtama" class="gambar-utama" src="img/kamar1.jpeg" alt="Gambar Kos">
-            <div class="thumbnail-container">
-                <img class="thumbnail" src="img/kamar1.jpeg" alt="Gambar Kos" onclick="tampilkanModal(0)">
-                <img class="thumbnail" src="img/kamar1.jpeg" alt="Gambar Kos" onclick="tampilkanModal(1)">
-                <img class="thumbnail" src="img/kamar1.jpeg" alt="Gambar Kos" onclick="tampilkanModal(2)">
-                <img class="thumbnail" src="img/kamar1.jpeg" alt="Gambar Kos" onclick="tampilkanModal(3)">
-            </div>
+          <img
+            id="gambarUtama"
+            class="gambar-utama"
+            src="img/kamar1.jpeg"
+            alt="Gambar Kos"
+          />
+          <div class="thumbnail-container">
+            <img
+              class="thumbnail"
+              src="img/kamar1.jpeg"
+              alt="Gambar Kos"
+              onclick="tampilkanModal(0)"
+            />
+            <img
+              class="thumbnail"
+              src="img/kamar1.jpeg"
+              alt="Gambar Kos"
+              onclick="tampilkanModal(1)"
+            />
+            <img
+              class="thumbnail"
+              src="img/kamar1.jpeg"
+              alt="Gambar Kos"
+              onclick="tampilkanModal(2)"
+            />
+            <img
+              class="thumbnail"
+              src="img/kamar1.jpeg"
+              alt="Gambar Kos"
+              onclick="tampilkanModal(3)"
+            />
+          </div>
         </div>
 
         <!-- Modal Slideshow -->
         <div id="modal" class="modal">
-            <span class="close" onclick="tutupModal()">&times;</span>
-            <span class="prev" onclick="gantiGambar(-1)">&#10094;</span>
-            <img id="gambarModal" class="modal-content" src="">
-            <span class="next" onclick="gantiGambar(1)">&#10095;</span>
+          <span class="close" onclick="closeModal()">&times;</span>
+          <img id="modal-img" class="modal-content" src="" />
+          <button class="prev" onclick="changeSlide(-1)">&#10094;</button>
+          <button class="next" onclick="changeSlide(1)">&#10095;</button>
         </div>
-        
-        <section class="info-kos">
-            <div class="ukuran">3 x 4 meter</div>
-            <div class="tersedia">5 Kamar Tersedia</div>
-            <div class="pengelola">Dikelola oleh Nama Owner</div>
-        </section>
-        
-        <section class="harga">
+        <div class="main-info">
+          <section class="info-boardinghouse">
+            <div class="size">
+              <i class="fa-solid fa-ruler-combined"></i> 3 x 4 meter
+            </div>
+            <div class="availablity">
+              <i class="fa-solid fa-door-open"></i> 5 Kamar Tersedia
+            </div>
+            <div class="address">
+              <p class="alamat"><i class="fa-solid fa-location-dot"></i> Jl. Sariasih No. 121, Sarijadi, Bandung, Jawa Barat
+              </p>
+            </div>
+            <div class="owner">
+              <p>Dikelola Oleh <span>Nama</span></p>
+                <i class="fa-solid fa-user-tie"></i>
+            </div>
+          </section>
+
+          <section class="price">
             <h3>Harga</h3>
             <ul>
-                <li>Rp. 1.500.000 / bulan</li>
-                <li>Rp. 4.000.000 / 3 bulan</li>
-                <li>Rp. 6.500.000 / 6 bulan</li>
-                <li>Rp. 12.000.000 / tahun</li>
+              <li>Rp. 1.500.000 / bulan</li>
+              <li>Rp. 4.000.000 / 3 bulan</li>
+              <li>Rp. 6.500.000 / 6 bulan</li>
+              <li>Rp. 12.000.000 / tahun</li>
             </ul>
-            <button class="ajukan">Ajukan Sewa</button>
-        </section>
-        
-        <section class="fasilitas-custom" id="customFasilitas">
+            <button class="booking">Ajukan Sewa</button>
+          </section>
+        </div>
+        <div class="detail-info">
+          <section class="fasilitas-custom" id="customFasilitas">
             <h3>Custom Fasilitas</h3>
             <p>Data fasilitas custom akan muncul di sini.</p>
-        </section>
-        
-        <section class="deskripsi-peraturan">
-            <div class="deskripsi">
-                <h3>Deskripsi Kos</h3>
-                <p>Deskripsi kos sesuai preferensi owner.</p>
+          </section>
+          <section class="desc-rules">
+            <div class="desc">
+              <h3>Deskripsi Kos</h3>
+              <p>Deskripsi kos sesuai preferensi owner.</p>
             </div>
-            <div class="peraturan">
-                <h3>Peraturan Kos</h3>
-                <p>Peraturan yang berlaku dalam kos ini.</p>
+            <div class="rules">
+              <h3>Peraturan Kos</h3>
+              <p>Peraturan yang berlaku dalam kos ini.</p>
             </div>
-        </section>
-        
+          </section>
+          <section class="facility">
+            <div class="general">
+              <h3>Fasilitas Umum</h3>
+              <p>Deskripsi kos sesuai preferensi owner.</p>
+            </div>
+            <div class="room">
+              <h3>Fasilitas Kamar Kos</h3>
+              <p>Peraturan yang berlaku dalam kos ini.</p>
+            </div>
+          </section>
+        </div>
+        <div class="location">
+        <h3>Peta Lokasi</h3>
         <section id="map" class="map"></section>
-    </main>
+        </div>
+      </main>
     </div>
 
     <footer class="site-footer" id="kontak">
@@ -143,9 +191,6 @@
           -Cari Kos-Kosan sesuai dengan Preferensimu di KosConnect-
         </p>
         <div class="footer-links">
-          <!-- <span class="about searchable">
-          <a href=""> <i class="fa-solid fa-info-circle"></i> Tentang </a>
-        </span> -->
           <span class="contact searchable">
             <a href="mailto:kosconnect2@gmail.com"
               ><i class="fa-solid fa-envelope"></i> Kontak
@@ -163,6 +208,6 @@
     </footer>
 
     <!-- Memanggil file JS -->
-    <script type="module" src="js/invoice.js"></script>
+    <script type="module" src="js/detail.js"></script>
   </body>
 </html>

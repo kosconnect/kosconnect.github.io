@@ -1,6 +1,6 @@
 /* Global Styles */
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Merriweather Sans', sans-serif;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -9,48 +9,46 @@ body {
 }
 
 .container {
-    width: 90%;
+    width: 100%;
     max-width: 1200px;
     margin: auto;
-    padding: 20px;
 }
 
-header {
-    background-color: #007bff;
-    color: #fff;
-    padding: 15px;
-    text-align: center;
+h2 {
+    font-family: 'Merriweather', serif;
+    text-align: left;
+    font-size: 27px;
 }
 
-nav h1 {
-    margin: 0;
-}
 /* Styling untuk grid gambar */
 .galeri-container {
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 10px;
-    height: 500px;
+    border-radius: 10px;
+    overflow: hidden;
+    /* Untuk menyembunyikan bagian gambar yang melebihi border radius */
 }
 
 .gambar-utama {
-    width: 90%;
-    height: 80%;
+    width: 100%;
+    height: 100%;
     cursor: pointer;
-    border-radius: 10px;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
 }
 
 .thumbnail-container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
+    height: 100%;
 }
 
 .thumbnail {
     width: 100%;
-    height: auto;
+    height: 100%;
     cursor: pointer;
-    border-radius: 8px;
 }
 
 /* Styling untuk modal slideshow */
@@ -102,85 +100,103 @@ nav h1 {
 .next {
     right: 10px;
 }
-/* Carousel */
-.carousel {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+
+.main-info {
+    /* Container untuk kedua elemen */
     position: relative;
-    overflow: hidden;
-    margin: 20px 0;
-}
-
-.carousel-container {
     display: flex;
-    transition: transform 0.5s ease-in-out;
 }
 
-.carousel-container img {
-    width: 300px;
-    height: 200px;
-    object-fit: cover;
-    border-radius: 10px;
-    margin: 0 10px;
-}
-
-button.prev,
-button.next {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-    font-size: 20px;
-}
-
-button.prev {
-    left: 10px;
-}
-
-button.next {
-    right: 10px;
-}
-
-/* Informasi Kos */
-.info-kos {
+.info-boardinghouse {
+    /* Mengapungkan elemen ke kiri */
+    width: 80%;
+    /* Lebar elemen, sesuaikan sesuai kebutuhan */
     display: flex;
     justify-content: space-between;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    padding-right: 20px;
+}
+
+.size,
+.availablity,
+.address,
+.owner {
     background: #ffffff;
     padding: 15px;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
 }
 
-/* Harga */
-.harga {
+.address,
+.owner {
+    display: flex;
+    align-items: center;
+    line-height: 1.5em;
+    /* Sesuaikan nilai ini */
+}
+
+.alamat {
+    max-width: 300px;
+    /* Sesuaikan lebar maksimum sesuai kebutuhan */
+}
+
+.owner i {
+    font-size: 50px;
+    /* Ukuran ikon */
+}
+
+.owner {
+    display: flex;
+    align-items: center;
+    text-align: left;
+}
+
+.owner span {
+    margin-right: 10px;
+}
+
+.price {
+    position: absolute;
+    top: 10;
+    right: 0;
+    width: 20%;
     background: #ffffff;
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     margin-bottom: 20px;
+    /* Lebar elemen, sesuaikan sesuai kebutuhan */
 }
 
-.harga ul {
+.price h3 {
+    font-family: 'Merriweather', serif;
+    font-size: 24px;
+}
+
+.price p {
+    font-size: 20px;
+    margin-top: 10px;
+}
+
+.price ul {
     list-style: none;
     padding: 0;
 }
 
-.harga ul li {
+.price ul li {
     padding: 5px 0;
     font-size: 16px;
 }
 
-.ajukan {
+.booking {
     display: block;
     width: 100%;
     padding: 10px;
-    background: #007bff;
+    background: #005f73;
     color: white;
     border: none;
     border-radius: 5px;
@@ -188,8 +204,12 @@ button.next {
     margin-top: 10px;
 }
 
-.ajukan:hover {
-    background: #0056b3;
+.booking:hover {
+    background: #003f53;
+}
+
+.detail-info {
+    width: 78%;
 }
 
 /* Custom Fasilitas */
@@ -198,17 +218,19 @@ button.next {
     padding: 20px;
     border-radius: 10px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 /* Deskripsi dan Peraturan */
-.deskripsi-peraturan {
+.desc-rules, .facility {
     display: flex;
-    gap: 20px;
+    gap: 10px;
 }
 
-.deskripsi,
-.peraturan {
+.desc,
+.rules,
+.general,
+.room {
     flex: 1;
     background: #ffffff;
     padding: 20px;
@@ -216,20 +238,24 @@ button.next {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
+.facility {
+    margin-top: 10px;
+}
+
 /* Map */
+.location {
+    background: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+}
+
+.location h3 {
+    padding: 10px;
+}
 .map {
     width: 100%;
     height: 300px;
     background: #e9ecef;
-    border-radius: 10px;
-    margin-top: 20px;
-}
-
-/* Footer */
-footer {
-    background: #343a40;
-    color: white;
-    text-align: center;
-    padding: 15px;
-    margin-top: 20px;
+    margin-top: 10px;
 }
