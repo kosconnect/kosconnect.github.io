@@ -126,13 +126,12 @@ h4 {
     color: #005f73;
 }
 
-.order-details p strong .title{
+.order-details p .title{
     color: #1b3446;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 .order-details p strong {
     color: #005f73;
-    margin-bottom: 10px;
 }
 
 /* rincian pesanan */
@@ -140,7 +139,7 @@ h4 {
     font-size: 0.9rem;
     flex: 1.5;
 }
-.center p strong .title {
+.center .title {
     text-align: center;
 }
 
@@ -148,14 +147,14 @@ h4 {
     display: flex;
     justify-content: space-between;
 }
-.center p .fcustom{
+ .fcustom{
     margin-top: 0px;
 }
-.center p .fctotal{
-    border-top: 10px solid #1b3446;
+.fctotal{
+    border-top: 1px solid #1b3446;
 }
-.center p .subtotal{
-    border-top: 10px solid #1b3446;
+.subtotal{
+    border-top: 1px solid #1b3446;
 }
 
 .total {
@@ -164,7 +163,12 @@ h4 {
     font-size: 20px;
     color: #20B2AA;
     text-align: right;
-    border-top: 10px solid #1b3446;
+    border-top: 1px solid #1b3446;
+}
+
+.notice {
+    position: absolute;
+    margin-bottom: 0;
 }
 
 /* Right Section */

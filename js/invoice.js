@@ -110,20 +110,23 @@ async function renderTransactionDetail(order) {
   // Komponen rincian biaya
   const biayaDetails = ` 
   <p><strong>Tanggal Masuk</strong> <strong>${formattedCheckInDate}</strong></p>
-    <p ><strong>Fasilitas Custom</strong> 
+    <p><strong>Fasilitas Custom</strong> 
       ${customFacilities}</p>
-      <p class="="fctotal"><strong>Biaya Fasilitas</strong> Rp ${order.facilities_price.toLocaleString(
+      <p class="fctotal"><strong>Biaya Fasilitas</strong> Rp ${order.facilities_price.toLocaleString(
         "id-ID"
       )}</p>
       <p><strong>Harga Sewa</strong></p>
-      <p>${paymentTermText} Rp ${order.price.toLocaleString("id-ID")}</p>
+      <p>${paymentTermText} <span> Rp ${order.price.toLocaleString(
+    "id-ID"
+  )}</span></p>
       <p class="subtotal"><strong>Subtotal</strong> Rp ${order.subtotal.toLocaleString(
         "id-ID"
       )}</p>
       <p><strong>PPN 11%</strong> Rp ${order.ppn.toLocaleString("id-ID")}</p>
-      <p class="total"><strong>Total</strong> Rp ${order.total.toLocaleString(
+      <h5 class="total">Total <span> Rp ${order.total.toLocaleString(
         "id-ID"
-      )}</p>
+      )}</></h5>
+      <p class="notice">*Harga Fasilitas Custom merupakan harga bulanan</p>
     `;
 
   // Tombol bayar sekarang (jika status pending)
