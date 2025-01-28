@@ -185,9 +185,9 @@ async function renderTransactionDetail(order) {
     <h6><strong>Rincian Pembayaran</strong></h6>
     <p><strong>Dibuat: ${formattedCreatedAt}</strong></p>
     <div class="img" data-status="${order.payment_status}"> 
-    </div>
     <i class="status-icon"></i>
-    <p class="status">${paymentStatus}</p>
+     <p class="status">${paymentStatus}</p>
+    </div>
     ${actionElement}
   </div>
   </div>
