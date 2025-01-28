@@ -86,7 +86,7 @@ function handleBooking(ownerId) {
     });
   } else {
     console.log("Booking oleh user untuk owner ID:", ownerId);
-    window.location.href = `https://kosconnect.github.io/detail.html?room_id=${roomId}`;
+    window.location.href = `https://kosconnect.github.io/detail.html?room_id=${room.room_id}`;
   }
 }
 

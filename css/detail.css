@@ -19,6 +19,13 @@ h2 {
     text-align: left;
     font-size: 27px;
 }
+h3 {
+    color: #1b3446;
+}
+
+p {
+    color: #005f73;
+}
 
 /* Styling untuk grid gambar */
 .galeri-container {
@@ -137,17 +144,11 @@ h2 {
     display: flex;
     align-items: center;
     line-height: 1.5em;
-    /* Sesuaikan nilai ini */
 }
 
 .alamat {
     max-width: 300px;
     /* Sesuaikan lebar maksimum sesuai kebutuhan */
-}
-
-.owner i {
-    font-size: 50px;
-    /* Ukuran ikon */
 }
 
 .owner {
