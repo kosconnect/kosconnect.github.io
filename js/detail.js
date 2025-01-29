@@ -35,7 +35,7 @@ async function renderRoomDetail(detail) {
   window.allImages = images; // Simpan untuk modal
 
   if (images.length > 0) {
-    images.slice(0, 2).forEach((imgSrc, index) => {
+    images.slice(0, 3).forEach((imgSrc, index) => {
       const img = document.createElement("img");
       img.src = imgSrc;
       img.classList.add("thumbnail");
