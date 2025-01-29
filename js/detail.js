@@ -4,17 +4,6 @@ import { getCookie, renderHeader } from "./header.js";
 window.allImages = [];
 window.currentIndex = 0; // Pastikan variabel ini terdefinisi
 
-// 🔹 Fungsi untuk mendekode JWT dan mengambil userId
-function decodeToken(token) {
-  try {
-    const payload = JSON.parse(atob(token.split(".")[1]));
-    return payload.userId || null;
-  } catch (e) {
-    console.error("Gagal mendekode token:", e);
-    return null;
-  }
-}
-
 // 🔹 Fungsi untuk merender nama kamar kos di title
 document.addEventListener("DOMContentLoaded", function () {
   const roomNameElement = document.getElementById("room-name");
@@ -30,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-async function renderRoomDetail(detail, userId) {
+async function renderRoomDetail(detail) {
   document.getElementById("room-name").textContent =
     detail.room_name || "Nama Kamar Tidak Diketahui";
 
@@ -40,19 +29,23 @@ async function renderRoomDetail(detail, userId) {
   const thumbnailContainer = document.getElementById("thumbnailContainer");
   thumbnailContainer.innerHTML = "";
 
+  // const seeAllButton = document.getElementById("seeAll");
+
   let images = detail.all_images || [];
   window.allImages = images; // Simpan untuk modal
 
   if (images.length > 0) {
+    // Set main image to the first image
     mainImage.src = images[0] || "";
 
+    // Create thumbnails for the second and third image (maximum 2)
     images.slice(1, 3).forEach((imgSrc, index) => {
       const img = document.createElement("img");
       img.src = imgSrc;
       img.classList.add("thumbnail");
       img.onclick = () => {
         mainImage.src = imgSrc;
-        openModal(index + 1);
+        openModal(index + 1); // Adjust index for modal
       };
       thumbnailContainer.appendChild(img);
     });
@@ -65,7 +58,7 @@ async function renderRoomDetail(detail, userId) {
     "size"
   ).innerHTML = `<p><i class="fa-solid fa-ruler-combined"></i> ${
     detail.size || "Tidak Ada"
-  } </p>`;
+  } </p>`; //meter nya nanti ditambahin kalo perlu
   document.getElementById(
     "availability"
   ).innerHTML = `<p><i class="fa-solid fa-door-open"></i> ${
@@ -125,23 +118,77 @@ async function renderRoomDetail(detail, userId) {
           )
           .join("")
       : "<div>Tidak ada fasilitas tambahan</div>";
+}
 
-  // 🔹 Tambahkan tombol Ajukan Sewa
-  const rentButton = document.getElementById("rentButton");
-  if (rentButton) {
-    if (
-      detail.owner_id &&
-      detail.boarding_house_id &&
-      detail.room_id &&
-      userId
-    ) {
-      rentButton.style.display = "block";
-      rentButton.onclick = () => {
-        window.location.href = `https://kosconnect.github.io/checkout.html?owner_id=${detail.owner_id}&boarding_house_id=${detail.boarding_house_id}&room_id=${detail.room_id}&user_id=${userId}`;
-      };
-    } else {
-      rentButton.style.display = "none";
+// 🔹 Modal Functions
+function openModal(index) {
+  const modal = document.getElementById("modal");
+  const modalImg = document.getElementById("modal-img");
+
+  if (window.allImages.length > 0) {
+    window.currentIndex = index;
+    modalImg.src = window.allImages[window.currentIndex];
+    modal.style.display = "flex";
+  }
+}
+
+function closeModalFunc() {
+  document.getElementById("modal").style.display = "none";
+}
+
+function nextImage() {
+  window.currentIndex = (window.currentIndex + 1) % window.allImages.length;
+  document.getElementById("modal-img").src =
+    window.allImages[window.currentIndex];
+}
+
+function prevImage() {
+  window.currentIndex =
+    (window.currentIndex - 1 + window.allImages.length) %
+    window.allImages.length;
+  document.getElementById("modal-img").src =
+    window.allImages[window.currentIndex];
+}
+async function handleAjukanSewa() {
+  try {
+    const authToken = getCookie("authToken");
+    if (!authToken) {
+      return alert("Anda harus login untuk mengajukan sewa.");
     }
+
+    // Ambil user_id dari endpoint /api/users/me
+    const userResponse = await fetch(
+      "https://kosconnect-server.vercel.app/api/users/me",
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
+    );
+
+    if (!userResponse.ok) {
+      throw new Error("Gagal mengambil data pengguna.");
+    }
+
+    const userData = await userResponse.json();
+    const userId = userData?.user?._id;
+    if (!userId) {
+      throw new Error("User ID tidak ditemukan.");
+    }
+
+    // Ambil room_id dari URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomId = urlParams.get("room_id");
+    if (!roomId) {
+      throw new Error("Room ID tidak ditemukan.");
+    }
+
+    // Redirect ke halaman checkout dengan room_id dan user_id
+    window.location.href = `https://kosconnect.github.io/checkout.html?room_id=${roomId}&user_id=${userId}`;
+  } catch (error) {
+    console.error("Error saat mengajukan sewa:", error);
+    alert("Terjadi kesalahan, silakan coba lagi.");
   }
 }
 
@@ -149,7 +196,6 @@ async function renderRoomDetail(detail, userId) {
 document.addEventListener("DOMContentLoaded", async () => {
   try {
     const authToken = getCookie("authToken");
-    const userId = authToken ? decodeToken(authToken) : null;
     const urlParams = new URLSearchParams(window.location.search);
     const roomId = urlParams.get("room_id");
 
@@ -169,9 +215,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (!roomData || !Array.isArray(roomData) || roomData.length === 0)
       throw new Error("Data kamar kosong atau tidak valid.");
 
-    renderRoomDetail(roomData[0], userId);
+    renderRoomDetail(roomData[0]);
     const userRole = getCookie("userRole");
     renderHeader(authToken, userRole);
+
+    const ajukanSewaBtn = document.getElementById("ajukanSewaBtn");
+    if (ajukanSewaBtn) {
+      ajukanSewaBtn.addEventListener("click", handleAjukanSewa);
+    }
+    
+    document.querySelector(".close").addEventListener("click", closeModalFunc);
+    document.querySelector(".prev").addEventListener("click", prevImage);
+    document.querySelector(".next").addEventListener("click", nextImage);
   } catch (error) {
     console.error("Gagal mengambil data:", error);
   }
