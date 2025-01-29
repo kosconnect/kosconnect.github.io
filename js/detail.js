@@ -29,7 +29,7 @@ async function renderRoomDetail(detail) {
   const thumbnailContainer = document.getElementById("thumbnailContainer");
   thumbnailContainer.innerHTML = "";
 
-  const seeAllButton = document.getElementById("seeAll");
+  // const seeAllButton = document.getElementById("seeAll");
 
   let images = detail.all_images || [];
   window.allImages = images; // Simpan untuk modal
@@ -46,7 +46,7 @@ async function renderRoomDetail(detail) {
       thumbnailContainer.appendChild(img);
 
       if (index === Math.min(images.length, 3) - 1) {
-        seeAllButton.style.display = "block";
+        // seeAllButton.style.display = "block";
       }
     });
   }
