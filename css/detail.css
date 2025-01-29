@@ -143,6 +143,7 @@ p {
 .size,
 .availablity,
 .address,
+.category,
 .owner {
     background: #ffffff;
     padding: 15px;
@@ -161,7 +162,7 @@ p {
 }
 
 .alamat {
-    max-width: 300px;
+    max-width: 250px;
     /* Sesuaikan lebar maksimum sesuai kebutuhan */
 }
 
