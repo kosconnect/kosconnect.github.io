@@ -1,141 +1,70 @@
-import { getCookie } from "./header.js";
+import { getCookie} from "./header.js";
 
-const authToken = getCookie("authToken");
-const userRole = getCookie("userRole");
-
-// Ambil roomId dari URL
-const urlParams = new URLSearchParams(window.location.search);
-const roomId = urlParams.get("roomId");
-
-window.onload = async () => {
-  try {
-    if (authToken) {
-      await fetchUserData(authToken);
-    }
-    if (roomId) {
-      await fetchRoomData(roomId);
-    }
-  } catch (error) {
-    console.error("Terjadi kesalahan saat memuat halaman:", error);
+document.addEventListener("DOMContentLoaded", async function () {
+  const authToken = getCookie("authToken");
+  if (!authToken) {
+    window.location.href = "/login.html";
+    return;
   }
-};
 
-async function fetchUserData(token) {
+  const urlParams = new URLSearchParams(window.location.search);
+  const roomId = urlParams.get("roomId");
+  if (!roomId) {
+    window.location.href = "/index.html";
+    return;
+  }
+
   try {
-    const response = await fetch(
+    const userResponse = await fetch(
       "https://kosconnect-server.vercel.app/api/users/me",
       {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${authToken}` },
       }
     );
+    if (!userResponse.ok) throw new Error("Failed to fetch user data");
+    const userData = await userResponse.json();
+    document.getElementById("checkoutFullName").textContent = userData.fullname;
+    document.getElementById("inputFullName").value = userData.fullname;
+    document.getElementById("inputEmail").value = userData.Email;
 
-    if (!response.ok) throw new Error("Gagal mengambil data user");
-
-    const { user } = await response.json();
-    if (!user) return;
-
-    document.getElementById("full_name").value = user.fullname || "";
-    document.getElementById("full_name").setAttribute("autocomplete", "name");
-
-    document.getElementById("email").value = user.email || "";
-    document.getElementById("email").setAttribute("autocomplete", "email");
-
-    const userNameElement = document.getElementById("user-name");
-    if (userNameElement) {
-      userNameElement.textContent = user.fullname;
-    }
-  } catch (error) {
-    console.error("Error fetching user data:", error);
-  }
-}
-
-async function fetchRoomData(roomId) {
-  try {
-    const response = await fetch(
+    const roomResponse = await fetch(
       `https://kosconnect-server.vercel.app/api/rooms/${roomId}/pages`
     );
-    if (!response.ok) throw new Error("Gagal mengambil data kamar");
+    if (!roomResponse.ok) throw new Error("Failed to fetch room data");
+    const roomData = await roomResponse.json();
+    document.getElementById("checkoutKosName").textContent =
+      roomData.boardingHouseName;
+    document.getElementById("checkoutAddress").textContent = roomData.address;
 
-    const detail = await response.json();
-    document.querySelector(".room-name").textContent = detail.room_name;
-    document.querySelector(".address").textContent = detail.address;
-
-    // Harga sewa
-    const priceList = document.getElementById("price-list");
-    priceList.innerHTML = "";
-
-    const priceTypes = {
-      monthly: "bulan",
-      quarterly: "3 bulan",
-      semi_annual: "6 bulan",
-      yearly: "tahun",
-    };
-
-    if (detail.price && typeof detail.price === "object") {
-      Object.entries(priceTypes).forEach(([key, label]) => {
-        if (detail.price[key]) {
-          const li = document.createElement("li");
-          li.innerHTML = `
-            <label>
-              <input type="radio" name="price" value="${detail.price[key]}">
-              Rp ${detail.price[key].toLocaleString("id-ID")} / ${label}
-            </label>
-          `;
-          priceList.appendChild(li);
-        }
-      });
-    }
-
-    // Fasilitas custom
-    const customFasilitasContainer = document.getElementById(
-      "customFasilitasContainer"
-    );
-    customFasilitasContainer.innerHTML = detail.custom_facilities.length
-      ? detail.custom_facilities
-          .map(
-            (facility) => `
-        <label>
-          <input type="checkbox" name="facility[]" value="${facility.name}">
-          ${facility.name} - Rp ${facility.price.toLocaleString("id-ID")}
-        </label>
-      `
-          )
-          .join("")
-      : "<div>Tidak ada fasilitas tambahan</div>";
-  } catch (error) {
-    console.error("Error fetching room data:", error);
-  }
-}
-
-// Tombol kembali
-const backButton = document.querySelector(".back-button");
-if (backButton) {
-  backButton.addEventListener("click", () => window.history.back());
-}
-
-// Logout
-const logoutBtn = document.querySelector(".logout-btn");
-if (logoutBtn) {
-  logoutBtn.addEventListener("click", () => {
-    Swal.fire({
-      title: "Anda yakin ingin keluar?",
-      text: "Anda akan keluar dari akun Anda!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Ya, keluar",
-      cancelButtonText: "Batal",
-      reverseButtons: true,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        document.cookie =
-          "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        document.cookie =
-          "userRole=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        window.location.href = "https://kosconnect.github.io/";
-      }
+    const hargaSewaList = document.getElementById("hargaSewaList");
+    hargaSewaList.innerHTML = "";
+    roomData.prices.forEach((price) => {
+      const li = document.createElement("li");
+      li.textContent = `${price.duration}: Rp ${price.amount}`;
+      hargaSewaList.appendChild(li);
     });
-  });
-}
+
+    const fasilitasList = document.getElementById("fasilitasList");
+    fasilitasList.innerHTML = "";
+    roomData.facilities.forEach((facility) => {
+      const li = document.createElement("li");
+      li.textContent = facility;
+      fasilitasList.appendChild(li);
+    });
+  } catch (error) {
+    console.error("Error loading checkout data:", error);
+  }
+});
+
+//button back
+const backButton = document.querySelector(".back-button");
+
+backButton.addEventListener("click", () => {
+  window.history.back();
+});
+
+document.getElementById("logoutButton").addEventListener("click", function () {
+  document.cookie =
+    "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  window.location.href = "/login.html";
+});
