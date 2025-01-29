@@ -30,7 +30,6 @@ async function renderRoomDetail(detail) {
   thumbnailContainer.innerHTML = "";
 
   const seeAllButton = document.getElementById("seeAll");
-  seeAllButton.style.display = "none";
 
   let images = detail.all_images || [];
   window.allImages = images; // Simpan untuk modal
