@@ -149,7 +149,7 @@ function prevImage() {
   document.getElementById("modal-img").src =
     window.allImages[window.currentIndex];
 }
-async function handleAjukanSewa() {
+async function handleBooking() {
   try {
     const authToken = getCookie("authToken");
     if (!authToken) {
@@ -219,11 +219,11 @@ document.addEventListener("DOMContentLoaded", async () => {
     const userRole = getCookie("userRole");
     renderHeader(authToken, userRole);
 
-    const ajukanSewaBtn = document.getElementById("ajukanSewaBtn");
-    if (ajukanSewaBtn) {
-      ajukanSewaBtn.addEventListener("click", handleAjukanSewa);
+    const bookingBtn = document.getElementById("booking-btn");
+    if (bookingBtn) {
+      bookingBtn.addEventListener("click", handleBooking);
     }
-    
+
     document.querySelector(".close").addEventListener("click", closeModalFunc);
     document.querySelector(".prev").addEventListener("click", prevImage);
     document.querySelector(".next").addEventListener("click", nextImage);
