@@ -7,6 +7,7 @@ const userRole = getCookie("userRole");
 const urlParams = new URLSearchParams(window.location.search);
 const roomId = urlParams.get("roomId");
 
+// Jika user sudah login, ambil data user
 if (authToken) {
   fetch("https://kosconnect-server.vercel.app/api/users/me", {
     method: "GET",
@@ -20,9 +21,13 @@ if (authToken) {
     })
     .then((data) => {
       const user = data.user;
+      const fullName = user?.fullName || "Pengguna";
       document.getElementById("full_name").value = user?.fullName || "";
       document.getElementById("email").value = user?.email || "";
-      renderLoggedInMenu(user?.fullName || userRole);
+
+      // Menampilkan nama user di dropdown
+      const userNameElement = document.getElementById("user-name");
+      if (userNameElement) userNameElement.textContent = fullName;
     })
     .catch((error) => {
       console.error("Error fetching user data:", error);
@@ -72,7 +77,7 @@ if (roomId) {
 }
 
 // Tambahkan event listener untuk logout
-document.getElementById("logout-btn")?.addEventListener("click", () => {
+document.querySelector(".logout-btn")?.addEventListener("click", () => {
   // Menampilkan konfirmasi sebelum logout
   Swal.fire({
     title: "Anda yakin ingin keluar?",
