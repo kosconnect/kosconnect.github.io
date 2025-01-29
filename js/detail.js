@@ -1,14 +1,16 @@
 import { getCookie, renderHeader } from "./header.js";
 
-// Fungsi untuk merender nama kamar kos di title
+// 🔹 Global Variables
+window.allImages = [];
+window.currentIndex = 0; // Pastikan variabel ini terdefinisi
+
+// 🔹 Fungsi untuk merender nama kamar kos di title
 document.addEventListener("DOMContentLoaded", function () {
   const roomNameElement = document.getElementById("room-name");
 
   if (roomNameElement) {
-    // Setel judul awal
     document.title = `${roomNameElement.innerText} | KosConnect`;
 
-    // Jika teks `room-name` diubah secara dinamis, perbarui title
     const observer = new MutationObserver(() => {
       document.title = `${roomNameElement.innerText} | KosConnect`;
     });
@@ -20,41 +22,44 @@ document.addEventListener("DOMContentLoaded", function () {
 async function renderRoomDetail(detail) {
   document.getElementById("room-name").textContent =
     detail.room_name || "Nama Kamar Tidak Diketahui";
-  document.getElementById("mainImage").src =
-    detail.all_images?.[0] || "img/default.jpg";
+
+  const mainImage = document.getElementById("mainImage");
+  mainImage.src = detail.all_images?.[0] || ""; // Biarkan browser menangani jika kosong
 
   const thumbnailContainer = document.getElementById("thumbnailContainer");
   thumbnailContainer.innerHTML = "";
 
-  if (Array.isArray(detail.all_images)) {
-    detail.all_images.slice(0, 3).forEach((imgSrc, index) => {
-      // Slice(0, 3) extracts the first 3 images from the array
+  const seeAllButton = document.getElementById("seeAll");
+  seeAllButton.style.display = "none";
+
+  let images = detail.all_images || [];
+  window.allImages = images; // Simpan untuk modal
+
+  if (images.length > 0) {
+    images.slice(0, 3).forEach((imgSrc, index) => {
       const img = document.createElement("img");
       img.src = imgSrc;
       img.classList.add("thumbnail");
       img.onclick = () => {
-        document.getElementById("mainImage").src = imgSrc;
+        mainImage.src = imgSrc;
+        openModal(index); // Sekarang juga membuka modal
       };
       thumbnailContainer.appendChild(img);
 
-      if (index === detail.all_images.length - 1) {
-        const viewAllButton = document.createElement("button");
-        viewAllButton.textContent = "Lihat Semua Foto";
-        viewAllButton.classList.add("view-all");
-        viewAllButton.onclick = tampilkanModal;
-        thumbnailContainer.appendChild(viewAllButton);
+      if (index === Math.min(images.length, 3) - 1) {
+        seeAllButton.style.display = "block";
       }
     });
   }
 
-  document.getElementById("category").innerHTML = `<p>Kategori: ${
+  document.getElementById("category").innerHTML = `<p>${
     detail.category_name || "Tidak Ada"
   }</p>`;
   document.getElementById(
     "size"
   ).innerHTML = `<p><i class="fa-solid fa-ruler-combined"></i> ${
     detail.size || "Tidak Ada"
-  } meter</p>`;
+  } </p>`; //meter nya nanti ditambahin kalo perlu
   document.getElementById(
     "availability"
   ).innerHTML = `<p><i class="fa-solid fa-door-open"></i> ${
@@ -65,9 +70,6 @@ async function renderRoomDetail(detail) {
   ).innerHTML = `<p><i class="fa-solid fa-location-dot"></i> ${
     detail.address || "Tidak Diketahui"
   } </p>`;
-  document.getElementById("owner").innerHTML = `<p>Dikelola Oleh: <span>${
-    detail.owner_fullname || "Tidak Diketahui"
-  }</span> <i class="fa-solid fa-user-tie" style = "font-size:16px;"></i></p>`;
 
   const priceList = document.getElementById("price-list");
   priceList.innerHTML = "";
@@ -96,123 +98,88 @@ async function renderRoomDetail(detail) {
   document.querySelector("#rules p").textContent =
     detail.rules || "Peraturan tidak tersedia.";
 
-  const generalFacilityList = document.querySelector("#generalFacility ul");
-  generalFacilityList.innerHTML = detail.facilities
+  document.querySelector("#generalFacility ul").innerHTML = detail.facilities
     ? detail.facilities.map((facility) => `<li>${facility.name}</li>`).join("")
     : "<li>Tidak ada fasilitas</li>";
 
-  const roomFacilityList = document.querySelector("#roomFacility ul");
-  roomFacilityList.innerHTML = detail.room_facilities
+  document.querySelector("#roomFacility ul").innerHTML = detail.room_facilities
     ? detail.room_facilities
         .map((facility) => `<li>${facility.name}</li>`)
         .join("")
     : "<li>Tidak ada fasilitas kamar</li>";
 
-  const customFacilityContainer = document.getElementById(
-    "customFasilitasContainer"
-  );
-  customFacilityContainer.innerHTML = detail.custom_facilities
-    ? detail.custom_facilities
-        .map(
-          (facility) =>
-            `<div class="custom-item"><span>${
-              facility.name
-            }</span> - <span>Rp ${facility.price.toLocaleString()}</span></div>`
-        )
-        .join("")
-    : "<div>Tidak ada fasilitas tambahan</div>";
+  document.getElementById("customFasilitasContainer").innerHTML =
+    detail.custom_facilities
+      ? detail.custom_facilities
+          .map(
+            (facility) =>
+              `<div class="custom-item"><span>${
+                facility.name
+              }</span> - <span>Rp ${facility.price.toLocaleString()}</span></div>`
+          )
+          .join("")
+      : "<div>Tidak ada fasilitas tambahan</div>";
 }
 
-function tampilkanModal() {
-  const modal = document.getElementById("modal");
-  modal.style.display = "block";
-  document.getElementById("modal-img").src =
-    document.getElementById("gambarUtama").src;
-}
-
-document.addEventListener("DOMContentLoaded", function () {
+// 🔹 Modal Functions
+function openModal(index) {
   const modal = document.getElementById("modal");
   const modalImg = document.getElementById("modal-img");
-  const thumbnails = document.querySelectorAll(".thumbnail, .main-image");
-  const closeModal = document.querySelector(".close");
-  const prevBtn = document.querySelector(".prev");
-  const nextBtn = document.querySelector(".next");
 
-  let images = [];
-  let currentIndex = 0;
-
-  thumbnails.forEach((thumb, index) => {
-    images.push(thumb.src);
-    thumb.addEventListener("click", () => {
-      openModal(index);
-    });
-  });
-
-  function openModal(index) {
-    currentIndex = index;
-    modalImg.src = images[currentIndex];
+  if (window.allImages.length > 0) {
+    window.currentIndex = index;
+    modalImg.src = window.allImages[window.currentIndex];
     modal.style.display = "flex";
   }
+}
 
-  function closeModalFunc() {
-    modal.style.display = "none";
-  }
+function closeModalFunc() {
+  document.getElementById("modal").style.display = "none";
+}
 
-  function nextImage() {
-    currentIndex = (currentIndex + 1) % images.length;
-    modalImg.src = images[currentIndex];
-  }
+function nextImage() {
+  window.currentIndex = (window.currentIndex + 1) % window.allImages.length;
+  document.getElementById("modal-img").src =
+    window.allImages[window.currentIndex];
+}
 
-  function prevImage() {
-    currentIndex = (currentIndex - 1 + images.length) % images.length;
-    modalImg.src = images[currentIndex];
-  }
+function prevImage() {
+  window.currentIndex =
+    (window.currentIndex - 1 + window.allImages.length) %
+    window.allImages.length;
+  document.getElementById("modal-img").src =
+    window.allImages[window.currentIndex];
+}
 
-  closeModal.addEventListener("click", closeModalFunc);
-  nextBtn.addEventListener("click", nextImage);
-  prevBtn.addEventListener("click", prevImage);
-
-  modal.addEventListener("click", function (e) {
-    if (e.target === modal) closeModalFunc();
-  });
-});
-
-window.onload = async () => {
+// 🔹 Event Listeners
+document.addEventListener("DOMContentLoaded", async () => {
   try {
     const authToken = getCookie("authToken");
     const urlParams = new URLSearchParams(window.location.search);
     const roomId = urlParams.get("room_id");
 
-    if (!roomId) {
-      console.error("room_id tidak ditemukan di URL.");
-      return;
-    }
+    if (!roomId) return console.error("room_id tidak ditemukan di URL.");
 
     const response = await fetch(
       `https://kosconnect-server.vercel.app/api/rooms/${roomId}/pages`,
       {
         method: "GET",
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
+        headers: { Authorization: `Bearer ${authToken}` },
       }
     );
 
-    if (!response.ok) {
-      throw new Error(`Gagal mengambil data kamar: ${response.statusText}`);
-    }
+    if (!response.ok) throw new Error(`Gagal mengambil data kamar`);
 
     const roomData = await response.json();
-    if (!roomData || !Array.isArray(roomData) || roomData.length === 0) {
+    if (!roomData || !Array.isArray(roomData) || roomData.length === 0)
       throw new Error("Data kamar kosong atau tidak valid.");
-    }
 
-    console.log("Room Data:", roomData[0]);
-    renderRoomDetail(roomData[0]); // Ambil objek pertama dari array
+    renderRoomDetail(roomData[0]);
 
-    const userRole = getCookie("userRole");
-    renderHeader(authToken, userRole);
+    document.querySelector(".close").addEventListener("click", closeModalFunc);
+    document.querySelector(".prev").addEventListener("click", prevImage);
+    document.querySelector(".next").addEventListener("click", nextImage);
   } catch (error) {
     console.error("Gagal mengambil data:", error);
   }
-};
+});
