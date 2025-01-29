@@ -111,16 +111,23 @@
       <label for="checkin-date">Tanggal Masuk</label>
       <input type="date" id="checkin-date" name="checkin-date">
     </div>
+
     <div class="row">
+      <!-- Pilihan Harga -->
       <div class="price-options">
-        <label>Harga Sewa<input type="radio" name="price" value="1500000"> <ul>Rp 1.500.000 / Bulan</ul></label>
-        </div>
+        <label>Harga Sewa</label>
+        <ul id="price-list"></ul>
+      </div>
+
+      <!-- Pilihan Fasilitas Custom -->
       <div class="facilities">
-        <label>Fasilitas Custom<input type="checkbox" name="facility[]" value="galon"> <ul>4 Galon tiap Bulan</ul></label>
-        </div>
+        <label>Fasilitas Custom</label>
+        <div id="customFasilitasContainer"></div>
+      </div>
     </div>
   </div>
 </div>
+
           </div>
 
           <div class="right-section">

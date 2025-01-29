@@ -170,6 +170,10 @@ input::placeholder,
 textarea::placeholder {
     color: rgba(27, 52, 70, 0.7);
 }
+
+.left-bottom label {
+    font-weight: bold;
+}
 /* left bottom */
 .order-details {
     display: grid;

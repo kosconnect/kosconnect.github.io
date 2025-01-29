@@ -44,45 +44,74 @@ if (authToken) {
 
 // Fetch data kamar
 if (roomId) {
-  fetch(`https://kosconnect-server.vercel.app/api/rooms/${roomId}/pages`, {
-    method: "GET",
-  })
+  fetch(`https://kosconnect-server.vercel.app/api/rooms/${roomId}/pages`)
     .then((response) => {
       if (!response.ok) throw new Error("Failed to fetch room data");
       return response.json();
     })
-    .then((roomData) => {
-      document.querySelector(".room-name").textContent = roomData.name;
-      document.querySelector(".address").textContent = roomData.address;
+    .then((detail) => {
+      document.querySelector(".room-name").textContent = detail.room_name;
+      document.querySelector(".address").textContent = detail.address;
 
-      // Isi harga sewa
-      const priceOptionsContainer = document.querySelector(".price-options");
-      priceOptionsContainer.innerHTML = "";
-      roomData.prices.forEach((price) => {
-        const label = document.createElement("label");
-        label.innerHTML = `
-          <input type="radio" name="price" value="${price.amount}">
-          <ul>Rp ${price.amount.toLocaleString()} / ${price.term}</ul>
-        `;
-        priceOptionsContainer.appendChild(label);
-      });
+      // Menampilkan harga sewa
+      const priceList = document.getElementById("price-list");
+      priceList.innerHTML = "";
 
-      // Isi fasilitas custom
-      const facilitiesContainer = document.querySelector(".facilities");
-      facilitiesContainer.innerHTML = "";
-      roomData.customFacilities.forEach((facility) => {
-        const label = document.createElement("label");
-        label.innerHTML = `
-          <input type="checkbox" name="facility[]" value="${facility.name}">
-          <ul>${facility.name}</ul>
-        `;
-        facilitiesContainer.appendChild(label);
-      });
+      const priceTypes = {
+        monthly: "bulan",
+        quarterly: "3 bulan",
+        semi_annual: "6 bulan",
+        yearly: "tahun",
+      };
+
+      if (detail.price && typeof detail.price === "object") {
+        Object.entries(priceTypes).forEach(([key, label]) => {
+          if (detail.price[key]) {
+            const li = document.createElement("li");
+            li.innerHTML = `
+              <label>
+                <input type="radio" name="price" value="${detail.price[key]}">
+                Rp ${detail.price[key].toLocaleString("id-ID")} / ${label}
+              </label>
+            `;
+            priceList.appendChild(li);
+          }
+        });
+      }
+
+      // Menampilkan fasilitas custom
+      const customFasilitasContainer = document.getElementById(
+        "customFasilitasContainer"
+      );
+      customFasilitasContainer.innerHTML = detail.custom_facilities.length
+        ? detail.custom_facilities
+            .map(
+              (facility) =>
+                `<label>
+                  <input type="checkbox" name="facility[]" value="${
+                    facility.name
+                  }">
+                  ${facility.name} - Rp ${facility.price.toLocaleString(
+                  "id-ID"
+                )}
+                </label>`
+            )
+            .join("")
+        : "<div>Tidak ada fasilitas tambahan</div>";
     })
     .catch((error) => {
       console.error("Error fetching room data:", error);
     });
 }
+
+
+
+//button back
+const backButton = document.querySelector(".back-button");
+
+backButton.addEventListener("click", () => {
+  window.history.back();
+});
 
 // Tambahkan event listener untuk logout
 document.querySelector(".logout-btn")?.addEventListener("click", () => {
