@@ -174,7 +174,9 @@ document.addEventListener("DOMContentLoaded", async () => {
       throw new Error("Data kamar kosong atau tidak valid.");
 
     renderRoomDetail(roomData[0]);
-
+    const userRole = getCookie("userRole");
+    renderHeader(authToken, userRole);
+    
     document.querySelector(".close").addEventListener("click", closeModalFunc);
     document.querySelector(".prev").addEventListener("click", prevImage);
     document.querySelector(".next").addEventListener("click", nextImage);
