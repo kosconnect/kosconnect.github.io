@@ -22,18 +22,18 @@ if (authToken) {
     .then((data) => {
       const user = data.user;
       if (user) {
-        const fullName = user.fullname || "Pengguna"; // Sesuai dengan respons API
-        document.getElementById("full_name").value = fullName;
+        const fullname = user.fullname || "Pengguna"; // Sesuai dengan respons API
+        document.getElementById("full_name").value = fullname;
         document.getElementById("email").value = user.email || "";
         document
           .getElementById("full_name")
-          .setAttribute("autocomplete", "name");
+          .setAttribute("autocomplete", "fullname");
         document.getElementById("email").setAttribute("autocomplete", "email");
 
         // Menampilkan nama user di dropdown
         const userNameElement = document.getElementById("user-name");
         if (userNameElement) {
-          userNameElement.textContent = fullName;
+          userNameElement.textContent = fullname;
         }
       }
     })
