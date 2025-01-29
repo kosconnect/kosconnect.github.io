@@ -207,6 +207,7 @@ p {
 .price ul li {
     padding: 5px 0;
     font-size: 16px;
+    color: #005f73;
 }
 
 .booking {
@@ -237,6 +238,10 @@ p {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     margin-bottom: 10px;
 }
+.custom-item {
+    color: #005f73;
+    padding: 5px;
+}
 
 /* Deskripsi dan Peraturan */
 .desc-rules, .facility {
@@ -257,6 +262,12 @@ p {
 
 .facility {
     margin-top: 10px;
+}
+
+.facility li {
+    padding: 5px;
+    margin-left: 15px;
+    color: #005f73;
 }
 
 /* Map */

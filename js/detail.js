@@ -27,7 +27,8 @@ async function renderRoomDetail(detail) {
   thumbnailContainer.innerHTML = "";
 
   if (Array.isArray(detail.all_images)) {
-    detail.all_images.forEach((imgSrc, index) => {
+    detail.all_images.slice(0, 3).forEach((imgSrc, index) => {
+      // Slice(0, 3) extracts the first 3 images from the array
       const img = document.createElement("img");
       img.src = imgSrc;
       img.classList.add("thumbnail");
@@ -49,15 +50,24 @@ async function renderRoomDetail(detail) {
   document.getElementById("category").innerHTML = `<p>Kategori: ${
     detail.category_name || "Tidak Ada"
   }</p>`;
-  document.getElementById("size").innerHTML = `<p>Ukuran: ${
+  document.getElementById(
+    "size"
+  ).innerHTML = `<p><i class="fa-solid fa-ruler-combined"></i> ${
     detail.size || "Tidak Ada"
-  }</p>`;
-  document.getElementById("availability").innerHTML = `<p>Tersedia: ${
+  } meter</p>`;
+  document.getElementById(
+    "availability"
+  ).innerHTML = `<p><i class="fa-solid fa-door-open"></i> ${
     detail.number_available ?? "Tidak Diketahui"
-  }</p>`;
-  document.getElementById("owner").innerHTML = `<p>Pemilik: ${
+  } Kamar Tersedia</p>`;
+  document.getElementById(
+    "address"
+  ).innerHTML = `<p><i class="fa-solid fa-location-dot"></i> ${
+    detail.address || "Tidak Diketahui"
+  } <i class="fa-solid fa-user-tie"></i></p>`;
+  document.getElementById("owner").innerHTML = `<p>Dikelola Oleh: ${
     detail.owner_fullname || "Tidak Diketahui"
-  }</p>`;
+  } <i class="fa-solid fa-user-tie"></i></p>`;
 
   const priceList = document.getElementById("price-list");
   priceList.innerHTML = "";
