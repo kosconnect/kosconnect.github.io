@@ -21,13 +21,21 @@ if (authToken) {
     })
     .then((data) => {
       const user = data.user;
-      const fullName = user?.fullName || "Pengguna";
-      document.getElementById("full_name").value = user?.fullName || "";
-      document.getElementById("email").value = user?.email || "";
+      if (user) {
+        const fullName = user.fullname || "Pengguna"; // Sesuai dengan respons API
+        document.getElementById("full_name").value = fullName;
+        document.getElementById("email").value = user.email || "";
+        document
+          .getElementById("full_name")
+          .setAttribute("autocomplete", "name");
+        document.getElementById("email").setAttribute("autocomplete", "email");
 
-      // Menampilkan nama user di dropdown
-      const userNameElement = document.getElementById("user-name");
-      if (userNameElement) userNameElement.textContent = fullName;
+        // Menampilkan nama user di dropdown
+        const userNameElement = document.getElementById("user-name");
+        if (userNameElement) {
+          userNameElement.textContent = fullName;
+        }
+      }
     })
     .catch((error) => {
       console.error("Error fetching user data:", error);
