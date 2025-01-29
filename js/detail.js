@@ -172,7 +172,7 @@ async function handleBooking() {
     }
 
     const userData = await userResponse.json();
-    const userId = userData?.user?._id;
+    const userId = userData?.user?.user_id;
     if (!userId) {
       throw new Error("User ID tidak ditemukan.");
     }
