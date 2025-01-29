@@ -23,12 +23,22 @@ if (authToken) {
       const user = data.user;
       if (user) {
         const fullname = user.fullname || "Pengguna"; // Sesuai dengan respons API
-        document.getElementById("full_name").value = fullname;
-        document.getElementById("email").value = user.email || "";
-        document
-          .getElementById("full_name")
-          .setAttribute("autocomplete", "fullname");
-        document.getElementById("email").setAttribute("autocomplete", "email");
+
+        // Tetap gunakan class yang ada, hanya menambahkan id
+        const fullNameInput = document.querySelector(".user-fullname");
+        const emailInput = document.querySelector(".user-email");
+
+        if (fullNameInput) {
+          fullNameInput.value = fullname;
+          fullNameInput.id = "full_name"; // Tambah id
+          fullNameInput.setAttribute("autocomplete", "name");
+        }
+
+        if (emailInput) {
+          emailInput.value = user.email || "";
+          emailInput.id = "email"; // Tambah id
+          emailInput.setAttribute("autocomplete", "email");
+        }
 
         // Menampilkan nama user di dropdown
         const userNameElement = document.getElementById("user-name");
@@ -104,9 +114,7 @@ if (roomId) {
     });
 }
 
-
-
-//button back
+// Button back
 const backButton = document.querySelector(".back-button");
 
 backButton.addEventListener("click", () => {
@@ -115,7 +123,6 @@ backButton.addEventListener("click", () => {
 
 // Tambahkan event listener untuk logout
 document.querySelector(".logout-btn")?.addEventListener("click", () => {
-  // Menampilkan konfirmasi sebelum logout
   Swal.fire({
     title: "Anda yakin ingin keluar?",
     text: "Anda akan keluar dari akun Anda!",
@@ -126,7 +133,6 @@ document.querySelector(".logout-btn")?.addEventListener("click", () => {
     reverseButtons: true,
   }).then((result) => {
     if (result.isConfirmed) {
-      // Menghapus cookie dan logout
       document.cookie =
         "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       document.cookie =

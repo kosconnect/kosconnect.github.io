@@ -109,25 +109,19 @@
   <div class="order-details">
     <div class="row">
       <label for="checkin-date">Tanggal Masuk</label>
-      <input type="date" id="checkin-date" name="checkin-date">
+      <input type="date" id="checkin-date" name="checkin-date" autocomplete="bday">
     </div>
-
     <div class="row">
-      <!-- Pilihan Harga -->
       <div class="price-options">
         <label>Harga Sewa</label>
         <ul id="price-list"></ul>
       </div>
-
-      <!-- Pilihan Fasilitas Custom -->
-      <div class="facilities">
+      <div class="facilities" id="customFasilitasContainer">
         <label>Fasilitas Custom</label>
-        <div id="customFasilitasContainer"></div>
       </div>
     </div>
   </div>
 </div>
-
           </div>
 
           <div class="right-section">
