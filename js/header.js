@@ -150,26 +150,71 @@ function renderLoggedInMenu(fullName) {
        </div>
     `;
 
-  // Tambahkan event listener untuk logout
-  document.getElementById("logout-btn")?.addEventListener("click", () => {
-    // Menampilkan konfirmasi sebelum logout
-    Swal.fire({
-      title: "Anda yakin ingin keluar?",
-      text: "Anda akan keluar dari akun Anda!",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Ya, keluar",
-      cancelButtonText: "Batal",
-      reverseButtons: true,
-    }).then((result) => {
-      if (result.isConfirmed) {
-        // Menghapus cookie dan logout
-        document.cookie =
-          "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        document.cookie =
-          "userRole=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-        window.location.href = "https://kosconnect.github.io/";
-      }
-    });
+  // Tambahkan event listener untuk logout dengan memanggil handleLogout()
+        document.getElementById("logout-btn")?.addEventListener("click", handleLogout);
+}
+
+// Fungsi untuk merender header minimal (hanya akun pengguna & logout)
+export function renderMinimalHeader(authToken) {
+  const navLinks = document.querySelector(".nav-links");
+  if (!navLinks) return;
+
+  if (authToken) {
+    fetch("https://kosconnect-server.vercel.app/api/users/me", {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${authToken}`,
+      },
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("Failed to fetch user data");
+        return response.json();
+      })
+      .then((data) => {
+        const user = data.user;
+        navLinks.innerHTML = `
+          <div class="dropdown">
+            <a href="#" class="profile-icon dropdown-toggle d-flex align-items-center mx-2" id="profileDropdown" role="button">
+              <div class="d-flex align-items-center">
+                <i class="fa-solid fa-user me-2"></i>
+                <span id="user-name">${user?.fullname || "Pengguna"}</span>
+              </div>
+            </a>
+            <div class="dropdown-menu">
+              <a href="#" class="dropdown-item logout-btn" id="logout-btn">
+                <i class="fa-solid fa-right-from-bracket"></i> Logout
+              </a>
+            </div>
+          </div>
+        `;
+
+        // Tambahkan event listener untuk logout dengan memanggil handleLogout()
+        document
+          .getElementById("logout-btn")
+          ?.addEventListener("click", handleLogout);
+      })
+      .catch((error) => {
+        console.error("Error fetching user data:", error);
+      });
+  }
+}
+
+// Fungsi untuk melakukan logout dengan konfirmasi
+export function handleLogout() {
+  Swal.fire({
+    title: "Anda yakin ingin keluar?",
+    text: "Anda akan keluar dari akun Anda!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: "Ya, keluar",
+    cancelButtonText: "Batal",
+    reverseButtons: true,
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Menghapus cookie dan logout
+      document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      document.cookie = "userRole=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      window.location.href = "https://kosconnect.github.io/";
+    }
   });
 }
