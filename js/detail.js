@@ -18,11 +18,6 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 async function renderRoomDetail(detail) {
-  if (!detail || typeof detail !== "object") {
-    console.error("Data kamar tidak valid:", detail);
-    return;
-  }
-
   document.getElementById("room-name").textContent =
     detail.room_name || "Nama Kamar Tidak Diketahui";
   document.getElementById("mainImage").src =
@@ -198,13 +193,12 @@ window.onload = async () => {
     }
 
     const roomData = await response.json();
-
-    if (!roomData || !roomData.data) {
+    if (!roomData || !Array.isArray(roomData) || roomData.length === 0) {
       throw new Error("Data kamar kosong atau tidak valid.");
     }
 
-    console.log("Room Data:", roomData.data);
-    renderRoomDetail(roomData.data);
+    console.log("Room Data:", roomData[0]);
+    renderRoomDetail(roomData[0]); // Ambil objek pertama dari array
 
     const userRole = getCookie("userRole");
     renderHeader(authToken, userRole);
