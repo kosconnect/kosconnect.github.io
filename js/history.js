@@ -221,6 +221,11 @@ window.onload = async () => {
     allOrderData = await response.json();
     await renderOrderCards(allOrderData, authToken);
 
+    // Urutkan transaksi dari yang terbaru berdasarkan created_at
+    allOrderData.data.sort(
+      (a, b) => new Date(b.created_at) - new Date(a.created_at)
+    );
+
     const userRole = getCookie("userRole");
     renderHeader(authToken, userRole);
   } catch (error) {
