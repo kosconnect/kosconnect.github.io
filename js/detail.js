@@ -35,19 +35,19 @@ async function renderRoomDetail(detail) {
   window.allImages = images; // Simpan untuk modal
 
   if (images.length > 0) {
-    images.slice(0, 3).forEach((imgSrc, index) => {
+    // Set main image to the first image
+    mainImage.src = images[0] || "";
+
+    // Create thumbnails for the second and third image (maximum 2)
+    images.slice(1, 3).forEach((imgSrc, index) => {
       const img = document.createElement("img");
       img.src = imgSrc;
       img.classList.add("thumbnail");
       img.onclick = () => {
         mainImage.src = imgSrc;
-        openModal(index); // Sekarang juga membuka modal
+        openModal(index + 1); // Adjust index for modal
       };
       thumbnailContainer.appendChild(img);
-
-      if (index === Math.min(images.length, 3) - 1) {
-        // seeAllButton.style.display = "block";
-      }
     });
   }
 
