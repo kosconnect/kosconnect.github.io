@@ -64,10 +64,10 @@ async function renderRoomDetail(detail) {
     "address"
   ).innerHTML = `<p><i class="fa-solid fa-location-dot"></i> ${
     detail.address || "Tidak Diketahui"
-  } <i class="fa-solid fa-user-tie"></i></p>`;
-  document.getElementById("owner").innerHTML = `<p>Dikelola Oleh: ${
+  } </p>`;
+  document.getElementById("owner").innerHTML = `<p>Dikelola Oleh: <span>${
     detail.owner_fullname || "Tidak Diketahui"
-  } <i class="fa-solid fa-user-tie"></i></p>`;
+  }</span> <i class="fa-solid fa-user-tie" style = "font-size:16px;"></i></p>`;
 
   const priceList = document.getElementById("price-list");
   priceList.innerHTML = "";

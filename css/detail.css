@@ -141,7 +141,7 @@ p {
 }
 
 .size,
-.availablity,
+.availability,
 .address,
 .category,
 .owner {
@@ -161,7 +161,7 @@ p {
     line-height: 1.5em;
 }
 
-.alamat {
+.address {
     max-width: 250px;
     /* Sesuaikan lebar maksimum sesuai kebutuhan */
 }
