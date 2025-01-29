@@ -59,107 +59,68 @@
     </header>
     <div class="container-wrapper">
       <main class="container">
-        <h2>Nama & Tipe Kamar Kos</h2>
-
+        <h2 id="room-name">Nama & Tipe Kamar Kos</h2>
         <div class="galeri-container">
-          <img
-            id="gambarUtama"
-            class="gambar-utama"
-            src="img/kamar1.jpeg"
-            alt="Gambar Kos"
-          />
-          <div class="thumbnail-container">
-            <img
-              class="thumbnail"
-              src="img/kamar1.jpeg"
-              alt="Gambar Kos"
-              onclick="tampilkanModal(0)"
-            />
-            <img
-              class="thumbnail"
-              src="img/kamar1.jpeg"
-              alt="Gambar Kos"
-              onclick="tampilkanModal(1)"
-            />
-            <img
-              class="thumbnail"
-              src="img/kamar1.jpeg"
-              alt="Gambar Kos"
-              onclick="tampilkanModal(2)"
-            />
-            <img
-              class="thumbnail"
-              src="img/kamar1.jpeg"
-              alt="Gambar Kos"
-              onclick="tampilkanModal(3)"
-            />
+          <img id="mainImage" class="main-image" src="" alt="Gambar Kos" />
+          <div id="thumbnailContainer" class="thumbnail-container" onclick="tampilkanModal()">
+            <button id="seeAll" class="see-all">Lihat Semua Foto</button>
           </div>
         </div>
 
-        <!-- Modal Slideshow -->
         <div id="modal" class="modal">
           <span class="close" onclick="closeModal()">&times;</span>
           <img id="modal-img" class="modal-content" src="" />
           <button class="prev" onclick="changeSlide(-1)">&#10094;</button>
           <button class="next" onclick="changeSlide(1)">&#10095;</button>
         </div>
+
         <div class="main-info">
           <section class="info-boardinghouse">
-            <div class="size">
-              <p><i class="fa-solid fa-ruler-combined"></i> 3 x 4 meter</p>
-            </div>
-            <div class="availablity">
-              <p><i class="fa-solid fa-door-open"></i> 5 Kamar Tersedia</p>
-            </div>
-            <div class="address">
-              <p class="alamat"><i class="fa-solid fa-location-dot"></i> Jl. Sariasih No. 121, Sarijadi, Bandung, Jawa Barat
-              </p>
-            </div>
-            <div class="owner">
-              <p>Dikelola Oleh <span>Nama</span><i class="fa-solid fa-user-tie"></i></p>
-            </div>
+            <div id="size" class="size"></div>
+            <div id="availability" class="availability"></div>
+            <div id="address" class="address"></div>
+            <div id="owner" class="owner"></div>
           </section>
 
           <section class="price">
             <h3>Harga</h3>
-            <ul>
-              <li>Rp. 1.500.000 / bulan</li>
-              <li>Rp. 4.000.000 / 3 bulan</li>
-              <li>Rp. 6.500.000 / 6 bulan</li>
-              <li>Rp. 12.000.000 / tahun</li>
-            </ul>
+            <ul id="price-list"></ul>
             <button class="booking">Ajukan Sewa</button>
           </section>
         </div>
+
         <div class="detail-info">
           <section class="fasilitas-custom" id="customFasilitas">
             <h3>Custom Fasilitas</h3>
-            <p>Data fasilitas custom akan muncul di sini.</p>
+            <div id="customFasilitasContainer" class="horizontal-list"></div>
           </section>
+
           <section class="desc-rules">
-            <div class="desc">
+            <div id="desc" class="desc">
               <h3>Deskripsi Kos</h3>
-              <p>Deskripsi kos sesuai preferensi owner.</p>
+              <p></p>
             </div>
-            <div class="rules">
+            <div id="rules" class="rules">
               <h3>Peraturan Kos</h3>
-              <p>Peraturan yang berlaku dalam kos ini.</p>
+              <p></p>
             </div>
           </section>
+
           <section class="facility">
-            <div class="general">
+            <div id="generalFacility" class="general">
               <h3>Fasilitas Umum</h3>
-              <p>Deskripsi kos sesuai preferensi owner.</p>
+              <ul></ul>
             </div>
-            <div class="room">
+            <div id="roomFacility" class="room">
               <h3>Fasilitas Kamar Kos</h3>
-              <p>Peraturan yang berlaku dalam kos ini.</p>
+              <ul></ul>
             </div>
           </section>
         </div>
+
         <div class="location">
-        <h3>Peta Lokasi</h3>
-        <section id="map" class="map"></section>
+          <h3>Peta Lokasi</h3>
+          <section id="map" class="map"></section>
         </div>
       </main>
     </div>
