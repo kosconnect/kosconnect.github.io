@@ -63,14 +63,22 @@ async function renderCheckoutDetail(roomId) {
     document.querySelector(".address").textContent =
       roomData.address || "Alamat tidak tersedia";
 
-    // Populate price list dengan radio button
+    // Mapping untuk terjemahan term pembayaran
+    const termTranslations = {
+      monthly: "Bulanan",
+      quarterly: "Per 3 Bulan",
+      semi_annual: "Per 6 Bulan",
+      yearly: "Tahunan",
+    };
+
+    // Populate price list dengan radio button tanpa bullet
     const priceList = document.getElementById("price-list");
     if (priceList) {
       priceList.innerHTML = "";
 
       if (roomData.price && typeof roomData.price === "object") {
         Object.entries(roomData.price).forEach(([duration, price], index) => {
-          const li = document.createElement("li");
+          const container = document.createElement("div"); // Gunakan div agar tidak ada bullet point
 
           const radio = document.createElement("input");
           radio.type = "radio";
@@ -81,32 +89,32 @@ async function renderCheckoutDetail(roomId) {
 
           const label = document.createElement("label");
           label.setAttribute("for", `price-${index}`);
-          label.textContent = `${duration}: Rp ${price.toLocaleString(
-            "id-ID"
-          )}`;
+          label.textContent = `${
+            termTranslations[duration] || duration
+          }: Rp ${price.toLocaleString("id-ID")}`;
 
-          li.appendChild(radio);
-          li.appendChild(label);
-          priceList.appendChild(li);
+          container.appendChild(radio);
+          container.appendChild(label);
+          priceList.appendChild(container);
         });
       }
     } else {
       console.error("Element price-list tidak ditemukan di halaman.");
     }
 
-    // Populate custom facilities dengan checkbox
+    // Populate custom facilities dengan checkbox tanpa bullet
     const facilitiesList = document.getElementById("custom-facilities");
     if (facilitiesList) {
       facilitiesList.innerHTML = "";
 
       if (Array.isArray(roomData.custom_facilities)) {
         roomData.custom_facilities.forEach((facility, index) => {
-          const li = document.createElement("li");
+          const container = document.createElement("div"); // Gunakan div agar tidak ada bullet point
 
           const checkbox = document.createElement("input");
           checkbox.type = "checkbox";
           checkbox.name = "custom_facility";
-          checkbox.value = facility._id; // Gunakan ID sebagai value agar mudah diolah di backend
+          checkbox.value = facility._id;
           checkbox.id = `facility-${index}`;
 
           const label = document.createElement("label");
@@ -115,9 +123,9 @@ async function renderCheckoutDetail(roomId) {
             facility.name
           } - Rp ${facility.price.toLocaleString("id-ID")}`;
 
-          li.appendChild(checkbox);
-          li.appendChild(label);
-          facilitiesList.appendChild(li);
+          container.appendChild(checkbox);
+          container.appendChild(label);
+          facilitiesList.appendChild(container);
         });
       }
     } else {
