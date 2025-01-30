@@ -114,6 +114,13 @@ async function renderCheckoutDetail(roomId) {
   }
 }
 
+//button back
+const backButton = document.querySelector(".back-button");
+
+backButton.addEventListener("click", () => {
+  window.history.back();
+});
+
 // Ambil data checkout saat halaman dimuat
 window.onload = () => {
   const urlParams = new URLSearchParams(window.location.search);
