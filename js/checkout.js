@@ -35,13 +35,11 @@ async function renderCheckoutDetail(roomId) {
     }
 
     const userData = await userResponse.json();
-    const { fullname, email, phoneNumber, address } = userData?.user;
+    const { fullname, email } = userData?.user;
 
     // Isi form dengan data user
     document.getElementById("full_name").value = fullname || "";
     document.getElementById("email").value = email || "";
-    document.getElementById("whatsapp").value = phoneNumber || "";
-    document.getElementById("address").value = address || "";
 
     // Ambil detail kamar berdasarkan roomId
     const roomResponse = await fetch(
@@ -59,38 +57,64 @@ async function renderCheckoutDetail(roomId) {
     // Pastikan apakah API mengembalikan array atau objek
     const roomData = Array.isArray(roomDetail) ? roomDetail[0] : roomDetail;
 
-    const { room_name, boarding_house, priceList, custom_facilities } =
-      roomData;
-
     // Update informasi kamar di halaman
     document.querySelector(".room-name").textContent =
-      room_name || "Tidak Diketahui";
+      roomData.room_name || "Tidak Diketahui";
     document.querySelector(".address").textContent =
-      boarding_house?.address || "Alamat tidak tersedia";
+      roomData.address || "Alamat tidak tersedia";
 
-    // Menampilkan daftar harga sewa
-    const priceListElement = document.getElementById("price-list");
-    priceListElement.innerHTML = priceList
-      .map(
-        (price) =>
-          `<li>${price.duration}: Rp ${price.amount.toLocaleString(
-            "id-ID"
-          )}</li>`
-      )
-      .join("");
+    // Populate price list dengan radio button
+    const priceList = document.getElementById("price-list");
+    priceList.innerHTML = "";
 
-    // Menampilkan fasilitas custom
-    const facilitiesElement = document.getElementById("custom-facilities");
-    facilitiesElement.innerHTML = custom_facilities
-      .map(
-        (facility) =>
-          `<li>${facility.name} - Rp ${facility.price.toLocaleString(
-            "id-ID"
-          )}</li>`
-      )
-      .join("");
+    if (roomData.price && typeof roomData.price === "object") {
+      Object.entries(roomData.price).forEach(([duration, price], index) => {
+        const li = document.createElement("li");
+
+        const radio = document.createElement("input");
+        radio.type = "radio";
+        radio.name = "rental_price"; // Semua radio button harus memiliki name yang sama
+        radio.value = duration;
+        radio.id = `price-${index}`;
+        if (index === 0) radio.checked = true; // Default pilih opsi pertama
+
+        const label = document.createElement("label");
+        label.setAttribute("for", `price-${index}`);
+        label.textContent = `${duration}: Rp ${price.toLocaleString()}`;
+
+        li.appendChild(radio);
+        li.appendChild(label);
+        priceList.appendChild(li);
+      });
+    }
+
+    // Populate custom facilities dengan checkbox
+    const facilitiesList = document.getElementById("custom-facilities");
+    facilitiesList.innerHTML = "";
+
+    if (Array.isArray(roomData.custom_facilities)) {
+      roomData.custom_facilities.forEach((facility, index) => {
+        const li = document.createElement("li");
+
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.name = "custom_facility";
+        checkbox.value = facility.name;
+        checkbox.id = `facility-${index}`;
+
+        const label = document.createElement("label");
+        label.setAttribute("for", `facility-${index}`);
+        label.textContent = `${
+          facility.name
+        } - Rp ${facility.price.toLocaleString()}`;
+
+        li.appendChild(checkbox);
+        li.appendChild(label);
+        facilitiesList.appendChild(li);
+      });
+    }
   } catch (error) {
-    console.error("Gagal mengambil data checkout:", error);
+    console.error("Error fetching data:", error);
   }
 }
 
