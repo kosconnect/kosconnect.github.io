@@ -1,34 +1,49 @@
-// Import getCookie dan renderHeader dari header.js
-import { getCookie, renderHeader } from "./header.js";
-
 // Fungsi untuk merender detail transaksi ke halaman
-async function renderCheckoutDetail(roomId, userId) {
+async function renderCheckoutDetail(roomId) {
   const checkoutElement = document.getElementById("checkout");
 
   // Bersihkan elemen sebelumnya
   checkoutElement.innerHTML = "";
 
-  if (!roomId || !userId) {
-    checkoutElement.innerHTML =
-      "<p>Informasi kamar atau user tidak ditemukan.</p>";
+  if (!roomId) {
+    checkoutElement.innerHTML = "<p>Informasi kamar tidak ditemukan.</p>";
     return;
   }
 
   try {
-    // Ambil detail user berdasarkan userId
+    const authToken = getCookie("authToken");
+    if (!authToken) {
+      checkoutElement.innerHTML =
+        "<p>Anda harus login untuk melanjutkan checkout.</p>";
+      return;
+    }
+
+    // Ambil detail user berdasarkan authToken
     const userResponse = await fetch(
-      `https://kosconnect-server.vercel.app/api/users/${userId}`
+      "https://kosconnect-server.vercel.app/api/users/me",
+      {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
     );
 
     if (!userResponse.ok) {
-      console.error(`Error fetching user detail for user_id ${userId}`);
+      console.error("Error fetching user detail");
       checkoutElement.innerHTML =
-        "<p>Gagal mengambil detail user untuk transaksi ini.</p>";
+        "<p>Gagal mengambil detail pengguna untuk transaksi ini.</p>";
       return;
     }
 
     const userData = await userResponse.json();
-    const { full_name, email } = userData;
+    const { full_name, email, user_id } = userData?.user;
+
+    if (!user_id) {
+      checkoutElement.innerHTML =
+        "<p>User ID tidak ditemukan, harap login terlebih dahulu.</p>";
+      return;
+    }
 
     // Ambil detail kamar berdasarkan roomId
     const roomResponse = await fetch(
@@ -64,7 +79,6 @@ async function renderCheckoutDetail(roomId, userId) {
     checkoutElement.innerHTML = checkoutDetails;
 
     // Setup header dan autentikasi
-    const authToken = getCookie("authToken");
     const userRole = getCookie("userRole");
     renderHeader(authToken, userRole);
   } catch (error) {
@@ -76,8 +90,11 @@ async function renderCheckoutDetail(roomId, userId) {
 window.onload = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const roomId = urlParams.get("room_id");
-  const userId = urlParams.get("user_id");
 
   // Panggil fungsi untuk merender checkout detail
-  renderCheckoutDetail(roomId, userId);
+  if (roomId) {
+    renderCheckoutDetail(roomId);
+  } else {
+    console.error("room_id tidak ditemukan di URL.");
+  }
 };
