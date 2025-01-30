@@ -1,130 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pemesanan | KosConnect</title>
+    <!-- css -->
+    <link rel="stylesheet" href="./css/styles.css" />
+    <link rel="stylesheet" href="./css/header.css" />
+    <link rel="stylesheet" href="./css/footer.css" />
+    <link rel="stylesheet" href="./css/history.css" />
+    <!-- Favicon -->
+    <link rel="icon" href="img/logokos.png" type="image/x-icon" />
+    <!-- google fonts-->
+    <!-- google fonts-->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <!-- fontawesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+    />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"
+      integrity="sha512-yFjZbTYRCJodnuyGlsKamNE/LlEaEAxSUDe5+u61mV8zzqJVFOH7TnULE2/PP/l5vKWpUNnF4VGVkXh3MjgLsg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pemesanan | KosConnect</title>
-  <!-- css -->
-  <link rel="stylesheet" href="./css/styles.css" />
-  <link rel="stylesheet" href="./css/header.css" />
-  <link rel="stylesheet" href="./css/footer.css" />
-  <link rel="stylesheet" href="./css/history.css" />
-  <!-- Favicon -->
-  <link rel="icon" href="img/logokos.png" type="image/x-icon" />
-  <!-- google fonts-->
-  <!-- google fonts-->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-    rel="stylesheet"
-  />
-  <!-- fontawesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js" integrity="sha512-yFjZbTYRCJodnuyGlsKamNE/LlEaEAxSUDe5+u61mV8zzqJVFOH7TnULE2/PP/l5vKWpUNnF4VGVkXh3MjgLsg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-  <style>
-      #user-info {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            margin-bottom: 20px;
-        }
-        #user-photo {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: #ccc; /* Placeholder jika foto tidak ada */
-        }
-        #user-name, #user-phone {
-            font-size: 1rem;
-            font-weight: bold;
-        }
-  </style>
-</head>
-
-<body>
-  <!-- Main Header -->
-  <header class="header">
-    <div class="navbar">
-      <div class="brand">
-        <img src="img/logokos.png" alt="Brand Logo" class="brand-logo" />
-        <h1 class="brand-name" data-jscroot="fade-in">KosConnect</h1>
-      </div>
-
-      <div class="search-bar">
-        <input
-          type="text"
-          id="search-input"
-          placeholder="Cari di halaman ini..."
-        />
-        <button class="search-button" onclick="searchKos()">
-          <i class="fa-solid fa-magnifying-glass"></i>
-        </button>
-      </div>
-
-      <div class="nav-links" id="navLinks">
-        <!-- Navbar links will be dynamically populated based on login status -->
-      </div>
-    </div>
-  </header>
-  <div class="container-wrapper">
-    <!-- <aside class="sidebar">
-        <div class="profile">
-            <div class="profile-header">
-                <img src="menu/sm.png" alt="Profile Picture" class="profile-picture">
-                <div class="profile-info">
-                    <h3 class="profile-name" id="user-fullname">Pengguna</h3>
-                    <a href="#" class="edit-profile">
-                        <i class="fas fa-pencil-alt"></i> Ubah Profil
-                    </a>
-                </div>
-            </div>
-            <nav class="menu">
-                <a href="#" class="menu-item">
-                    <i class="fas fa-user menu-icon"></i> Akun Saya
-                </a>
-                <a href="riwayat.html" class="menu-item active">
-                    <i class="fas fa-history menu-icon"></i> Riwayat Pesanan
-                </a>
-            </nav>
+  <body>
+    <!-- Main Header -->
+    <header class="header">
+      <div class="navbar">
+        <div class="brand">
+          <img src="img/logokos.png" alt="Brand Logo" class="brand-logo" />
+          <h1 class="brand-name" data-jscroot="fade-in">KosConnect</h1>
         </div>
-    </aside> -->
-    <main class="main-container">
-      <h2>Riwayat Pesanan</h2>
-      <!-- konten kanan: form pesanan -->
-      <div id="orderHistory" class="order-history">
-        <!-- Elemen menu akan diisi oleh JavaScript -->     
-      </div>
-    </main>
-  </div>
 
-  <footer class="site-footer" id="kontak">
-    <div class="footer-content">
-      <p class="footer-intro">-Cari Kos-Kosan sesuai dengan Preferensimu di KosConnect-</p>
-      <div class="footer-links">
-        <!-- <span class="about searchable">
+        <div class="search-bar">
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Cari di halaman ini..."
+          />
+          <button class="search-button" onclick="searchKos()">
+            <i class="fa-solid fa-magnifying-glass"></i>
+          </button>
+        </div>
+
+        <div class="nav-links" id="navLinks">
+          <!-- Navbar links will be dynamically populated based on login status -->
+        </div>
+      </div>
+    </header>
+    <div class="container-wrapper">
+      <main class="main-container">
+        <h2>Riwayat Pesanan</h2>
+        <!-- konten kanan: form pesanan -->
+        <div id="orderHistory" class="order-history">
+          <!-- Elemen menu akan diisi oleh JavaScript -->
+        </div>
+      </main>
+    </div>
+
+    <footer class="site-footer" id="kontak">
+      <div class="footer-content">
+        <p class="footer-intro">
+          -Cari Kos-Kosan sesuai dengan Preferensimu di KosConnect-
+        </p>
+        <div class="footer-links">
+          <!-- <span class="about searchable">
           <a href=""> <i class="fa-solid fa-info-circle"></i> Tentang </a>
         </span> -->
-        <span class="contact searchable">
-          <a href="mailto:kosconnect2@gmail.com"
-            ><i class="fa-solid fa-envelope"></i> Kontak
-          </a>
-        </span>
-        <span class="address searchable">
-          <a href="https://g.co/kgs/3VB5ztr">
-            <i class="fa-solid fa-map-marker-alt"></i> Jl. Sariasih No. 54,
-            Sarijadi
-          </a>
-        </span>
+          <span class="contact searchable">
+            <a href="mailto:kosconnect2@gmail.com"
+              ><i class="fa-solid fa-envelope"></i> Kontak
+            </a>
+          </span>
+          <span class="address searchable">
+            <a href="https://g.co/kgs/3VB5ztr">
+              <i class="fa-solid fa-map-marker-alt"></i> Jl. Sariasih No. 54,
+              Sarijadi
+            </a>
+          </span>
+        </div>
+        <p class="copyright">KosConnect &copy; 2024 All rights reserved.</p>
       </div>
-      <p class="copyright">KosConnect &copy; 2024 All rights reserved.</p>
-    </div>
-  </footer>
+    </footer>
 
-  <!-- Memanggil file JS -->
-  <script type="module" src="js/history.js"></script>
-</body>
-
+    <!-- Memanggil file JS -->
+    <script type="module" src="js/history.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  </body>
 </html>
