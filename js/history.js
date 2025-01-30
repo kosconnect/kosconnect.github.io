@@ -91,11 +91,9 @@ async function renderOrderCards(orders) {
 <p><strong>Kategori:</strong> ${
       roomDetail[0]?.category_name || "Tidak Diketahui"
     }</p>
-<p><strong>Alamat:</strong> ${
-      roomDetail[0]?.address || "Tidak Diketahui"
-    }</p>
+<p><strong>Alamat:</strong> ${roomDetail[0]?.address || "Tidak Diketahui"}</p>
 <p><strong>Nama Pemilik:</strong> ${
-      roomDetail[0]?.owner?.fullname || "Tidak Diketahui"
+      roomDetail[0]?.owner_fullname || "Tidak Diketahui"
     }</p>
 `;
 
@@ -103,16 +101,21 @@ async function renderOrderCards(orders) {
 
     // Sekarang Anda bisa menggunakan transactionDetail.price, transactionDetail.ppn, dll.
     let biayaDetails = `
-        <p><strong>Harga Sewa:</strong> Rp ${(order.price ?? 0).toLocaleString("id-ID")} / ${paymentTermText}</p>
-        <p><strong>PPN 11%:</strong> Rp ${(order.ppn ?? 0).toLocaleString("id-ID")}</p>
-        <p><strong>Biaya Fasilitas:</strong> Rp ${order.facilities_price.toLocaleString("id-ID")}</p>
-    `;
+        <p><strong>Harga Sewa:</strong> Rp ${(order.price ?? 0).toLocaleString(
+          "id-ID"
+        )} / ${paymentTermText}</p>
+        <p><strong>PPN 11%:</strong> Rp ${(order.ppn ?? 0).toLocaleString(
+          "id-ID"
+        )}</p>
+        <p class="total"><strong>Total:</strong> Rp ${(
+          order.total ?? 0
+        ).toLocaleString("id-ID")}</p>`;
 
     if (order.facilities_price) {
-        biayaDetails =
-          `<p class="total"><strong>Total:</strong> Rp ${(
-            order.total ?? 0
-          ).toLocaleString("id-ID")}</p>` + biayaDetails;
+      biayaDetails =
+        `<p><strong>Biaya Fasilitas:</strong> Rp ${order.facilities_price.toLocaleString(
+          "id-ID"
+        )}</p>` + biayaDetails;
     }
 
     // Tombol bayar sekarang (jika status pending)
