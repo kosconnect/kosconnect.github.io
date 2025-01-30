@@ -205,6 +205,7 @@ function setStatusIcons() {
   });
 }
 
+// Ambil data kos saat halaman dimuat
 window.onload = async () => {
   try {
     const authToken = getCookie("authToken");
@@ -217,19 +218,8 @@ window.onload = async () => {
         },
       }
     );
-
     allOrderData = await response.json();
-
-    // Urutkan transaksi dari yang terbaru berdasarkan created_at
-    if (allOrderData && Array.isArray(allOrderData.data)) {
-      allOrderData.data.sort(
-        (a, b) => new Date(b.created_at) - new Date(a.created_at)
-      );
-    } else {
-      console.error("Data allOrderData tidak valid");
-    }
-
-    await renderOrderCards(allOrderData.data, authToken);
+    await renderOrderCards(allOrderData, authToken);
 
     const userRole = getCookie("userRole");
     renderHeader(authToken, userRole);
