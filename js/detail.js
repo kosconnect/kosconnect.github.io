@@ -149,32 +149,54 @@ function prevImage() {
   document.getElementById("modal-img").src =
     window.allImages[window.currentIndex];
 }
+// async function handleBooking() {
+//   try {
+//     const authToken = getCookie("authToken");
+//     if (!authToken) {
+//       return alert("Anda harus login untuk mengajukan sewa.");
+//     }
+
+//     // Ambil user_id dari endpoint /api/users/me
+//     const userResponse = await fetch(
+//       "https://kosconnect-server.vercel.app/api/users/me",
+//       {
+//         method: "GET",
+//         headers: {
+//           Authorization: `Bearer ${authToken}`,
+//         },
+//       }
+//     );
+
+//     if (!userResponse.ok) {
+//       throw new Error("Gagal mengambil data pengguna.");
+//     }
+
+//     const userData = await userResponse.json();
+//     const userId = userData?.user?.user_id;
+//     if (!userId) {
+//       throw new Error("User ID tidak ditemukan.");
+//     }
+
+//     // Ambil room_id dari URL
+//     const urlParams = new URLSearchParams(window.location.search);
+//     const roomId = urlParams.get("room_id");
+//     if (!roomId) {
+//       throw new Error("Room ID tidak ditemukan.");
+//     }
+
+//     // Redirect ke halaman checkout dengan room_id dan user_id
+//     window.location.href = `https://kosconnect.github.io/checkout.html?room_id=${roomId}&user_id=${userId}`;
+//   } catch (error) {
+//     console.error("Error saat mengajukan sewa:", error);
+//     alert("Terjadi kesalahan, silakan coba lagi.");
+//   }
+// }
+
 async function handleBooking() {
   try {
     const authToken = getCookie("authToken");
     if (!authToken) {
       return alert("Anda harus login untuk mengajukan sewa.");
-    }
-
-    // Ambil user_id dari endpoint /api/users/me
-    const userResponse = await fetch(
-      "https://kosconnect-server.vercel.app/api/users/me",
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${authToken}`,
-        },
-      }
-    );
-
-    if (!userResponse.ok) {
-      throw new Error("Gagal mengambil data pengguna.");
-    }
-
-    const userData = await userResponse.json();
-    const userId = userData?.user?.user_id;
-    if (!userId) {
-      throw new Error("User ID tidak ditemukan.");
     }
 
     // Ambil room_id dari URL
@@ -184,8 +206,8 @@ async function handleBooking() {
       throw new Error("Room ID tidak ditemukan.");
     }
 
-    // Redirect ke halaman checkout dengan room_id dan user_id
-    window.location.href = `https://kosconnect.github.io/checkout.html?room_id=${roomId}&user_id=${userId}`;
+    // Redirect ke halaman checkout dengan room_id saja
+    window.location.href = `https://kosconnect.github.io/checkout.html?room_id=${roomId}`;
   } catch (error) {
     console.error("Error saat mengajukan sewa:", error);
     alert("Terjadi kesalahan, silakan coba lagi.");
