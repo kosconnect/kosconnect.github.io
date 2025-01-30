@@ -100,23 +100,27 @@ async function renderOrderCards(orders) {
 `;
 
     // Komponen rincian biaya
-    // Komponen rincian biaya
-    let biayaDetails = `
-<p><strong>Harga Sewa:</strong> Rp ${order.price.toLocaleString(
-      "id-ID"
-    )} / ${paymentTermText}</p>
-<p><strong>PPN 11%:</strong> Rp ${order.ppn.toLocaleString("id-ID")}</p>
-<p class="total"><strong>Total:</strong> Rp ${order.total.toLocaleString(
-      "id-ID"
-    )}</p>
-`;
+   // Ambil detail transaksi untuk mendapatkan informasi harga yang spesifik
+    const transactionDetailResponse = await fetch(
+        `https://kosconnect-server.vercel.app/api/transaction/${order.transaction_id}`
+    );
 
-    // Tambahkan biaya fasilitas jika ada
-    if (order.facilities_price) {
-      biayaDetails =
-        `<p><strong>Biaya Fasilitas:</strong> Rp ${order.facilities_price.toLocaleString(
-          "id-ID"
-        )}</p>` + biayaDetails;
+    if (!transactionDetailResponse.ok) {
+        console.error(`Error fetching transaction detail for transaction_id ${order.transaction_id}`);
+        continue;
+    }
+
+    const transactionDetail = await transactionDetailResponse.json();
+
+    // Sekarang Anda bisa menggunakan transactionDetail.price, transactionDetail.ppn, dll.
+    let biayaDetails = `
+        <p><strong>Harga Sewa:</strong> Rp ${(transactionDetail.price ?? 0).toLocaleString("id-ID")} / ${paymentTermText}</p>
+        <p><strong>PPN 11%:</strong> Rp ${(transactionDetail.ppn ?? 0).toLocaleString("id-ID")}</p>
+        <p class="total"><strong>Total:</strong> Rp ${(transactionDetail.total ?? 0).toLocaleString("id-ID")}</p>
+    `;
+
+    if (transactionDetail.facilities_price) {
+        biayaDetails = `<p><strong>Biaya Fasilitas:</strong> Rp ${transactionDetail.facilities_price.toLocaleString("id-ID")}</p>` + biayaDetails;
     }
 
     // Tombol bayar sekarang (jika status pending)
