@@ -50,10 +50,6 @@ h3 {
 }
 
 /* left */
-.left-section {
-    border-left: #005f73 solid 8px;
-}
-
 .form-row {
     display: flex;
     gap: 20px;
@@ -62,8 +58,7 @@ h3 {
 .fullname,
 .gender,
 .email,
-.whatsapp,
-.address-user {
+.whatsapp {
     margin-top: 15px;
 }
 
@@ -95,7 +90,9 @@ h3 {
     /* Untuk memposisikan elemen anak */
 }
 
-.input-group-prepend {
+.input-group-text {
+    border: none;
+    color: #999;
     position: absolute;
     left: 0;
     top: 0;
@@ -103,15 +100,8 @@ h3 {
     /* Sesuaikan warna latar belakang */
     border: 1px solid #ccc;
     border-radius: 4px 0 0 4px;
-    padding: 8.5px;
+    padding: 9px;
     z-index: 1;
-    /* Agar elemen ini berada di atas input */
-}
-
-.input-group-text {
-    border: none;
-    background-color: transparent;
-    color: #999;
 }
 
 .form-control {
@@ -176,13 +166,11 @@ textarea::placeholder {
 
 /* left bottom */
 .order-details {
-    display: flex;
     grid-template-columns: 1fr 2fr;
     gap: 20px;
 }
 
 .row {
-    display: flex;
     align-items: end;
     margin-bottom: 10px;
 }
