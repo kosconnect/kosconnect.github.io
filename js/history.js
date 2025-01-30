@@ -102,7 +102,13 @@ async function renderOrderCards(orders) {
     // Komponen rincian biaya
    // Ambil detail transaksi untuk mendapatkan informasi harga yang spesifik
     const transactionDetailResponse = await fetch(
-        `https://kosconnect-server.vercel.app/api/transaction/${order.transaction_id}`
+        `https://kosconnect-server.vercel.app/api/transaction/${order.transaction_id}`,
+        {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      }
     );
 
     if (!transactionDetailResponse.ok) {
