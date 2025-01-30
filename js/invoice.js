@@ -169,10 +169,8 @@ async function renderTransactionDetail(order) {
       <div class="user-details">
       <h6><strong>Informasi Pemesan</strong></h6>
         <p><strong>${order.personal_info.full_name}</strong> </p>
-        <p>${order.personal_info.gender}</p>
         <p>${order.personal_info.email}</p>
         <p>${order.personal_info.phone_number}</p>
-        <p>${order.personal_info.address}</p>
       </div>
     </div>
     </div>
