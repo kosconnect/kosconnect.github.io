@@ -1,20 +1,24 @@
+// Fungsi untuk mendapatkan nilai cookie berdasarkan nama
+function getCookie(name) {
+  const cookies = document.cookie.split("; ");
+  for (const cookie of cookies) {
+    const [key, value] = cookie.split("=");
+    if (key === name) return value;
+  }
+  return null;
+}
+
 // Fungsi untuk merender detail transaksi ke halaman
 async function renderCheckoutDetail(roomId) {
-  const checkoutElement = document.getElementById("checkout");
-
-  // Bersihkan elemen sebelumnya
-  checkoutElement.innerHTML = "";
-
   if (!roomId) {
-    checkoutElement.innerHTML = "<p>Informasi kamar tidak ditemukan.</p>";
+    console.error("room_id tidak ditemukan di URL.");
     return;
   }
 
   try {
     const authToken = getCookie("authToken");
     if (!authToken) {
-      checkoutElement.innerHTML =
-        "<p>Anda harus login untuk melanjutkan checkout.</p>";
+      alert("Anda harus login untuk melanjutkan checkout.");
       return;
     }
 
@@ -31,19 +35,17 @@ async function renderCheckoutDetail(roomId) {
 
     if (!userResponse.ok) {
       console.error("Error fetching user detail");
-      checkoutElement.innerHTML =
-        "<p>Gagal mengambil detail pengguna untuk transaksi ini.</p>";
       return;
     }
 
     const userData = await userResponse.json();
-    const { full_name, email, user_id } = userData?.user;
+    const { fullName, email, phoneNumber, address } = userData?.user;
 
-    if (!user_id) {
-      checkoutElement.innerHTML =
-        "<p>User ID tidak ditemukan, harap login terlebih dahulu.</p>";
-      return;
-    }
+    // Isi form dengan data user
+    document.getElementById("full_name").value = fullName || "";
+    document.getElementById("email").value = email || "";
+    document.getElementById("whatsapp").value = phoneNumber || "";
+    document.getElementById("address").value = address || "";
 
     // Ambil detail kamar berdasarkan roomId
     const roomResponse = await fetch(
@@ -52,31 +54,39 @@ async function renderCheckoutDetail(roomId) {
 
     if (!roomResponse.ok) {
       console.error(`Error fetching room detail for room_id ${roomId}`);
-      checkoutElement.innerHTML =
-        "<p>Gagal mengambil detail kamar untuk transaksi ini.</p>";
       return;
     }
 
     const roomDetail = await roomResponse.json();
-    const { boarding_house, room_type, price } = roomDetail[0];
-    const category = roomDetail[0].category_name || "Tidak Diketahui";
-    const roomName = roomDetail[0]?.room_name || "Tidak Diketahui";
+    const { boarding_house, priceList, custom_facilities } = roomDetail[0];
 
-    // Tampilkan detail checkout
-    const checkoutDetails = `
-      <div>
-        <h4>Checkout</h4>
-        <p><strong>Nama Pemesan:</strong> ${full_name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Kamar:</strong> ${roomName}</p>
-        <p><strong>Kategori:</strong> ${category}</p>
-        <p><strong>Harga:</strong> Rp ${price.toLocaleString("id-ID")}</p>
-        <p><strong>Alamat Kos:</strong> ${
-          boarding_house?.address || "Tidak Diketahui"
-        }</p>
-      </div>
-    `;
-    checkoutElement.innerHTML = checkoutDetails;
+    // Update informasi kamar di halaman
+    document.querySelector(".room-name").textContent =
+      boarding_house?.name || "Tidak Diketahui";
+    document.querySelector(".address").textContent =
+      boarding_house?.address || "Alamat tidak tersedia";
+
+    // Menampilkan daftar harga sewa
+    const priceListElement = document.getElementById("price-list");
+    priceListElement.innerHTML = priceList
+      .map(
+        (price) =>
+          `<li>${price.duration}: Rp ${price.amount.toLocaleString(
+            "id-ID"
+          )}</li>`
+      )
+      .join("");
+
+    // Menampilkan fasilitas custom
+    const facilitiesElement = document.getElementById("custom-facilities");
+    facilitiesElement.innerHTML = custom_facilities
+      .map(
+        (facility) =>
+          `<li>${facility.name} - Rp ${facility.price.toLocaleString(
+            "id-ID"
+          )}</li>`
+      )
+      .join("");
 
     // Setup header dan autentikasi
     const userRole = getCookie("userRole");
@@ -94,7 +104,5 @@ window.onload = () => {
   // Panggil fungsi untuk merender checkout detail
   if (roomId) {
     renderCheckoutDetail(roomId);
-  } else {
-    console.error("room_id tidak ditemukan di URL.");
   }
 };
