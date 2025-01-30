@@ -5,18 +5,27 @@ body {
 }
 
 .form-container {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr;
+    display: flex;
+    flex-wrap: wrap;
     gap: 20px;
-    border-radius: 10px;
     padding: 20px;
+    justify-content: center;
 }
 
-
+form {
+    display: grid;
+        /* Mengaktifkan grid */
+        grid-template-columns: repeat(3, 1fr);
+        /* Membuat 3 kolom dengan lebar yang sama */
+        gap: 10px;
+        /* Mengatur jarak antar elemen */
+}
 h2 {
     font-family: 'Merriweather', serif;
     text-align: center;
     color: #1b3446;
+    margin-bottom: 20px;
+    /* Spasi bawah judul */
 }
 
 h3 {
@@ -37,54 +46,30 @@ h3 {
 .address {
     text-align: center;
     color: #005f73;
+    margin-bottom: 20px;
+    /* Spasi bawah alamat */
 }
 
-.left-section,
-.right-section {
+.left,
+.center,
+.right {
     background-color: #fff;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     padding: 15px;
-    margin-top: 20px;
     border-radius: 10px;
-    border-top: #005f73 solid 8px;
+    border-top: #005f73 solid 5px;
+    /* Border top 5px */
+    flex: 1 1 45%;
+    /* Mengatur lebar card agar proporsional, minimal 45% */
+    box-sizing: border-box;
+    /* Memastikan padding tidak menambah lebar */
+    margin-bottom: 20px;
+    /* Spasi bawah card */
 }
-
-/* left */
 .form-row {
-    display: flex;
     gap: 20px;
-}
-
-.fullname,
-.gender,
-.email,
-.whatsapp {
     margin-top: 15px;
 }
-
-.fullname {
-    width: 70%;
-}
-
-.gender {
-    width: 30%;
-}
-
-.email,
-.whatsapp {
-    width: 50%;
-}
-
-.address-user {
-    text-align: start;
-    color: #005f73;
-}
-
-.whatsapp {
-    /* Gaya untuk keseluruhan elemen WhatsApp */
-    margin-bottom: 10px;
-}
-
 .input-group {
     position: relative;
     /* Untuk memposisikan elemen anak */
@@ -100,7 +85,7 @@ h3 {
     /* Sesuaikan warna latar belakang */
     border: 1px solid #ccc;
     border-radius: 4px 0 0 4px;
-    padding: 9px;
+    padding: 8.5px;
     z-index: 1;
 }
 
@@ -109,16 +94,8 @@ h3 {
     /* Sesuaikan dengan lebar kode negara */
 }
 
-/* Gaya untuk dropdown */
-select {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24"><path d="M7 10L12 15 17 10"/></svg>');
-    background-repeat: no-repeat;
-    background-position-x: right;
-    background-position-y: center;
-    padding-right: 25px;
+.center label {
+    font-weight: bold;
 }
 
 label {
@@ -128,7 +105,6 @@ label {
 }
 
 input,
-select,
 textarea {
     width: 100%;
     padding: 10px;
@@ -139,7 +115,6 @@ textarea {
 
 /* Warna garis aktif saat input difokuskan */
 input:focus,
-select:focus,
 textarea:focus {
     border-color: #20B2AA;
     outline: none;
@@ -149,7 +124,6 @@ textarea:focus {
 
 /* Warna teks dalam input */
 input,
-select,
 textarea {
     color: #1b3446;
 }
@@ -160,47 +134,75 @@ textarea::placeholder {
     color: rgba(27, 52, 70, 0.7);
 }
 
-.left-bottom label {
-    font-weight: bold;
-}
-
 /* left bottom */
 .order-details {
-    grid-template-columns: 1fr 2fr;
     gap: 20px;
 }
-
-.row {
-    align-items: end;
-    margin-bottom: 10px;
+.order-details label {
+    margin-top: 15px;
 }
-
-.price-options,
-.facilities {
-    display: flex;
-    flex-direction: column;
+.row {
+    /* Menggunakan flexbox untuk row */
+    align-items: center;
+    /* Rata tengah vertikal */
+    margin-bottom: 10px;
 }
 
 button {
     background-color: #4CAF50;
-    /* Green */
     color: white;
     padding: 15px 32px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
-    margin: 4px 2px;
+    margin: 20px auto 0;
+    /* margin atas 20px, tengah horizontal */
     cursor: pointer;
+    border: none;
+    /* Hilangkan border default */
+    border-radius: 5px;
+    /* Tambahkan border radius */
 }
 
-.right-section {
+.right {
+    display: flex;
+    flex-direction: column;
+    /* Konten di dalam right ke bawah */
     justify-content: space-between;
+    /* Spasi antar elemen di right */
 }
 
-.right-section h3 {
+.right h3 {
     text-align: center;
     border-bottom: none;
-    margin-bottom: 20px;
+    margin-bottom: 5x;
+}
+/* Tambahkan media query untuk layar kecil */
+@media (max-width: 768px) {
+    .form-container {
+        flex-direction: column;
+        /* Card jadi ke bawah */
+    }
 
+    .left,
+    .center,
+    .right {
+        flex: 1 1 100%;
+        /* Lebar card jadi 100% */
+        margin-bottom: 20px;
+        /* Spasi bawah card */
+    }
+
+    .order-details {
+        grid-template-columns: 1fr;
+        /* 1 kolom */
+    }
+
+    .fullname,
+    .email,
+    .whatsapp {
+        width: 100%;
+        /* Input full width */
+    }
 }

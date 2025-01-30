@@ -4,28 +4,44 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Transaksi | KosConnect</title>
+    <!-- css -->
     <link rel="stylesheet" href="./css/styles.css" />
     <link rel="stylesheet" href="./css/header.css" />
     <link rel="stylesheet" href="./css/footer.css" />
     <link rel="stylesheet" href="./css/checkout.css" />
+    <!-- Favicon -->
     <link rel="icon" href="img/logokos.png" type="image/x-icon" />
+    <!-- google fonts-->
+    <!-- google fonts-->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
       rel="stylesheet"
     />
+    <!-- fontawesome -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"
+      integrity="sha512-yFjZbTYRCJodnuyGlsKamNE/LlEaEAxSUDe5+u61mV8zzqJVFOH7TnULE2/PP/l5vKWpUNnF4VGVkXh3MjgLsg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
   </head>
+
   <body>
+    <!-- Main Header -->
     <header class="header">
       <div class="navbar">
         <div class="brand">
           <img src="img/logokos.png" alt="Brand Logo" class="brand-logo" />
-          <h1 class="brand-name">KosConnect</h1>
+          <h1 class="brand-name" data-jscroot="fade-in">KosConnect</h1>
+        </div>
+        <div class="nav-links" id="navLinks">
+          <!-- Navbar links will be dynamically populated based on login status -->
         </div>
       </div>
     </header>
@@ -35,110 +51,109 @@
         <button class="back-button">
           <i class="fa-solid fa-arrow-left"></i> Kembali
         </button>
-        <h3 class="room-name">Kos ABC</h3>
-        <p class="address">Jl. Kota</p>
+        <h3 class="room-name">Kos Fathfathazz Tipe Standar</h3>
+        <p class="address">
+          Jl. Sarimanah No.21, Sarijadi, Kec. Sukasari, Kota Bandung, Jawa Barat
+          40151
+        </p>
         <div class="form-container">
-          <div class="left-section">
-            <h3>Informasi Pribadi</h3>
-            <div class="form-row">
-              <div class="fullname">
-                <label for="full_name">Nama Lengkap</label>
-                <input
-                  type="text"
-                  id="full_name"
-                  name="full_name"
-                  autocomplete="name"
-                  required
-                />
+          <form id="order-form">
+            <div class="left">
+              <h3>Informasi Pribadi</h3>
+              <div class="form-row">
+                <div class="fullname">
+                  <label for="full_name">Nama Lengkap</label>
+                  <input type="text" id="full_name" name="full_name" required />
+                </div>
               </div>
-              <div class="gender">
-                <label for="gender">Jenis Kelamin</label>
-                <select id="gender" name="gender" autocomplete="sex" required>
-                  <option value="laki-laki">Laki-laki</option>
-                  <option value="perempuan">Perempuan</option>
-                </select>
+              <div class="form-row">
+                <div class="email">
+                  <label for="email">Email</label>
+                  <input type="email" id="email" name="email" required />
+                </div>
+                <div class="form-row">
+                  <label for="nomor-whatsapp">Nomor Whatsapp</label>
+                  <div class="input-group">
+                    <span class="input-group-text">+62</span>
+                    <input
+                      type="tel"
+                      id="nomor-whatsapp"
+                      name="nomor-whatsapp"
+                      class="form-control"
+                      required
+                    />
+                  </div>
+                </div>
               </div>
             </div>
-            <div class="form-row">
-              <div class="email">
-                <label for="email">Email</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  autocomplete="email"
-                  required
-                />
-              </div>
-              <div class="whatsapp">
-                <label for="whatsapp">Nomor Whatsapp</label>
-                <div class="input-group">
-                  <span class="input-group-text">+62</span>
+
+            <div class="center">
+              <h3>Kustomisasi Pesanan</h3>
+              <div class="order-details">
+                  <label for="checkin-date">Tanggal Masuk</label>
                   <input
-                    type="tel"
-                    id="whatsapp"
-                    name="whatsapp"
-                    class="form-control"
-                    autocomplete="tel"
+                    type="date"
+                    id="checkin-date"
+                    name="checkin-date"
                     required
                   />
-                </div>
-              </div>
-            </div>
-            <div class="address-user">
-              <label for="address">Alamat</label>
-              <textarea
-                id="address"
-                name="address"
-                autocomplete="street-address"
-                required
-              ></textarea>
-            </div>
-          </div>
-          <div class="right-section">
-            <h3>Kustomisasi Pesanan</h3>
-            <div class="order-details">
-              <div class="row">
-                <label for="checkin-date">Tanggal Masuk</label>
-                <input
-                  type="date"
-                  id="checkin-date"
-                  name="checkin-date"
-                  autocomplete="bday"
-                  required
-                />
-              </div>
-              <div class="row">
-                <div class="facilities">
-                  <p><strong>Fasilitas Custom:</strong></p>
-                  <ul id="custom-facilities"></ul>
-                </div>
-                <div class="price-options">
-                  <p><strong>Harga Sewa:</strong></p>
-                  <ul id="price-list"></ul>
-                </div>
 
-                <div class="auto-calculate"></div>
+                <div class="price-options">
+                  <label> Harga Sewa</label>
+                  <input
+                    type="radio"
+                    name="price"
+                    value="1500000"
+                    id="harga1500"
+                    required
+                  />
+                  <ul>
+                    Rp 1.500.000 / Bulan
+                  </ul>
+                </div>
+                <div class="facilities">
+                  <label> Fasilitas Custom </label>
+                  <input
+                    type="checkbox"
+                    name="facility[]"
+                    value="galon"
+                    id="galon"
+                  />
+                  <ul>
+                    4 Galon tiap Bulan
+                  </ul>
+                </div>
               </div>
+            </div>
+
+            <div class="right">
+              <h3>Rincian Pesanan</h3>
+              <p>Tanggal Pindah: <span id="checkin-date"></span></p>
+              <ul id="fasilitas-list"></ul>
+              <p>Biaya Fasilitas: <span id="biaya-fasilitas">0</span></p>
+              <p>Harga Sewa: <span id="harga-sewa">0</span></p>
+              <p>Sub Total: <span id="sub-total"></span></p>
+              <p>PPN: <span id="ppn"></span></p>
               <p>Total: <span id="total-harga"></span></p>
               <button type="submit">Ajukan Sewa Sekarang</button>
             </div>
-          </div>
+          </form>
         </div>
       </main>
     </div>
+
     <footer class="site-footer" id="kontak">
       <div class="footer-content">
         <p class="footer-intro">
           -Cari Kos-Kosan sesuai dengan Preferensimu di KosConnect-
         </p>
         <div class="footer-links">
-          <span class="contact">
+          <span class="contact searchable">
             <a href="mailto:kosconnect2@gmail.com"
-              ><i class="fa-solid fa-envelope"></i> Kontak</a
-            >
+              ><i class="fa-solid fa-envelope"></i> Kontak
+            </a>
           </span>
-          <span class="address">
+          <span class="address searchable">
             <a href="https://g.co/kgs/3VB5ztr">
               <i class="fa-solid fa-map-marker-alt"></i> Jl. Sariasih No. 54,
               Sarijadi
@@ -148,6 +163,7 @@
         <p class="copyright">KosConnect &copy; 2024 All rights reserved.</p>
       </div>
     </footer>
+    <!-- Memanggil file JS -->
     <script type="module" src="js/checkout.js"></script>
   </body>
 </html>
