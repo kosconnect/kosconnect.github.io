@@ -39,19 +39,18 @@ h3 {
     color: #005f73;
 }
 
-.left-top,
-.left-bottom,
+.left-section,
 .right-section {
     background-color: #fff;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
     padding: 15px;
     margin-top: 20px;
     border-radius: 10px;
+    border-top: #005f73 solid 8px;
 }
 
 /* left */
-.left-top,
-.left-bottom {
+.left-section {
     border-left: #005f73 solid 8px;
 }
 
@@ -174,9 +173,10 @@ textarea::placeholder {
 .left-bottom label {
     font-weight: bold;
 }
+
 /* left bottom */
 .order-details {
-    display: grid;
+    display: flex;
     grid-template-columns: 1fr 2fr;
     gap: 20px;
 }
@@ -207,7 +207,6 @@ button {
 }
 
 .right-section {
-    border-top: #005f73 solid 8px;
     justify-content: space-between;
 }
 
@@ -217,4 +216,3 @@ button {
     margin-bottom: 20px;
 
 }
-
