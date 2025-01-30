@@ -71,35 +71,24 @@ async function renderCheckoutDetail(roomId) {
       yearly: "Tahunan",
     };
 
-    // Populate price list dengan radio button tanpa bullet
     const priceList = document.getElementById("price-list");
     if (priceList) {
       priceList.innerHTML = "";
 
       if (roomData.price && typeof roomData.price === "object") {
         Object.entries(roomData.price).forEach(([duration, price], index) => {
-          const container = document.createElement("div"); // Gunakan div agar tidak ada bullet point
-
-          const radio = document.createElement("input");
-          radio.type = "radio";
-          radio.name = "rental_price"; // Semua radio button harus memiliki name yang sama
-          radio.value = duration;
-          radio.id = `price-${index}`;
-          if (index === 0) radio.checked = true; // Default pilih opsi pertama
-
-          const label = document.createElement("label");
-          label.setAttribute("for", `price-${index}`);
-          label.textContent = `${
+          const label = document.createElement("label"); // Label membungkus input
+          label.innerHTML = `
+        <input type="radio" name="rental_price" value="${duration}" id="price-${index}" ${
+            index === 0 ? "checked" : ""
+          }>
+        Rp ${price.toLocaleString("id-ID")} / ${
             termTranslations[duration] || duration
-          }: Rp ${price.toLocaleString("id-ID")}`;
-
-          container.appendChild(radio);
-          container.appendChild(label);
-          priceList.appendChild(container);
+          }
+      `;
+          priceList.appendChild(label);
         });
       }
-    } else {
-      console.error("Element price-list tidak ditemukan di halaman.");
     }
 
     // Populate custom facilities dengan checkbox tanpa bullet
@@ -109,27 +98,16 @@ async function renderCheckoutDetail(roomId) {
 
       if (Array.isArray(roomData.custom_facilities)) {
         roomData.custom_facilities.forEach((facility, index) => {
-          const container = document.createElement("div"); // Gunakan div agar tidak ada bullet point
-
-          const checkbox = document.createElement("input");
-          checkbox.type = "checkbox";
-          checkbox.name = "custom_facility";
-          checkbox.value = facility._id;
-          checkbox.id = `facility-${index}`;
-
-          const label = document.createElement("label");
-          label.setAttribute("for", `facility-${index}`);
-          label.textContent = `${
-            facility.name
-          } - Rp ${facility.price.toLocaleString("id-ID")}`;
-
-          container.appendChild(checkbox);
-          container.appendChild(label);
-          facilitiesList.appendChild(container);
+          const label = document.createElement("label"); // Label membungkus input
+          label.innerHTML = `
+        <input type="checkbox" name="custom_facility" value="${
+          facility._id
+        }" id="facility-${index}">
+        ${facility.name} - Rp ${facility.price.toLocaleString("id-ID")}
+      `;
+          facilitiesList.appendChild(label);
         });
       }
-    } else {
-      console.error("Element custom-facilities tidak ditemukan di halaman.");
     }
   } catch (error) {
     console.error("Error fetching data:", error);
