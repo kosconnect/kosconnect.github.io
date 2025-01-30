@@ -4,41 +4,28 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Transaksi | KosConnect</title>
-    <!-- css -->
     <link rel="stylesheet" href="./css/styles.css" />
     <link rel="stylesheet" href="./css/header.css" />
     <link rel="stylesheet" href="./css/footer.css" />
     <link rel="stylesheet" href="./css/checkout.css" />
-    <!-- Favicon -->
     <link rel="icon" href="img/logokos.png" type="image/x-icon" />
-    <!-- google fonts-->
-    <!-- google fonts-->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:ital,wght@0,300..800;1,300..800&family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700;1,900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
       rel="stylesheet"
     />
-    <!-- fontawesome -->
     <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
     />
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js"
-      integrity="sha512-yFjZbTYRCJodnuyGlsKamNE/LlEaEAxSUDe5+u61mV8zzqJVFOH7TnULE2/PP/l5vKWpUNnF4VGVkXh3MjgLsg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
   </head>
-
   <body>
-    <!-- Main Header -->
     <header class="header">
       <div class="navbar">
         <div class="brand">
           <img src="img/logokos.png" alt="Brand Logo" class="brand-logo" />
-          <h1 class="brand-name" data-jscroot="fade-in">KosConnect</h1>
+          <h1 class="brand-name">KosConnect</h1>
         </div>
       </div>
     </header>
@@ -52,73 +39,57 @@
         <p class="address">Jl. Kota</p>
         <div class="form-container">
           <div class="left-section">
-            <div class="left-top">
-              <h3>Informasi Pribadi</h3>
-              <div class="form-row">
-                <div class="fullname">
-                  <label for="full_name">Nama Lengkap</label>
-                  <input type="text" id="full_name" name="full_name" />
-                </div>
-                <div class="gender">
-                  <label for="gender">Jenis Kelamin</label>
-                  <select id="gender" name="gender">
-                    <option value="laki-laki">Laki-laki</option>
-                    <option value="perempuan">Perempuan</option>
-                  </select>
-                </div>
+            <h3>Informasi Pribadi</h3>
+            <div class="form-row">
+              <div class="fullname">
+                <label for="full_name">Nama Lengkap</label>
+                <input type="text" id="full_name" name="full_name" autocomplete="name" required />
               </div>
-              <div class="form-row">
-                <div class="email">
-                  <label for="email">Email</label>
-                  <input type="email" id="email" name="email" />
-                </div>
-                <div class="whatsapp">
-                  <label for="nomor-whatsapp">Nomor Whatsapp</label>
-                  <div class="input-group">
-                    <div class="input-group-prepend">
-                      <span class="input-group-text">+62</span>
-                    </div>
-                    <input
-                      type="tel"
-                      id="nomor-whatsapp"
-                      name="nomor-whatsapp"
-                      class="form-control"
-                    />
-                  </div>
-                </div>
-              </div>
-              <div class="address-user">
-                <label for="address-user">Alamat</label>
-                <textarea id="address-user" name="address-user"></textarea>
+              <div class="gender">
+                <label for="gender">Jenis Kelamin</label>
+                <select id="gender" name="gender" autocomplete="sex" required>
+                  <option value="laki-laki">Laki-laki</option>
+                  <option value="perempuan">Perempuan</option>
+                </select>
               </div>
             </div>
-
-            <div class="left-bottom">
-              <h3>Kustomisasi Pesanan</h3>
-              <div class="order-details">
-                <div class="row">
-                  <label for="checkin-date">Tanggal Masuk</label>
-                  <input
-                    type="date"
-                    id="checkin-date"
-                    name="checkin-date"
-                    autocomplete="bday"
-                  />
+            <div class="form-row">
+              <div class="email">
+                <label for="email">Email</label>
+                <input type="email" id="email" name="email" autocomplete="email" required />
+              </div>
+              <div class="whatsapp">
+                <label for="whatsapp">Nomor Whatsapp</label>
+                <div class="input-group">
+                  <span class="input-group-text">+62</span>
+                  <input type="tel" id="whatsapp" name="whatsapp" class="form-control" autocomplete="tel" required />
                 </div>
-                <div class="row">
-                  <div class="price-options">
-                    <label>Harga Sewa</label>
-                    <ul id="price-list"></ul>
-                  </div>
-                  <div class="facilities" id="customFasilitasContainer">
-                    <label for="custom-facilities">Fasilitas Custom</label>
-                    <ul id="custom-facilities"></ul>
-                  </div>
+              </div>
+            </div>
+            <div class="address-user">
+              <label for="address">Alamat</label>
+              <textarea id="address" name="address" autocomplete="street-address" required></textarea>
+            </div>
+          </div>
+          <div class="left-bottom">
+            <h3>Kustomisasi Pesanan</h3>
+            <div class="order-details">
+              <div class="row">
+                <label for="checkin-date">Tanggal Masuk</label>
+                <input type="date" id="checkin-date" name="checkin-date" autocomplete="bday" required />
+              </div>
+              <div class="row">
+                <div class="price-options">
+                  <label>Harga Sewa</label>
+                  <ul id="price-list"></ul>
+                </div>
+                <div class="facilities">
+                  <label for="custom-facilities">Fasilitas Custom</label>
+                  <ul id="custom-facilities"></ul>
                 </div>
               </div>
             </div>
           </div>
-
           <div class="right-section">
             <h3>Rincian Pesanan</h3>
             <p>Tanggal Pindah: <span id="tanggal-pindah"></span></p>
@@ -130,30 +101,22 @@
         </div>
       </main>
     </div>
-
     <footer class="site-footer" id="kontak">
       <div class="footer-content">
-        <p class="footer-intro">
-          -Cari Kos-Kosan sesuai dengan Preferensimu di KosConnect-
-        </p>
+        <p class="footer-intro">-Cari Kos-Kosan sesuai dengan Preferensimu di KosConnect-</p>
         <div class="footer-links">
-          <span class="contact searchable">
-            <a href="mailto:kosconnect2@gmail.com"
-              ><i class="fa-solid fa-envelope"></i> Kontak
-            </a>
+          <span class="contact">
+            <a href="mailto:kosconnect2@gmail.com"><i class="fa-solid fa-envelope"></i> Kontak</a>
           </span>
-          <span class="address searchable">
+          <span class="address">
             <a href="https://g.co/kgs/3VB5ztr">
-              <i class="fa-solid fa-map-marker-alt"></i> Jl. Sariasih No. 54,
-              Sarijadi
+              <i class="fa-solid fa-map-marker-alt"></i> Jl. Sariasih No. 54, Sarijadi
             </a>
           </span>
         </div>
         <p class="copyright">KosConnect &copy; 2024 All rights reserved.</p>
       </div>
     </footer>
-
-    <!-- Memanggil file JS -->
     <script type="module" src="js/checkout.js"></script>
   </body>
 </html>
