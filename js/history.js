@@ -92,7 +92,7 @@ async function renderOrderCards(orders) {
       roomDetail[0]?.category_name || "Tidak Diketahui"
     }</p>
 <p><strong>Alamat:</strong> ${
-      roomDetail[0]?.boarding_house?.address || "Tidak Diketahui"
+      roomDetail[0]?.address || "Tidak Diketahui"
     }</p>
 <p><strong>Nama Pemilik:</strong> ${
       roomDetail[0]?.owner?.fullname || "Tidak Diketahui"
@@ -220,11 +220,6 @@ window.onload = async () => {
     );
     allOrderData = await response.json();
     await renderOrderCards(allOrderData, authToken);
-
-    // Urutkan transaksi dari yang terbaru berdasarkan created_at
-    allOrderData.sort(
-      (a, b) => new Date(b.created_at) - new Date(a.created_at)
-    );
 
     const userRole = getCookie("userRole");
     renderHeader(authToken, userRole);
