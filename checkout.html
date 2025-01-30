@@ -63,13 +63,25 @@
               <div class="form-row">
                 <div class="fullname">
                   <label for="full_name">Nama Lengkap</label>
-                   <input type="text" id="full_name" name="full_name" autocomplete="name" required />
+                  <input
+                    type="text"
+                    id="full_name"
+                    name="full_name"
+                    autocomplete="name"
+                    required
+                  />
                 </div>
               </div>
               <div class="form-row">
                 <div class="email">
                   <label for="email">Email</label>
-                  <input type="email" id="email" name="email" autocomplete="name" required />
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    autocomplete="name"
+                    required
+                  />
                 </div>
                 <div class="form-row">
                   <label for="whatsapp">Nomor Whatsapp</label>
@@ -90,35 +102,25 @@
             <div class="center">
               <h3>Kustomisasi Pesanan</h3>
               <div class="order-details">
-                  <label for="checkin-date">Tanggal Masuk</label>
-                  <input
-                    type="date"
-                    id="checkin-date"
-                    name="checkin-date"
-                    required
-                  />
+                <label for="checkin-date">Tanggal Masuk</label>
+                <input
+                  type="date"
+                  id="checkin-date"
+                  name="checkin-date"
+                  required
+                />
 
                 <div class="price-options">
-                  <label> Harga Sewa</label>
-                  <input
-                    type="radio"
-                    name="price"
-                    id="price-list"
-                    required
-                  />
-                  <ul>
-                    Rp 1.500.000 / Bulan
+                  <label>Harga Sewa</label>
+                  <ul id="price-list">
+                    <!-- Daftar harga akan diisi oleh JavaScript -->
                   </ul>
                 </div>
+
                 <div class="facilities">
-                  <label> Fasilitas Custom </label>
-                  <input
-                    type="checkbox"
-                    name="facility[]"
-                    id="custom-facilities"
-                  />
-                  <ul>
-                    4 Galon tiap Bulan
+                  <label>Fasilitas Custom</label>
+                  <ul id="custom-facilities">
+                    <!-- Daftar fasilitas akan diisi oleh JavaScript -->
                   </ul>
                 </div>
               </div>
