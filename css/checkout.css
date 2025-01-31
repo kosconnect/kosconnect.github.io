@@ -198,10 +198,9 @@ button {
         /* Spasi bawah card */
     }
 
-    .order-details {
+    /* .order-details {
         grid-template-columns: 1fr;
-        /* 1 kolom */
-    }
+    } */
 
     .fullname,
     .email,
