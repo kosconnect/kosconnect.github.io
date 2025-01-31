@@ -29,8 +29,8 @@ async function renderTransactionDetail(order) {
   const roomDetail = await response.json();
 
   // Data boarding house, room, category, owner langsung diambil dari roomDetail
-  const { boarding_house, owner, room_type } = roomDetail[0];
-  const category = boarding_house?.category || null;
+  // const  { boarding_house} = roomDetail[0];
+  // const category = boarding_house?.category || null;
 
   // Format tanggal
   const formattedCheckInDate = new Date(order.check_in_date).toLocaleDateString(
@@ -95,15 +95,15 @@ async function renderTransactionDetail(order) {
 
   // Komponen informasi kos
   const kosDetails = `
-<p><strong> ${roomDetail[0]?.room_name || "Tidak Diketahui"}</strong></p>
+<p><strong> ${roomDetail?.room_name || "Tidak Diketahui"}</strong></p>
 <p><strong>Kategori:</strong> ${
-    roomDetail[0]?.category_name || "Tidak Diketahui"
+    roomDetail?.category_name || "Tidak Diketahui"
   }</p>
 <p><strong></strong> ${
-    roomDetail[0]?.boarding_house?.address || "Tidak Diketahui"
+    roomDetail?.address || "Tidak Diketahui"
   }</p>
 <p><strong>Pemilik:</strong> ${
-    roomDetail[0]?.owner?.fullname || "Tidak Diketahui"
+    roomDetail?.owner_fullname || "Tidak Diketahui"
   }</p>
 `;
 
