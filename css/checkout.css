@@ -94,7 +94,7 @@ h3 {
     /* Sesuaikan dengan lebar kode negara */
 }
 
-.center label {
+.center .form-label {
     font-weight: bold;
 }
 
@@ -108,8 +108,7 @@ label {
     color: #005f73;
 }
 
-input,
-textarea {
+.form-row input {
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
@@ -118,8 +117,7 @@ textarea {
 }
 
 /* Warna garis aktif saat input difokuskan */
-input:focus,
-textarea:focus {
+.form-row input:focus {
     border-color: #20B2AA;
     outline: none;
     /* Menghilangkan outline default */
@@ -127,14 +125,12 @@ textarea:focus {
 }
 
 /* Warna teks dalam input */
-input,
-textarea {
+.form-row input {
     color: #1b3446;
 }
 
 /* Placeholder tetap terlihat tetapi dengan warna lebih terang */
-input::placeholder,
-textarea::placeholder {
+.form-row input::placeholder {
     color: rgba(27, 52, 70, 0.7);
 }
 

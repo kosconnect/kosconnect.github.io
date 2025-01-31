@@ -80,7 +80,7 @@ async function renderCheckoutDetail(roomId) {
         Object.entries(roomData.price).forEach(([duration, price], index) => {
           // Membuat wrapper div
           const radioWrapper = document.createElement("div");
-          radioWrapper.style.display = "flex";
+          // radioWrapper.style.display = "flex";
 
           // Membuat input radio
           const radioInput = document.createElement("input");
@@ -114,7 +114,7 @@ async function renderCheckoutDetail(roomId) {
         roomData.custom_facilities.forEach((facility, index) => {
           // Membuat wrapper div
           const checkboxWrapper = document.createElement("div");
-          checkboxWrapper.style.display = "flex";
+          // checkboxWrapper.style.display = "flex";
 
           // Membuat input checkbox
           const checkboxInput = document.createElement("input");
