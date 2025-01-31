@@ -64,7 +64,6 @@ async function renderCheckoutDetail(roomId) {
       roomData.address || "Alamat tidak tersedia";
 
     // Mapping untuk terjemahan term pembayaran
-    // Mapping untuk terjemahan term pembayaran
     const termTranslations = {
       monthly: "Bulanan",
       quarterly: "Per 3 Bulan",
@@ -80,7 +79,7 @@ async function renderCheckoutDetail(roomId) {
       if (roomData.price && typeof roomData.price === "object") {
         Object.entries(roomData.price).forEach(([duration, price], index) => {
           // Membuat wrapper div
-          const radioWrapper = document.createElement("div");
+          const radioWrapper = document.createElement("div").style.display = "flex";
 
           // Membuat input radio
           const radioInput = document.createElement("input");
@@ -113,7 +112,7 @@ async function renderCheckoutDetail(roomId) {
       if (Array.isArray(roomData.custom_facilities)) {
         roomData.custom_facilities.forEach((facility, index) => {
           // Membuat wrapper div
-          const checkboxWrapper = document.createElement("div");
+          const checkboxWrapper = document.createElement("div").style.display = "flex";
 
           // Membuat input checkbox
           const checkboxInput = document.createElement("input");
