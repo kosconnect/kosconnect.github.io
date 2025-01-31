@@ -64,6 +64,7 @@ async function renderCheckoutDetail(roomId) {
       roomData.address || "Alamat tidak tersedia";
 
     // Mapping untuk terjemahan term pembayaran
+    // Mapping untuk terjemahan term pembayaran
     const termTranslations = {
       monthly: "Bulanan",
       quarterly: "Per 3 Bulan",
@@ -71,41 +72,67 @@ async function renderCheckoutDetail(roomId) {
       yearly: "Tahunan",
     };
 
+    // **Render Harga Sewa (Radio Button)**
     const priceList = document.getElementById("price-list");
     if (priceList) {
       priceList.innerHTML = "";
 
       if (roomData.price && typeof roomData.price === "object") {
         Object.entries(roomData.price).forEach(([duration, price], index) => {
-          const label = document.createElement("p"); // Label membungkus input
-          label.innerHTML = `
-        <input type="radio" name="rental_price" value="${duration}" id="price-${index}" ${
-            index === 0 ? "checked" : ""
-          }>
-        Rp ${price.toLocaleString("id-ID")} / ${
+          // Membuat wrapper div
+          const radioWrapper = document.createElement("div");
+
+          // Membuat input radio
+          const radioInput = document.createElement("input");
+          radioInput.type = "radio";
+          radioInput.name = "rental_price";
+          radioInput.value = duration;
+          radioInput.id = `price-${index}`;
+          if (index === 0) radioInput.checked = true;
+
+          // Membuat label untuk radio
+          const radioLabel = document.createElement("label");
+          radioLabel.setAttribute("for", radioInput.id);
+          radioLabel.textContent = `Rp ${price.toLocaleString("id-ID")} / ${
             termTranslations[duration] || duration
-          }
-      `;
-          priceList.appendChild(label);
+          }`;
+
+          // Menyusun elemen
+          radioWrapper.appendChild(radioInput);
+          radioWrapper.appendChild(radioLabel);
+          priceList.appendChild(radioWrapper);
         });
       }
     }
 
-    // Populate custom facilities dengan checkbox tanpa bullet
+    // **Render Fasilitas Custom (Checkbox)**
     const facilitiesList = document.getElementById("custom-facilities");
     if (facilitiesList) {
       facilitiesList.innerHTML = "";
 
       if (Array.isArray(roomData.custom_facilities)) {
         roomData.custom_facilities.forEach((facility, index) => {
-          const label = document.createElement("p"); // Label membungkus input
-          label.innerHTML = `
-        <input type="checkbox" name="custom_facility" value="${
-          facility._id
-        }" id="facility-${index}">
-        ${facility.name} - Rp ${facility.price.toLocaleString("id-ID")}
-      `;
-          facilitiesList.appendChild(label);
+          // Membuat wrapper div
+          const checkboxWrapper = document.createElement("div");
+
+          // Membuat input checkbox
+          const checkboxInput = document.createElement("input");
+          checkboxInput.type = "checkbox";
+          checkboxInput.name = "custom_facility";
+          checkboxInput.value = facility._id;
+          checkboxInput.id = `facility-${index}`;
+
+          // Membuat label untuk checkbox
+          const checkboxLabel = document.createElement("label");
+          checkboxLabel.setAttribute("for", checkboxInput.id);
+          checkboxLabel.textContent = `${
+            facility.name
+          } - Rp ${facility.price.toLocaleString("id-ID")}`;
+
+          // Menyusun elemen
+          checkboxWrapper.appendChild(checkboxInput);
+          checkboxWrapper.appendChild(checkboxLabel);
+          facilitiesList.appendChild(checkboxWrapper);
         });
       }
     }
