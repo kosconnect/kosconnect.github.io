@@ -81,6 +81,8 @@ async function renderCheckoutDetail(roomId) {
           // Membuat wrapper div
           const radioWrapper = document.createElement("div");
           radioWrapper.style.display = "flex";
+          radioWrapper.style.alignItems = "center"; // Untuk membuat rata tengah vertikal
+          radioWrapper.style.marginBottom = "5px"; // Optional: margin bawah
 
           // Membuat input radio
           const radioInput = document.createElement("input");
@@ -115,6 +117,8 @@ async function renderCheckoutDetail(roomId) {
           // Membuat wrapper div
           const checkboxWrapper = document.createElement("div");
           checkboxWrapper.style.display = "flex";
+          checkboxWrapper.style.alignItems = "center"; // Untuk membuat rata tengah vertikal
+          checkboxWrapper.style.marginBottom = "5px"; // Optional: margin bawah
 
           // Membuat input checkbox
           const checkboxInput = document.createElement("input");
