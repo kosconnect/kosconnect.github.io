@@ -1,7 +1,5 @@
 // Import getCookie dan renderMinimalHeader dari header.js
-import { getCookie, renderMinimalHeader } from "./header.js";
-
-let cachedUserData = null;
+import { getCookie, renderMinimalHeader, setCookie } from "./header.js";
 
 // Fungsi untuk merender detail transaksi ke halaman
 async function renderCheckoutDetail(roomId) {
@@ -17,36 +15,27 @@ async function renderCheckoutDetail(roomId) {
       return;
     }
 
-    // Render header (anggap header tidak membutuhkan user detail lengkap)
     renderMinimalHeader(authToken);
 
-    // Cek apakah data user sudah ada di cache
-    let userData;
-    if (cachedUserData) {
-      userData = cachedUserData;
-    } else {
-      const userResponse = await fetch(
-        "https://kosconnect-server.vercel.app/api/users/me",
-        {
-          method: "GET",
-          headers: { Authorization: `Bearer ${authToken}` },
-        }
-      );
-
-      if (!userResponse.ok) {
-        console.error("Error fetching user detail");
-        return;
+    // Ambil data user dari API
+    const userResponse = await fetch(
+      "https://kosconnect-server.vercel.app/api/users/me",
+      {
+        method: "GET",
+        headers: { Authorization: `Bearer ${authToken}` },
       }
+    );
 
-      userData = await userResponse.json();
-      cachedUserData = userData; // Simpan ke cache
+    if (!userResponse.ok) {
+      console.error("Error fetching user detail");
+      return;
     }
 
-    const { fullname, email } = userData?.user;
+    const userData = await userResponse.json();
+    setCookie("userId", userData.user._id);
 
-    // Isi form dengan data user
-    document.getElementById("full_name").value = fullname || "";
-    document.getElementById("email").value = email || "";
+    document.getElementById("full_name").value = userData.user.fullname || "";
+    document.getElementById("email").value = userData.user.email || "";
 
     // Ambil detail kamar berdasarkan roomId
     const roomResponse = await fetch(
@@ -59,12 +48,8 @@ async function renderCheckoutDetail(roomId) {
     }
 
     const roomDetail = await roomResponse.json();
-    console.log("Room Detail:", roomDetail); // Debugging
-
-    // Pastikan apakah API mengembalikan array atau objek
     const roomData = Array.isArray(roomDetail) ? roomDetail[0] : roomDetail;
 
-    // Update informasi kamar di halaman
     document.querySelector(".room-name").textContent =
       roomData.room_name || "Tidak Diketahui";
     document.querySelector(".address").textContent =
@@ -150,6 +135,8 @@ async function renderCheckoutDetail(roomId) {
         });
       }
     }
+    setCookie("boardingHouseId", roomData.boarding_house_id);
+    setCookie("ownerId", roomData.owner_id);
   } catch (error) {
     console.error("Error fetching data:", error);
   }
@@ -169,95 +156,48 @@ async function submitTransaction(roomId) {
     return;
   }
 
-  // Ambil data dari formulir
   const fullName = document.getElementById("full_name").value;
   const email = document.getElementById("email").value;
   let phoneNumber = document.getElementById("phone_number").value.trim();
-
-  // Pastikan nomor telepon diawali +62
   if (!phoneNumber.startsWith("+")) {
-    if (phoneNumber.startsWith("0")) {
-      phoneNumber = "+62" + phoneNumber.slice(1);
-    } else {
-      phoneNumber = "+62" + phoneNumber;
-    }
+    phoneNumber = phoneNumber.startsWith("0")
+      ? "+62" + phoneNumber.slice(1)
+      : "+62" + phoneNumber;
   }
 
-  // Ambil pilihan harga sewa (payment_term)
   const selectedPaymentTerm = document.querySelector(
     'input[name="rental_price"]:checked'
   )?.value;
-
   if (!selectedPaymentTerm) {
     alert("Pilih lama sewa sebelum melanjutkan transaksi.");
     return;
   }
 
-  // Ambil fasilitas custom yang dipilih
   const selectedFacilities = Array.from(
     document.querySelectorAll('input[name="custom_facility"]:checked')
   ).map((checkbox) => checkbox.value);
 
-  // Ambil dan konversi tanggal check-in
   let checkInDate = document.getElementById("check_in_date").value;
   if (checkInDate) {
     const dateParts = checkInDate.split("/");
     if (dateParts.length === 3) {
-      checkInDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`; // Ubah ke format yyyy-mm-dd
+      checkInDate = `${dateParts[2]}-${dateParts[1]}-${dateParts[0]}`;
     }
   }
-
   if (!checkInDate) {
     alert("Harap pilih tanggal check-in.");
     return;
   }
 
-  // Cek apakah user data sudah di-cache
-  if (!cachedUserData) {
-    const userResponse = await fetch(
-      "https://kosconnect-server.vercel.app/api/users/me",
-      {
-        method: "GET",
-        headers: { Authorization: `Bearer ${authToken}` },
-      }
-    );
+  const userId = getCookie("userId");
+  const boardingHouseId = getCookie("boardingHouseId");
+  const ownerId = getCookie("ownerId");
 
-    if (!userResponse.ok) {
-      alert("Gagal mengambil data pengguna.");
-      return;
-    }
-
-    cachedUserData = await userResponse.json();
-  }
-
-  const userId = cachedUserData?.user?._id;
-  if (!userId) {
-    alert("User ID tidak ditemukan.");
+  if (!userId || !boardingHouseId || !ownerId) {
+    alert("Data transaksi tidak lengkap.");
     return;
   }
 
-  // Ambil room detail untuk mendapatkan boarding_house_id & owner_id
-  const roomResponse = await fetch(
-    `https://kosconnect-server.vercel.app/api/rooms/${roomId}/pages`
-  );
-
-  if (!roomResponse.ok) {
-    alert("Gagal mengambil data kamar.");
-    return;
-  }
-
-  const roomData = await roomResponse.json();
-  const roomInfo = Array.isArray(roomData) ? roomData[0] : roomData;
-
-  const boardingHouseId = roomInfo?.boarding_house_id;
-  const ownerId = roomInfo?.owner_id;
-
-  if (!boardingHouseId || !ownerId) {
-    alert("Data kos atau pemilik tidak ditemukan.");
-    return;
-  }
-
-  // Susun data transaksi
   const transactionData = {
     personal_info: {
       full_name: fullName,
@@ -270,7 +210,6 @@ async function submitTransaction(roomId) {
   };
 
   try {
-    // Kirim transaksi ke backend
     const transactionResponse = await fetch(
       `https://kosconnect-server.vercel.app/api/transaction/?room_id=${roomId}&boarding_house_id=${boardingHouseId}&owner_id=${ownerId}&user_id=${userId}`,
       {
@@ -292,9 +231,6 @@ async function submitTransaction(roomId) {
     const transactionResult = await transactionResponse.json();
     const transactionId = transactionResult.transaction_id;
 
-    console.log("Transaksi berhasil dibuat:", transactionResult);
-
-    // **Langsung request ke endpoint payment**
     const paymentResponse = await fetch(
       `https://kosconnect-server.vercel.app/transactions/${transactionId}/payment`,
       {
@@ -313,19 +249,14 @@ async function submitTransaction(roomId) {
     }
 
     const paymentResult = await paymentResponse.json();
-    const redirectURL = paymentResult.redirectURL;
-
-    console.log("Pembayaran berhasil dibuat:", paymentResult);
-
-    // **Redirect user ke halaman pembayaran**
-    window.location.href = redirectURL;
+    window.location.href = paymentResult.redirectURL;
   } catch (error) {
     console.error("Error saat mengirim transaksi:", error);
     alert("Terjadi kesalahan saat membuat transaksi.");
   }
 }
 
-document.getElementById("submit-button").addEventListener("click", () => {
+document.getElementById("submit-button")?.addEventListener("click", () => {
   const urlParams = new URLSearchParams(window.location.search);
   const roomId = urlParams.get("room_id");
   if (roomId) {
@@ -335,12 +266,9 @@ document.getElementById("submit-button").addEventListener("click", () => {
   }
 });
 
-// Ambil data checkout saat halaman dimuat
 window.onload = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const roomId = urlParams.get("room_id");
-
-  // Panggil fungsi untuk merender checkout detail
   if (roomId) {
     renderCheckoutDetail(roomId);
   } else {
