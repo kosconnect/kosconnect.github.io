@@ -10,6 +10,14 @@ export function getCookie(name) {
   return null;
 }
 
+// Fungsi untuk menyetel cookie
+export function setCookie(name, value, days) {
+  const d = new Date();
+  d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000)); // Tentukan masa berlaku cookie
+  const expires = "expires=" + d.toUTCString();
+  document.cookie = `${name}=${encodeURIComponent(value)}; ${expires}; path=/`;
+}
+
 // Fungsi untuk merender dropdown kategori
 export function renderCategories(categories, onCategoryClick) {
   const dropdownCategoryContainer = document.querySelector(
