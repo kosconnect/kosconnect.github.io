@@ -138,10 +138,6 @@ textarea::placeholder {
     color: rgba(27, 52, 70, 0.7);
 }
 
-.center {
-    display: flex;
-}
-
 /* left bottom */
 .order-details {
     gap: 20px;
