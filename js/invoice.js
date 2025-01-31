@@ -119,13 +119,13 @@ async function renderTransactionDetail(order) {
       <p>${paymentTermText} <span> Rp ${order.price.toLocaleString(
     "id-ID"
   )}</span></p>
-      <p class="subtotal" style="margin-top:5px;"><strong>Subtotal</strong> Rp ${order.subtotal.toLocaleString(
+      <p class="subtotal" style="margin-top:5px;"><strong>Subtotal</strong> Rp ${(
+        order.subtotal ?? 0
+      ).toLocaleString("id-ID")}</p>
+      <p style="margin-top:5px;"><strong>PPN 11%</strong> Rp ${(order.ppn ?? 0).toLocaleString(
         "id-ID"
       )}</p>
-      <p style="margin-top:5px;"><strong>PPN 11%</strong> Rp ${order.ppn.toLocaleString(
-        "id-ID"
-      )}</p>
-      <h5>Total <span class="total">Rp ${order.total.toLocaleString(
+      <h5>Total <span class="total">Rp ${(order.total ?? 0).toLocaleString(
         "id-ID"
       )}</span></h5>
     `;
