@@ -112,11 +112,11 @@ async function renderTransactionDetail(order) {
   <p><strong>Tanggal Masuk</strong> <strong>${formattedCheckInDate}</strong></p>
     <p style="margin-top:5px;"><strong>Fasilitas Custom</strong> 
       ${customFacilities}</p>
-      <p class="fctotal"><strong>Biaya Fasilitas</strong> Rp ${order.facilities_price.toLocaleString(
+      <p class="fctotal"><strong>Biaya Fasilitas</strong> Rp ${(order.facilities_price ?? 0).toLocaleString(
         "id-ID"
       )}</p>
       <p style="margin-top:5px;"><strong>Harga Sewa</strong></p>
-      <p>${paymentTermText} <span> Rp ${order.price.toLocaleString(
+      <p>${paymentTermText} <span> Rp ${(order.price ?? 0).toLocaleString(
     "id-ID"
   )}</span></p>
       <p class="subtotal" style="margin-top:5px;"><strong>Subtotal</strong> Rp ${(
