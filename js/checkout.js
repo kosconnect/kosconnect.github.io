@@ -77,7 +77,7 @@ async function renderCheckoutDetail(roomId) {
 
       if (roomData.price && typeof roomData.price === "object") {
         Object.entries(roomData.price).forEach(([duration, price], index) => {
-          const label = document.createElement("label"); // Label membungkus input
+          const label = document.createElement("p"); // Label membungkus input
           label.innerHTML = `
         <input type="radio" name="rental_price" value="${duration}" id="price-${index}" ${
             index === 0 ? "checked" : ""
@@ -98,7 +98,7 @@ async function renderCheckoutDetail(roomId) {
 
       if (Array.isArray(roomData.custom_facilities)) {
         roomData.custom_facilities.forEach((facility, index) => {
-          const label = document.createElement("label"); // Label membungkus input
+          const label = document.createElement("p"); // Label membungkus input
           label.innerHTML = `
         <input type="checkbox" name="custom_facility" value="${
           facility._id
