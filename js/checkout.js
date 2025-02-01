@@ -142,7 +142,7 @@ backButton.addEventListener("click", () => {
 });
 
 // Function to submit the transaction
-async function submitTransaction(roomId) {
+async function submitTransaction() {
   const authToken = getCookie("authToken");
   if (!authToken) {
     alert("You must be logged in to continue the transaction.");
@@ -189,9 +189,10 @@ async function submitTransaction(roomId) {
   }
 
   // Fetch room details based on roomId to get boarding_house_id and owner_id
-  const roomResponse = await fetch(
-    `https://kosconnect-server.vercel.app/api/rooms/${roomId}/pages`
-  );
+ const roomResponse = await fetch(
+   `https://kosconnect-server.vercel.app/api/rooms/${document.roomId}/pages`
+ );
+
 
   if (!roomResponse.ok) {
     console.error(`Error fetching room details for room_id ${roomId}`);
@@ -201,6 +202,7 @@ async function submitTransaction(roomId) {
   const roomDetail = await roomResponse.json();
   const roomData = Array.isArray(roomDetail) ? roomDetail[0] : roomDetail;
 
+  const roomId = roomData._id;
   const boardingHouseId = roomData.boarding_house_id;
   const ownerId = roomData.owner_id;
 
@@ -283,13 +285,7 @@ async function submitTransaction(roomId) {
 
 // Submit button listener
 document.getElementById("submit-button")?.addEventListener("click", () => {
-  const urlParams = new URLSearchParams(window.location.search);
-  const roomId = urlParams.get("room_id");
-  if (roomId) {
-    submitTransaction(roomId);
-  } else {
-    alert("Room ID not found.");
-  }
+  submitTransaction();
 });
 
 // Onload function to render checkout details
