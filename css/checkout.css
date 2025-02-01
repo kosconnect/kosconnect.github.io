@@ -89,6 +89,10 @@ h3 {
     z-index: 1;
 }
 
+input#phone_number {
+    padding-left: 55px;
+}
+
 .form-control {
     padding-left: 55px;
     /* Sesuaikan dengan lebar kode negara */

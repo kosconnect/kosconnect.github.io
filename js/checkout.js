@@ -1,23 +1,23 @@
-// Import getCookie dan renderMinimalHeader dari header.js
+// Import getCookie, renderMinimalHeader, and setCookie from header.js
 import { getCookie, renderMinimalHeader, setCookie } from "./header.js";
 
-// Fungsi untuk merender detail transaksi ke halaman
+// Function to render checkout details to the page
 async function renderCheckoutDetail(roomId) {
   if (!roomId) {
-    console.error("room_id tidak ditemukan di URL.");
+    console.error("room_id not found in URL.");
     return;
   }
 
   try {
     const authToken = getCookie("authToken");
     if (!authToken) {
-      alert("Anda harus login untuk melanjutkan checkout.");
+      alert("You must be logged in to continue checkout.");
       return;
     }
 
     renderMinimalHeader(authToken);
 
-    // Ambil data user dari API
+    // Fetch user data from API
     const userResponse = await fetch(
       "https://kosconnect-server.vercel.app/api/users/me",
       {
@@ -27,23 +27,23 @@ async function renderCheckoutDetail(roomId) {
     );
 
     if (!userResponse.ok) {
-      console.error("Error fetching user detail");
+      console.error("Error fetching user details");
       return;
     }
 
     const userData = await userResponse.json();
-    setCookie("userId", userData.user._id);
+    const userId = userData.user.user_id || userData.user._id; // Handle both BSON and JSON formats
 
     document.getElementById("full_name").value = userData.user.fullname || "";
     document.getElementById("email").value = userData.user.email || "";
 
-    // Ambil detail kamar berdasarkan roomId
+    // Fetch room details based on roomId
     const roomResponse = await fetch(
       `https://kosconnect-server.vercel.app/api/rooms/${roomId}/pages`
     );
 
     if (!roomResponse.ok) {
-      console.error(`Error fetching room detail for room_id ${roomId}`);
+      console.error(`Error fetching room details for room_id ${roomId}`);
       return;
     }
 
@@ -51,33 +51,29 @@ async function renderCheckoutDetail(roomId) {
     const roomData = Array.isArray(roomDetail) ? roomDetail[0] : roomDetail;
 
     document.querySelector(".room-name").textContent =
-      roomData.room_name || "Tidak Diketahui";
+      roomData.room_name || "Unknown";
     document.querySelector(".address").textContent =
-      roomData.address || "Alamat tidak tersedia";
+      roomData.address || "Address not available";
 
-    // Mapping untuk terjemahan term pembayaran
     const termTranslations = {
-      monthly: "Bulanan",
-      quarterly: "Per 3 Bulan",
-      semi_annual: "Per 6 Bulan",
-      yearly: "Tahunan",
+      monthly: "Monthly",
+      quarterly: "Quarterly",
+      semi_annual: "Semi-annual",
+      yearly: "Yearly",
     };
 
-    // **Render Harga Sewa (Radio Button)**
     const priceList = document.getElementById("price-list");
     if (priceList) {
       priceList.innerHTML = "";
 
       if (roomData.price && typeof roomData.price === "object") {
         Object.entries(roomData.price).forEach(([duration, price], index) => {
-          // Membuat wrapper div
           const radioWrapper = document.createElement("div");
           radioWrapper.style.display = "flex";
-          radioWrapper.style.alignItems = "center"; // Untuk membuat rata tengah vertikal
-          radioWrapper.style.marginBottom = "5px"; // Optional: margin bawah
-          radioWrapper.style.gap = "5px"; // Optional: margin bawah
+          radioWrapper.style.alignItems = "center";
+          radioWrapper.style.marginBottom = "5px";
+          radioWrapper.style.gap = "5px";
 
-          // Membuat input radio
           const radioInput = document.createElement("input");
           radioInput.type = "radio";
           radioInput.name = "rental_price";
@@ -85,14 +81,12 @@ async function renderCheckoutDetail(roomId) {
           radioInput.id = `price-${index}`;
           if (index === 0) radioInput.checked = true;
 
-          // Membuat label untuk radio
           const radioLabel = document.createElement("label");
           radioLabel.setAttribute("for", radioInput.id);
           radioLabel.textContent = `Rp ${price.toLocaleString("id-ID")} / ${
             termTranslations[duration] || duration
           }`;
 
-          // Menyusun elemen
           radioWrapper.appendChild(radioInput);
           radioWrapper.appendChild(radioLabel);
           priceList.appendChild(radioWrapper);
@@ -100,41 +94,39 @@ async function renderCheckoutDetail(roomId) {
       }
     }
 
-    // **Render Fasilitas Custom (Checkbox)**
+    // Render custom facilities
     const facilitiesList = document.getElementById("custom-facilities");
     if (facilitiesList) {
       facilitiesList.innerHTML = "";
 
       if (Array.isArray(roomData.custom_facilities)) {
         roomData.custom_facilities.forEach((facility, index) => {
-          // Membuat wrapper div
           const checkboxWrapper = document.createElement("div");
           checkboxWrapper.style.display = "flex";
-          checkboxWrapper.style.alignItems = "center"; // Untuk membuat rata tengah vertikal
-          checkboxWrapper.style.marginBottom = "5px"; // Optional: margin bawah
-          checkboxWrapper.style.gap = "5px"; // Optional: margin bawah
+          checkboxWrapper.style.alignItems = "center";
+          checkboxWrapper.style.marginBottom = "5px";
+          checkboxWrapper.style.gap = "5px";
 
-          // Membuat input checkbox
           const checkboxInput = document.createElement("input");
           checkboxInput.type = "checkbox";
           checkboxInput.name = "custom_facility";
           checkboxInput.value = facility._id;
           checkboxInput.id = `facility-${index}`;
 
-          // Membuat label untuk checkbox
           const checkboxLabel = document.createElement("label");
           checkboxLabel.setAttribute("for", checkboxInput.id);
           checkboxLabel.textContent = `${
             facility.name
           } - Rp ${facility.price.toLocaleString("id-ID")}`;
 
-          // Menyusun elemen
           checkboxWrapper.appendChild(checkboxInput);
           checkboxWrapper.appendChild(checkboxLabel);
           facilitiesList.appendChild(checkboxWrapper);
         });
       }
     }
+
+    // Store boardingHouseId and ownerId directly from API response, not cookies
     setCookie("boardingHouseId", roomData.boarding_house_id);
     setCookie("ownerId", roomData.owner_id);
   } catch (error) {
@@ -142,17 +134,17 @@ async function renderCheckoutDetail(roomId) {
   }
 }
 
-//button back
+// Back button functionality
 const backButton = document.querySelector(".back-button");
-
 backButton.addEventListener("click", () => {
   window.history.back();
 });
 
+// Function to submit the transaction
 async function submitTransaction(roomId) {
   const authToken = getCookie("authToken");
   if (!authToken) {
-    alert("Anda harus login untuk melanjutkan transaksi.");
+    alert("You must be logged in to continue the transaction.");
     return;
   }
 
@@ -169,7 +161,7 @@ async function submitTransaction(roomId) {
     'input[name="rental_price"]:checked'
   )?.value;
   if (!selectedPaymentTerm) {
-    alert("Pilih lama sewa sebelum melanjutkan transaksi.");
+    alert("Please select rental term before continuing.");
     return;
   }
 
@@ -185,7 +177,7 @@ async function submitTransaction(roomId) {
     }
   }
   if (!checkInDate) {
-    alert("Harap pilih tanggal check-in.");
+    alert("Please select a check-in date.");
     return;
   }
 
@@ -194,7 +186,7 @@ async function submitTransaction(roomId) {
   const ownerId = getCookie("ownerId");
 
   if (!userId || !boardingHouseId || !ownerId) {
-    alert("Data transaksi tidak lengkap.");
+    alert("Transaction data is incomplete.");
     return;
   }
 
@@ -224,54 +216,70 @@ async function submitTransaction(roomId) {
 
     if (!transactionResponse.ok) {
       const errorData = await transactionResponse.json();
-      alert(`Gagal membuat transaksi: ${errorData.error}`);
+      alert(`Failed to create transaction: ${errorData.error}`);
       return;
     }
 
     const transactionResult = await transactionResponse.json();
     const transactionId = transactionResult.transaction_id;
 
-    const paymentResponse = await fetch(
-      `https://kosconnect-server.vercel.app/transactions/${transactionId}/payment`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${authToken}`,
-        },
+    // SweetAlert notification after transaction
+    swal({
+      title: "Room booked successfully!",
+      text: "You will be redirected to payment.",
+      icon: "success",
+      buttons: ["OK"],
+    }).then(async (value) => {
+      if (value) {
+        // Proceed with payment
+        const paymentResponse = await fetch(
+          `https://kosconnect-server.vercel.app/transactions/${transactionId}/payment`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${authToken}`,
+            },
+          }
+        );
+
+        if (!paymentResponse.ok) {
+          const paymentError = await paymentResponse.json();
+          alert(`Payment failed: ${paymentError.error}`);
+          return;
+        }
+
+        const paymentResult = await paymentResponse.json();
+        const redirectURL = paymentResult.redirectURL;
+
+        // Redirect to Midtrans
+        window.location.href = redirectURL;
       }
-    );
-
-    if (!paymentResponse.ok) {
-      const paymentError = await paymentResponse.json();
-      alert(`Gagal membuat pembayaran: ${paymentError.error}`);
-      return;
-    }
-
-    const paymentResult = await paymentResponse.json();
-    window.location.href = paymentResult.redirectURL;
+    });
   } catch (error) {
-    console.error("Error saat mengirim transaksi:", error);
-    alert("Terjadi kesalahan saat membuat transaksi.");
+    console.error("Error submitting transaction:", error);
+    alert("An error occurred while creating the transaction.");
   }
 }
 
+// Submit button listener
 document.getElementById("submit-button")?.addEventListener("click", () => {
   const urlParams = new URLSearchParams(window.location.search);
   const roomId = urlParams.get("room_id");
   if (roomId) {
     submitTransaction(roomId);
   } else {
-    alert("Room ID tidak ditemukan.");
+    alert("Room ID not found.");
   }
 });
 
+// Onload function to render checkout details
 window.onload = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const roomId = urlParams.get("room_id");
   if (roomId) {
     renderCheckoutDetail(roomId);
   } else {
-    console.error("room_id tidak ditemukan di URL.");
+    console.error("room_id not found in URL.");
   }
 };
