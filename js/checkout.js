@@ -142,7 +142,9 @@ backButton.addEventListener("click", () => {
 });
 
 // Function to submit the transaction
-async function submitTransaction() {
+async function submitTransaction(event) {
+  event.preventDefault(); // Prevent default form submission behavior
+
   console.log(window.location.href);
 
   const authToken = getCookie("authToken");
@@ -191,10 +193,9 @@ async function submitTransaction() {
   }
 
   // Fetch room details based on roomId to get boarding_house_id and owner_id
- const roomResponse = await fetch(
-   `https://kosconnect-server.vercel.app/api/rooms/${document.roomId}/pages`
- );
-
+  const roomResponse = await fetch(
+    `https://kosconnect-server.vercel.app/api/rooms/${document.roomId}/pages`
+  );
 
   if (!roomResponse.ok) {
     console.error(`Error fetching room details for room_id ${roomId}`);
@@ -276,7 +277,7 @@ async function submitTransaction() {
         const redirectURL = paymentResult.redirectURL;
 
         // Redirect to Midtrans
-        // window.location.href = redirectURL;
+        window.location.href = redirectURL;
       }
     });
   } catch (error) {
@@ -285,9 +286,88 @@ async function submitTransaction() {
   }
 }
 
-// Submit button listener
-document.getElementById("submit-button")?.addEventListener("click", () => {
-  submitTransaction();
+// Submit button listener with event.preventDefault()
+document.getElementById("submit-button")?.addEventListener("click", (event) => {
+  submitTransaction(event);
+});
+
+
+document.addEventListener("DOMContentLoaded", function () {
+  function updateOrderSummary() {
+    // Ambil nilai dari input pengguna
+    const checkInDate = document.getElementById("check_in_date")?.value || "-";
+    const selectedRental = document.querySelector(
+      'input[name="rental_price"]:checked'
+    );
+    const rentalPrice = selectedRental
+      ? selectedRental.nextSibling.textContent
+      : "-";
+
+    // Ambil fasilitas tambahan yang dipilih
+    const selectedFacilities = Array.from(
+      document.querySelectorAll('input[name="custom_facility"]:checked')
+    ).map((facility) => {
+      return facility.nextSibling.textContent;
+    });
+
+    // Hitung biaya fasilitas
+    let facilityCost = 0;
+    selectedFacilities.forEach((facility) => {
+      const priceMatch = facility.match(/Rp ([0-9.,]+)/);
+      if (priceMatch) {
+        facilityCost += parseInt(priceMatch[1].replace(/\./g, ""));
+      }
+    });
+
+    // Ambil harga sewa dari pilihan user
+    let rentalCost = 0;
+    const rentalMatch = rentalPrice.match(/Rp ([0-9.,]+)/);
+    if (rentalMatch) {
+      rentalCost = parseInt(rentalMatch[1].replace(/\./g, ""));
+    }
+
+    // Hitung subtotal, PPN, dan total harga
+    const subTotal = rentalCost + facilityCost;
+    const ppn = subTotal * 0.11; // PPN 11%
+    const totalHarga = subTotal + ppn;
+
+    // Update tampilan ringkasan pesanan
+    document.getElementById("checkin-date").textContent = checkInDate;
+    document.getElementById("fasilitas-list").innerHTML = selectedFacilities
+      .map((facility) => `<li>${facility}</li>`)
+      .join("");
+    document.getElementById(
+      "biaya-fasilitas"
+    ).textContent = `Rp ${facilityCost.toLocaleString("id-ID")}`;
+    document.getElementById(
+      "harga-sewa"
+    ).textContent = `Rp ${rentalCost.toLocaleString("id-ID")}`;
+    document.getElementById(
+      "sub-total"
+    ).textContent = `Rp ${subTotal.toLocaleString("id-ID")}`;
+    document.getElementById("ppn").textContent = `Rp ${ppn.toLocaleString(
+      "id-ID"
+    )}`;
+    document.getElementById(
+      "total-harga"
+    ).textContent = `Rp ${totalHarga.toLocaleString("id-ID")}`;
+  }
+
+  // Event listener untuk input yang mempengaruhi ringkasan pesanan
+  document
+    .getElementById("check_in_date")
+    ?.addEventListener("change", updateOrderSummary);
+  document.querySelectorAll('input[name="rental_price"]').forEach((input) => {
+    input.addEventListener("change", updateOrderSummary);
+  });
+  document
+    .querySelectorAll('input[name="custom_facility"]')
+    .forEach((input) => {
+      input.addEventListener("change", updateOrderSummary);
+    });
+
+  // Jalankan update pertama kali untuk mengisi data awal
+  updateOrderSummary();
 });
 
 // Onload function to render checkout details
