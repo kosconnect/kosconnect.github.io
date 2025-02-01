@@ -365,15 +365,16 @@ document.addEventListener("DOMContentLoaded", function () {
       "total-harga"
     ).textContent = `Rp ${totalHarga.toLocaleString("id-ID")}`;
 
-    // Sembunyikan/tampilkan biaya fasilitas sesuai kondisi
-    const biayaFasilitasElement = document.getElementById("biaya-fasilitas");
+    // Sembunyikan/tampilkan fasilitas custom & biaya fasilitas sesuai kondisi
     const fasilitasListElement = document.getElementById("fasilitas-list").parentElement;
+    const biayaFasilitasElement = document.getElementById("biaya-fasilitas");
 
-    if (facilityCost > 0) {
+    if (selectedFacilities.length > 0) {
+      fasilitasListElement.style.visibility = "visible";
       biayaFasilitasElement.textContent = `Rp ${facilityCost.toLocaleString("id-ID")}`;
-      fasilitasListElement.style.display = "block"; // Tampilkan jika ada fasilitas
     } else {
-      fasilitasListElement.style.display = "none"; // Sembunyikan jika tidak ada fasilitas
+      fasilitasListElement.style.visibility = "hidden";
+      biayaFasilitasElement.textContent = "Rp 0";
     }
   }
 
