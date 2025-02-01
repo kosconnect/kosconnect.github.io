@@ -146,6 +146,15 @@ async function submitTransaction(event) {
   event.preventDefault(); // Prevent default form submission behavior
 
   console.log(window.location.href);
+  const urlParams = new URLSearchParams(window.location.search);
+  const roomId = urlParams.get("room_id");
+
+  if (!roomId) {
+    alert("Room ID is missing.");
+    return;
+  }
+
+  console.log("Room ID:", roomId);
 
   const authToken = getCookie("authToken");
   if (!authToken) {
@@ -186,7 +195,7 @@ async function submitTransaction(event) {
     return;
   }
 
-  const userId = document.userId;  // Directly use userId from stored userData
+  const userId = document.userId; // Directly use userId from stored userData
   if (!userId) {
     alert("User ID is missing.");
     return;
@@ -194,7 +203,7 @@ async function submitTransaction(event) {
 
   // Fetch room details based on roomId to get boarding_house_id and owner_id
   const roomResponse = await fetch(
-    `https://kosconnect-server.vercel.app/api/rooms/${document.roomId}/pages`
+    `https://kosconnect-server.vercel.app/api/rooms/${roomId}/pages`
   );
 
   if (!roomResponse.ok) {
@@ -205,7 +214,6 @@ async function submitTransaction(event) {
   const roomDetail = await roomResponse.json();
   const roomData = Array.isArray(roomDetail) ? roomDetail[0] : roomDetail;
 
-  const roomId = roomData._id;
   const boardingHouseId = roomData.boarding_house_id;
   const ownerId = roomData.owner_id;
 
@@ -287,10 +295,9 @@ async function submitTransaction(event) {
 }
 
 // Submit button listener with event.preventDefault()
-document.getElementById("submit-button")?.addEventListener("click", (event) => {
-  submitTransaction(event);
-});
-
+document
+  .getElementById("submit-button")
+  ?.addEventListener("click", submitTransaction);
 
 document.addEventListener("DOMContentLoaded", function () {
   function updateOrderSummary() {
