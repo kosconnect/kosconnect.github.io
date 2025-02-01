@@ -180,6 +180,31 @@ button {
     border-bottom: none;
     margin-bottom: 5x;
 }
+
+.right p {
+    color: #005f73;
+    justify-content: space-between;
+    font-weight: bold;
+    margin-top: 5px;
+}
+
+.right ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.border-top, .total {
+    border-top: #005f73 solid 1px;
+    margin-top: 10px;
+    padding-top: 10px;
+}
+
+.total {
+    font-family: 'Merriweather', serif;
+    font-weight: bold;
+    font-size: 20px;
+    color: #20B2AA;
+}
 /* Tambahkan media query untuk layar kecil */
 @media (max-width: 768px) {
     .form-container {
