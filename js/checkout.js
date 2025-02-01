@@ -144,7 +144,7 @@ backButton.addEventListener("click", () => {
 // Function to submit the transaction
 async function submitTransaction() {
   console.log(window.location.href);
-  
+
   const authToken = getCookie("authToken");
   if (!authToken) {
     alert("You must be logged in to continue the transaction.");
@@ -276,7 +276,7 @@ async function submitTransaction() {
         const redirectURL = paymentResult.redirectURL;
 
         // Redirect to Midtrans
-        window.location.href = redirectURL;
+        // window.location.href = redirectURL;
       }
     });
   } catch (error) {
