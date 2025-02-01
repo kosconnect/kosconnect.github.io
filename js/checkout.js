@@ -98,11 +98,16 @@ async function renderCheckoutDetail(roomId) {
     }
 
     // Render custom facilities
+    const facilitiesWrapper = document.querySelector(".facilities");
     const facilitiesList = document.getElementById("custom-facilities");
+
     if (facilitiesList) {
       facilitiesList.innerHTML = "";
 
-      if (Array.isArray(roomData.custom_facilities)) {
+      if (
+        Array.isArray(roomData.custom_facilities) &&
+        roomData.custom_facilities.length > 0
+      ) {
         roomData.custom_facilities.forEach((facility, index) => {
           const checkboxWrapper = document.createElement("div");
           checkboxWrapper.style.display = "flex";
@@ -126,6 +131,10 @@ async function renderCheckoutDetail(roomId) {
           checkboxWrapper.appendChild(checkboxLabel);
           facilitiesList.appendChild(checkboxWrapper);
         });
+
+        facilitiesWrapper.style.display = "block"; // Tampilkan jika ada fasilitas
+      } else {
+        facilitiesWrapper.style.display = "none"; // Sembunyikan jika tidak ada fasilitas
       }
     }
 
@@ -299,6 +308,7 @@ document
   .getElementById("submit-button")
   ?.addEventListener("click", submitTransaction);
 
+// Rincian pesanan real-time
 document.addEventListener("DOMContentLoaded", function () {
   function updateOrderSummary() {
     // Ambil nilai dari input pengguna
@@ -307,24 +317,21 @@ document.addEventListener("DOMContentLoaded", function () {
       'input[name="rental_price"]:checked'
     );
     const rentalPrice = selectedRental
-      ? selectedRental.nextSibling.textContent
+      ? selectedRental.nextElementSibling.textContent.trim()
       : "-";
 
     // Ambil fasilitas tambahan yang dipilih
     const selectedFacilities = Array.from(
       document.querySelectorAll('input[name="custom_facility"]:checked')
-    ).map((facility) => {
-      return facility.nextSibling.textContent;
-    });
+    ).map((facility) => facility.nextElementSibling.textContent.trim());
 
     // Hitung biaya fasilitas
-    let facilityCost = 0;
-    selectedFacilities.forEach((facility) => {
+    let facilityCost = selectedFacilities.reduce((total, facility) => {
       const priceMatch = facility.match(/Rp ([0-9.,]+)/);
-      if (priceMatch) {
-        facilityCost += parseInt(priceMatch[1].replace(/\./g, ""));
-      }
-    });
+      return (
+        total + (priceMatch ? parseInt(priceMatch[1].replace(/\./g, "")) : 0)
+      );
+    }, 0);
 
     // Ambil harga sewa dari pilihan user
     let rentalCost = 0;
@@ -340,12 +347,11 @@ document.addEventListener("DOMContentLoaded", function () {
 
     // Update tampilan ringkasan pesanan
     document.getElementById("checkin-date").textContent = checkInDate;
-    document.getElementById("fasilitas-list").innerHTML = selectedFacilities
-      .map((facility) => `<li>${facility}</li>`)
-      .join("");
-    document.getElementById(
-      "biaya-fasilitas"
-    ).textContent = `Rp ${facilityCost.toLocaleString("id-ID")}`;
+    document.getElementById("fasilitas-list").innerHTML =
+      selectedFacilities.length > 0
+        ? selectedFacilities.map((facility) => `<li>${facility}</li>`).join("")
+        : "";
+
     document.getElementById(
       "harga-sewa"
     ).textContent = `Rp ${rentalCost.toLocaleString("id-ID")}`;
@@ -358,23 +364,59 @@ document.addEventListener("DOMContentLoaded", function () {
     document.getElementById(
       "total-harga"
     ).textContent = `Rp ${totalHarga.toLocaleString("id-ID")}`;
+
+    // Sembunyikan/tampilkan biaya fasilitas sesuai kondisi
+    const biayaFasilitasElement = document.getElementById("biaya-fasilitas");
+    const fasilitasListElement = document.getElementById("fasilitas-list").parentElement;
+
+    if (facilityCost > 0) {
+      biayaFasilitasElement.textContent = `Rp ${facilityCost.toLocaleString("id-ID")}`;
+      fasilitasListElement.style.display = "block"; // Tampilkan jika ada fasilitas
+    } else {
+      fasilitasListElement.style.display = "none"; // Sembunyikan jika tidak ada fasilitas
+    }
   }
 
-  // Event listener untuk input yang mempengaruhi ringkasan pesanan
-  document
-    .getElementById("check_in_date")
-    ?.addEventListener("change", updateOrderSummary);
-  document.querySelectorAll('input[name="rental_price"]').forEach((input) => {
-    input.addEventListener("change", updateOrderSummary);
-  });
-  document
-    .querySelectorAll('input[name="custom_facility"]')
-    .forEach((input) => {
+  function checkCustomFacilities() {
+    const facilitiesList = document.getElementById("custom-facilities");
+    if (!facilitiesList) return;
+
+    if (facilitiesList.children.length === 0) {
+      // Jika tidak ada fasilitas, tampilkan pesan dan sembunyikan elemen
+      facilitiesList.innerHTML =
+        "<p style='color: red; font-style: italic;'>Tidak ada fasilitas custom yang tersedia.</p>";
+    }
+  }
+
+  function addEventListeners() {
+    document
+      .getElementById("check_in_date")
+      ?.addEventListener("input", updateOrderSummary);
+
+    document.querySelectorAll('input[name="rental_price"]').forEach((input) => {
       input.addEventListener("change", updateOrderSummary);
     });
 
-  // Jalankan update pertama kali untuk mengisi data awal
+    document
+      .querySelectorAll('input[name="custom_facility"]')
+      .forEach((input) => {
+        input.addEventListener("change", updateOrderSummary);
+      });
+  }
+
+  // Jalankan update pertama kali
   updateOrderSummary();
+  addEventListeners();
+  checkCustomFacilities();
+
+  // Observer untuk mendeteksi perubahan elemen dinamis
+  const observer = new MutationObserver(() => {
+    addEventListeners(); // Tambahkan event listener ke elemen baru jika ada perubahan
+    updateOrderSummary(); // Perbarui data jika ada perubahan
+    checkCustomFacilities(); // Periksa fasilitas custom jika tidak ada
+  });
+
+  observer.observe(document.body, { childList: true, subtree: true });
 });
 
 // Onload function to render checkout details
@@ -387,3 +429,17 @@ window.onload = () => {
     console.error("room_id not found in URL.");
   }
 };
+
+// Tangkap URL setelah pembayaran
+const urlParams = new URLSearchParams(window.location.search);
+const transactionStatus = urlParams.get("transaction_status");
+const transactionId = urlParams.get("order_id"); // Atau sesuaikan dengan response Midtrans
+
+// Cek status pembayaran
+if (transactionStatus === "settlement") {
+  // Jika pembayaran berhasil, arahkan ke halaman invoice
+  window.location.href = `https://kosconnect.github.io/invoice.html?transaction_id=${transactionId}`;
+} else {
+  // Jika pembayaran gagal atau pending, arahkan ke history
+  window.location.href = "https://kosconnect.github.io/history.html";
+}

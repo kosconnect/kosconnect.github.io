@@ -234,7 +234,7 @@ function setStatusIcons() {
 const backButton = document.querySelector(".back-button");
 
 backButton.addEventListener("click", () => {
-  window.history.back();
+  window.location.href = "https://kosconnect.github.io/history.html";
 });
 
 // Ambil data kos saat halaman dimuat
