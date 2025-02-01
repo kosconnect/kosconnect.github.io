@@ -365,31 +365,15 @@ document.addEventListener("DOMContentLoaded", function () {
       "total-harga"
     ).textContent = `Rp ${totalHarga.toLocaleString("id-ID")}`;
 
-    // Sembunyikan/tampilkan fasilitas custom & biaya fasilitas sesuai kondisi
-    const fasilitasListElement =
-      document.getElementById("fasilitas-list").parentElement;
+    // Sembunyikan/tampilkan biaya fasilitas sesuai kondisi
     const biayaFasilitasElement = document.getElementById("biaya-fasilitas");
+    const fasilitasListElement = document.getElementById("fasilitas-list").parentElement;
 
-    if (selectedFacilities.length > 0) {
-      fasilitasListElement.style.visibility = "visible";
-      biayaFasilitasElement.textContent = `Rp ${facilityCost.toLocaleString(
-        "id-ID"
-      )}`;
+    if (facilityCost > 0) {
+      biayaFasilitasElement.textContent = `Rp ${facilityCost.toLocaleString("id-ID")}`;
+      fasilitasListElement.style.display = "block"; // Tampilkan jika ada fasilitas
     } else {
-      fasilitasListElement.style.visibility = "hidden";
-      biayaFasilitasElement.textContent = "Rp 0";
-    }
-
-    // 🔥 Fix: Update label fasilitas di dalam updateOrderSummary
-    const fasilitasElement = document.getElementById("fasilitas");
-    if (selectedFacilities.length > 0) {
-      fasilitasElement.textContent = "Fasilitas Custom:"; // Tampilkan label
-      fasilitasElement.style.visibility = "visible";
-      fasilitasListElement.style.visibility = "visible"; // Tampilkan list
-    } else {
-      fasilitasElement.textContent = "";
-      fasilitasElement.style.visibility = "hidden";
-      fasilitasListElement.style.visibility = "hidden"; // Sembunyikan list jika kosong
+      fasilitasListElement.style.display = "none"; // Sembunyikan jika tidak ada fasilitas
     }
   }
 
