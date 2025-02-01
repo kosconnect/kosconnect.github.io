@@ -255,15 +255,15 @@ async function submitTransaction(event) {
     const transactionResult = await transactionResponse.json();
     const transactionId = transactionResult.transaction_id;
 
-    // SweetAlert notification after transaction
-    swal({
+    Swal.fire({
       title: "Room booked successfully!",
       text: "You will be redirected to payment.",
       icon: "success",
-      buttons: ["OK"],
-    }).then(async (value) => {
-      if (value) {
-        // Proceed with payment
+      showCancelButton: false,
+      confirmButtonText: "OK",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        // Lanjutkan ke pembayaran
         const paymentResponse = await fetch(
           `https://kosconnect-server.vercel.app/transactions/${transactionId}/payment`,
           {
@@ -277,14 +277,14 @@ async function submitTransaction(event) {
 
         if (!paymentResponse.ok) {
           const paymentError = await paymentResponse.json();
-          alert(`Payment failed: ${paymentError.error}`);
+          Swal.fire("Payment Failed", paymentError.error, "error");
           return;
         }
 
         const paymentResult = await paymentResponse.json();
         const redirectURL = paymentResult.redirectURL;
 
-        // Redirect to Midtrans
+        // Redirect ke Midtrans
         window.location.href = redirectURL;
       }
     });
