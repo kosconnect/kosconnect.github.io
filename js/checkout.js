@@ -1,5 +1,5 @@
-// Import getCookie, renderMinimalHeader, and setCookie from header.js
-import { getCookie, renderMinimalHeader, setCookie } from "./header.js";
+// Import getCookie, renderMinimalHeader from header.js
+import { getCookie, renderMinimalHeader } from "./header.js";
 
 // Function to render checkout details to the page
 async function renderCheckoutDetail(roomId) {
@@ -36,6 +36,9 @@ async function renderCheckoutDetail(roomId) {
 
     document.getElementById("full_name").value = userData.user.fullname || "";
     document.getElementById("email").value = userData.user.email || "";
+
+    // Store userId directly to use in transaction
+    document.userId = userId; // Store userId in a global object for later use
 
     // Fetch room details based on roomId
     const roomResponse = await fetch(
@@ -126,9 +129,7 @@ async function renderCheckoutDetail(roomId) {
       }
     }
 
-    // Store boardingHouseId and ownerId directly from API response, not cookies
-    setCookie("boardingHouseId", roomData.boarding_house_id);
-    setCookie("ownerId", roomData.owner_id);
+    // No longer store boardingHouseId and ownerId in cookies
   } catch (error) {
     console.error("Error fetching data:", error);
   }
@@ -181,12 +182,30 @@ async function submitTransaction(roomId) {
     return;
   }
 
-  const userId = getCookie("userId");
-  const boardingHouseId = getCookie("boardingHouseId");
-  const ownerId = getCookie("ownerId");
+  const userId = document.userId;  // Directly use userId from stored userData
+  if (!userId) {
+    alert("User ID is missing.");
+    return;
+  }
 
-  if (!userId || !boardingHouseId || !ownerId) {
-    alert("Transaction data is incomplete.");
+  // Fetch room details based on roomId to get boarding_house_id and owner_id
+  const roomResponse = await fetch(
+    `https://kosconnect-server.vercel.app/api/rooms/${roomId}/pages`
+  );
+
+  if (!roomResponse.ok) {
+    console.error(`Error fetching room details for room_id ${roomId}`);
+    return;
+  }
+
+  const roomDetail = await roomResponse.json();
+  const roomData = Array.isArray(roomDetail) ? roomDetail[0] : roomDetail;
+
+  const boardingHouseId = roomData.boarding_house_id;
+  const ownerId = roomData.owner_id;
+
+  if (!boardingHouseId || !ownerId) {
+    alert("Boarding house ID or owner ID is missing.");
     return;
   }
 
