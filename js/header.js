@@ -10,12 +10,12 @@ export function getCookie(name) {
   return null;
 }
 
-// Fungsi untuk menyetel cookie
-export function setCookie(name, value, days) {
-  const d = new Date();
-  d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000)); // Tentukan masa berlaku cookie
-  const expires = "expires=" + d.toUTCString();
-  document.cookie = `${name}=${encodeURIComponent(value)}; ${expires}; path=/`;
+// Fungsi untuk memeriksa peran pengguna sebelum mengakses fitur
+export function checkUserRole() {
+  const userRole = getCookie("userRole");
+  if (userRole !== "user") {
+    window.location.href = "https://kosconnect.github.io/"; // Redirect jika bukan user
+  }
 }
 
 // Fungsi untuk merender dropdown kategori
@@ -62,6 +62,8 @@ export function fetchCategories(onCategoryClick) {
 
 // Fungsi untuk merender menu header (login/logout, kategori, pencarian)
 export function renderHeader(authToken, userRole, onSearch, onCategoryClick) {
+  checkUserRole(); // Validasi akses sebelum menampilkan header
+
   const navLinks = document.querySelector(".nav-links");
   if (!navLinks) return;
 
@@ -77,7 +79,12 @@ export function renderHeader(authToken, userRole, onSearch, onCategoryClick) {
         if (!response.ok) throw new Error("Failed to fetch user data");
         return response.json();
       })
+
       .then((data) => {
+        if (data.userRole !== "user") {
+          window.location.href = "https://kosconnect.github.io/"; // Redirect jika bukan user
+          return;
+        }
         const user = data.user;
         renderLoggedInMenu(user?.fullname || userRole);
         fetchCategories(onCategoryClick); // Panggil kategori setelah login
@@ -159,14 +166,22 @@ function renderLoggedInMenu(fullName) {
     `;
 
   // Tambahkan event listener untuk logout dengan memanggil handleLogout()
-        document.getElementById("logout-btn")?.addEventListener("click", handleLogout);
+  document
+    .getElementById("logout-btn")
+    ?.addEventListener("click", handleLogout);
 }
 
 // Fungsi untuk merender header minimal (hanya akun pengguna & logout)
-export function renderMinimalHeader(authToken) {
+export function renderMinimalHeader(authToken, userRole) {
   const navLinks = document.querySelector(".nav-links");
   if (!navLinks) return;
 
+  // Jika userRole bukan "user", arahkan ke halaman utama
+  if (userRole !== "user") {
+    window.location.href = "https://kosconnect.github.io/";
+    return;
+  }
+  
   if (authToken) {
     fetch("https://kosconnect-server.vercel.app/api/users/me", {
       method: "GET",
@@ -220,8 +235,10 @@ export function handleLogout() {
   }).then((result) => {
     if (result.isConfirmed) {
       // Menghapus cookie dan logout
-      document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      document.cookie = "userRole=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      document.cookie =
+        "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      document.cookie =
+        "userRole=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       window.location.href = "https://kosconnect.github.io/";
     }
   });
