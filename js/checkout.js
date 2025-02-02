@@ -47,6 +47,14 @@ async function renderCheckoutDetail(roomId) {
     document.querySelector(".address").textContent =
       roomData.address || "Address not available";
 
+    // Mapping untuk payment term ke bahasa Indonesia
+    const paymentTermMapping = {
+      monthly: "bulan",
+      quarterly: "3 bulan",
+      semi_annual: "6 bulan",
+      yearly: "tahun",
+    };
+
     // Render price options
     const priceList = document.getElementById("price-list");
     if (priceList) {
@@ -68,9 +76,13 @@ async function renderCheckoutDetail(roomId) {
 
           const radioLabel = document.createElement("label");
           radioLabel.setAttribute("for", radioInput.id);
+
+          // Gunakan mapping untuk menampilkan durasi dalam bahasa Indonesia
+          const durationText = paymentTermMapping[duration] || duration;
+
           radioLabel.textContent = `Rp ${price.toLocaleString(
             "id-ID"
-          )} / ${duration}`;
+          )} / ${durationText}`;
 
           radioWrapper.appendChild(radioInput);
           radioWrapper.appendChild(radioLabel);

@@ -107,17 +107,19 @@ async function renderRoomDetail(detail) {
         .join("")
     : "<li>Tidak ada fasilitas kamar</li>";
 
-  document.getElementById("customFasilitasContainer").innerHTML =
-    detail.custom_facilities
-      ? detail.custom_facilities
-          .map(
-            (facility) =>
-              `<div class="custom-item"><span>${
-                facility.name
-              }</span> - <span>Rp ${facility.price.toLocaleString()}</span></div>`
-          )
-          .join("")
-      : "<div>Tidak ada fasilitas tambahan</div>";
+ document.getElementById("customFasilitasContainer").innerHTML =
+   detail.custom_facilities
+     ? detail.custom_facilities
+         .map(
+           (facility) =>
+             `<div class="custom-item"><span>${
+               facility.name
+             }</span> - <span>Rp ${facility.price
+               .toLocaleString("id-ID", { minimumFractionDigits: 0 })
+               .replace(/,/g, ".")}</span></div>`
+         )
+         .join("")
+     : "<div>Tidak ada fasilitas tambahan</div>";
 }
 
 // 🔹 Modal Functions
