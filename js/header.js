@@ -62,7 +62,6 @@ export function fetchCategories(onCategoryClick) {
 
 // Fungsi untuk merender menu header (login/logout, kategori, pencarian)
 export function renderHeader(authToken, userRole, onSearch, onCategoryClick) {
-  checkUserRole(); // Validasi akses sebelum menampilkan header
 
   const navLinks = document.querySelector(".nav-links");
   if (!navLinks) return;
@@ -81,10 +80,6 @@ export function renderHeader(authToken, userRole, onSearch, onCategoryClick) {
       })
 
       .then((data) => {
-        if (data.userRole !== "user") {
-          window.location.href = "https://kosconnect.github.io/"; // Redirect jika bukan user
-          return;
-        }
         const user = data.user;
         renderLoggedInMenu(user?.fullname || userRole);
         fetchCategories(onCategoryClick); // Panggil kategori setelah login
@@ -176,12 +171,6 @@ export function renderMinimalHeader(authToken, userRole) {
   const navLinks = document.querySelector(".nav-links");
   if (!navLinks) return;
 
-  // Jika userRole bukan "user", arahkan ke halaman utama
-  if (userRole !== "user") {
-    window.location.href = "https://kosconnect.github.io/";
-    return;
-  }
-  
   if (authToken) {
     fetch("https://kosconnect-server.vercel.app/api/users/me", {
       method: "GET",
