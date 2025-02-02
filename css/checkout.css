@@ -151,7 +151,7 @@ label {
 }
 
 button {
-    background-color: #4CAF50;
+    background-color: #005f73;
     color: white;
     padding: 15px 32px;
     text-align: center;
@@ -166,6 +166,9 @@ button {
     border-radius: 5px;
     /* Tambahkan border radius */
 }
+.button:hover {
+    background: #003f53;
+}
 
 .right {
     display: flex;
@@ -178,14 +181,13 @@ button {
 .right h3 {
     text-align: center;
     border-bottom: none;
-    margin-bottom: 10x;
 }
 
 .right p {
     color: #005f73;
     justify-content: space-between;
     font-weight: bold;
-    margin-top: 5px;
+    margin-top: 15px;
 }
 
 .right ul {
