@@ -18,17 +18,17 @@ async function renderCheckoutDetail(roomId) {
     renderMinimalHeader(authToken);
 
     // Fetch user data from API
-     const [userResponse, roomResponse] = await Promise.all([
-       fetch("https://kosconnect-server.vercel.app/api/users/me", {
-         headers: { Authorization: `Bearer ${authToken}` },
-       }),
-       fetch(`https://kosconnect-server.vercel.app/api/rooms/${roomId}/pages`),
-     ]);
+    const [userResponse, roomResponse] = await Promise.all([
+      fetch("https://kosconnect-server.vercel.app/api/users/me", {
+        headers: { Authorization: `Bearer ${authToken}` },
+      }),
+      fetch(`https://kosconnect-server.vercel.app/api/rooms/${roomId}/pages`),
+    ]);
 
-     if (!userResponse.ok || !roomResponse.ok) {
-       console.error("Error fetching data");
-       return;
-     }
+    if (!userResponse.ok || !roomResponse.ok) {
+      console.error("Error fetching data");
+      return;
+    }
 
     const userData = await userResponse.json();
     const userId = userData.user.user_id || userData.user._id; // Handle both BSON and JSON formats
@@ -39,11 +39,10 @@ async function renderCheckoutDetail(roomId) {
     // Store userId directly to use in transaction
     document.userId = userId; // Store userId in a global object for later use
 
-
-   window.roomData = await roomResponse.json();
-   const roomData = Array.isArray(window.roomData)
-     ? window.roomData[0]
-     : window.roomData;
+    window.roomData = await roomResponse.json();
+    const roomData = Array.isArray(window.roomData)
+      ? window.roomData[0]
+      : window.roomData;
 
     document.querySelector(".room-name").textContent =
       roomData.room_name || "Unknown";
@@ -90,7 +89,6 @@ async function renderCheckoutDetail(roomId) {
     }
 
     // Render custom facilities
-    const facilitiesWrapper = document.querySelector(".facilities");
     const facilitiesList = document.getElementById("custom-facilities");
 
     if (facilitiesList) {
@@ -123,10 +121,6 @@ async function renderCheckoutDetail(roomId) {
           checkboxWrapper.appendChild(checkboxLabel);
           facilitiesList.appendChild(checkboxWrapper);
         });
-
-        facilitiesWrapper.style.display = "block"; // Tampilkan jika ada fasilitas
-      } else {
-        facilitiesWrapper.style.display = "none"; // Sembunyikan jika tidak ada fasilitas
       }
     }
 
@@ -351,20 +345,6 @@ function updateOrderSummary() {
   document.getElementById(
     "total-harga"
   ).textContent = `Rp ${totalHarga.toLocaleString("id-ID")}`;
-
-  // // Sembunyikan/tampilkan biaya fasilitas sesuai kondisi
-  // const biayaFasilitasElement = document.getElementById("biaya-fasilitas");
-  // const fasilitasListElement =
-  //   document.getElementById("fasilitas-list").parentElement;
-
-  // if (facilityCost > 0) {
-  //   biayaFasilitasElement.textContent = `Rp ${facilityCost.toLocaleString(
-  //     "id-ID"
-  //   )}`;
-  //   fasilitasListElement.style.display = "block"; // Tampilkan jika ada fasilitas
-  // } else {
-  //   fasilitasListElement.style.display = "none"; // Sembunyikan jika tidak ada fasilitas
-  // }
 }
 
 function checkCustomFacilities() {
