@@ -54,10 +54,10 @@ async function renderCheckoutDetail(roomId) {
       if (roomData.price && typeof roomData.price === "object") {
         Object.entries(roomData.price).forEach(([duration, price], index) => {
           const radioWrapper = document.createElement("div");
-           radioInput.style.display = "flex";
-           radioInput.style.alignItems = "center";
-           radioInput.style.marginBottom = "5px";
-           radioInput.style.gap = "5px";
+          radioWrapper.style.display = "flex";
+          radioWrapper.style.alignItems = "center";
+          radioWrapper.style.marginBottom = "5px";
+          radioWrapper.style.gap = "5px";
 
           const radioInput = document.createElement("input");
           radioInput.type = "radio";
@@ -68,7 +68,9 @@ async function renderCheckoutDetail(roomId) {
 
           const radioLabel = document.createElement("label");
           radioLabel.setAttribute("for", radioInput.id);
-          radioLabel.textContent = `Rp ${price.toLocaleString("id-ID")} / ${duration}`;
+          radioLabel.textContent = `Rp ${price.toLocaleString(
+            "id-ID"
+          )} / ${duration}`;
 
           radioWrapper.appendChild(radioInput);
           radioWrapper.appendChild(radioLabel);
@@ -87,10 +89,10 @@ async function renderCheckoutDetail(roomId) {
       ) {
         roomData.custom_facilities.forEach((facility, index) => {
           const checkboxWrapper = document.createElement("div");
-           checkboxWrapper.style.display = "flex";
-           checkboxWrapper.style.alignItems = "center";
-           checkboxWrapper.style.marginBottom = "5px";
-           checkboxWrapper.style.gap = "5px";
+          checkboxWrapper.style.display = "flex";
+          checkboxWrapper.style.alignItems = "center";
+          checkboxWrapper.style.marginBottom = "5px";
+          checkboxWrapper.style.gap = "5px";
 
           const checkboxInput = document.createElement("input");
           checkboxInput.type = "checkbox";
@@ -100,7 +102,9 @@ async function renderCheckoutDetail(roomId) {
 
           const checkboxLabel = document.createElement("label");
           checkboxLabel.setAttribute("for", checkboxInput.id);
-          checkboxLabel.textContent = `${facility.name} - Rp ${facility.price.toLocaleString("id-ID")}`;
+          checkboxLabel.textContent = `${
+            facility.name
+          } - Rp ${facility.price.toLocaleString("id-ID")}`;
 
           checkboxWrapper.appendChild(checkboxInput);
           checkboxWrapper.appendChild(checkboxLabel);
@@ -193,7 +197,6 @@ async function submitTransaction(event) {
 
   const boardingHouseId = roomData.boarding_house_id;
   const ownerId = roomData.owner_id;
-
 
   if (!boardingHouseId || !ownerId) {
     alert("Boarding house ID or owner ID is missing.");
@@ -319,11 +322,21 @@ function updateOrderSummary() {
     selectedFacilities.length > 0
       ? selectedFacilities.map((facility) => `<li>${facility}</li>`).join("")
       : "";
-  document.getElementById("harga-sewa").textContent = `Rp ${rentalCost.toLocaleString("id-ID")}`;
-  document.getElementById("biaya-fasilitas").textContent = `Rp ${facilityCost.toLocaleString("id-ID")}`;
-  document.getElementById("sub-total").textContent = `Rp ${subTotal.toLocaleString("id-ID")}`;
-  document.getElementById("ppn").textContent = `Rp ${ppn.toLocaleString("id-ID")}`;
-  document.getElementById("total-harga").textContent = `Rp ${totalHarga.toLocaleString("id-ID")}`;
+  document.getElementById(
+    "harga-sewa"
+  ).textContent = `Rp ${rentalCost.toLocaleString("id-ID")}`;
+  document.getElementById(
+    "biaya-fasilitas"
+  ).textContent = `Rp ${facilityCost.toLocaleString("id-ID")}`;
+  document.getElementById(
+    "sub-total"
+  ).textContent = `Rp ${subTotal.toLocaleString("id-ID")}`;
+  document.getElementById("ppn").textContent = `Rp ${ppn.toLocaleString(
+    "id-ID"
+  )}`;
+  document.getElementById(
+    "total-harga"
+  ).textContent = `Rp ${totalHarga.toLocaleString("id-ID")}`;
 }
 
 // Function to add event listeners once
@@ -336,9 +349,11 @@ function addEventListeners() {
     input.addEventListener("change", updateOrderSummary);
   });
 
-  document.querySelectorAll('input[name="custom_facility"]').forEach((input) => {
-    input.addEventListener("change", updateOrderSummary);
-  });
+  document
+    .querySelectorAll('input[name="custom_facility"]')
+    .forEach((input) => {
+      input.addEventListener("change", updateOrderSummary);
+    });
 }
 
 // Observe only the custom facilities section
