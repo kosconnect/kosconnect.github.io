@@ -18,18 +18,17 @@ async function renderCheckoutDetail(roomId) {
     renderMinimalHeader(authToken);
 
     // Fetch user data from API
-    const userResponse = await fetch(
-      "https://kosconnect-server.vercel.app/api/users/me",
-      {
-        method: "GET",
-        headers: { Authorization: `Bearer ${authToken}` },
-      }
-    );
+     const [userResponse, roomResponse] = await Promise.all([
+       fetch("https://kosconnect-server.vercel.app/api/users/me", {
+         headers: { Authorization: `Bearer ${authToken}` },
+       }),
+       fetch(`https://kosconnect-server.vercel.app/api/rooms/${roomId}/pages`),
+     ]);
 
-    if (!userResponse.ok) {
-      console.error("Error fetching user details");
-      return;
-    }
+     if (!userResponse.ok || !roomResponse.ok) {
+       console.error("Error fetching data");
+       return;
+     }
 
     const userData = await userResponse.json();
     const userId = userData.user.user_id || userData.user._id; // Handle both BSON and JSON formats
@@ -40,18 +39,11 @@ async function renderCheckoutDetail(roomId) {
     // Store userId directly to use in transaction
     document.userId = userId; // Store userId in a global object for later use
 
-    // Fetch room details based on roomId
-    const roomResponse = await fetch(
-      `https://kosconnect-server.vercel.app/api/rooms/${roomId}/pages`
-    );
 
-    if (!roomResponse.ok) {
-      console.error(`Error fetching room details for room_id ${roomId}`);
-      return;
-    }
-
-    const roomDetail = await roomResponse.json();
-    const roomData = Array.isArray(roomDetail) ? roomDetail[0] : roomDetail;
+   window.roomData = await roomResponse.json();
+   const roomData = Array.isArray(window.roomData)
+     ? window.roomData[0]
+     : window.roomData;
 
     document.querySelector(".room-name").textContent =
       roomData.room_name || "Unknown";
@@ -210,21 +202,18 @@ async function submitTransaction(event) {
     return;
   }
 
-  // Fetch room details based on roomId to get boarding_house_id and owner_id
-  const roomResponse = await fetch(
-    `https://kosconnect-server.vercel.app/api/rooms/${roomId}/pages`
-  );
+  const roomData = Array.isArray(window.roomData)
+    ? window.roomData[0]
+    : window.roomData;
 
-  if (!roomResponse.ok) {
-    console.error(`Error fetching room details for room_id ${roomId}`);
+  if (!roomData) {
+    alert("Room details not found. Please refresh the page.");
     return;
   }
 
-  const roomDetail = await roomResponse.json();
-  const roomData = Array.isArray(roomDetail) ? roomDetail[0] : roomDetail;
-
   const boardingHouseId = roomData.boarding_house_id;
   const ownerId = roomData.owner_id;
+
 
   if (!boardingHouseId || !ownerId) {
     alert("Boarding house ID or owner ID is missing.");
@@ -308,103 +297,108 @@ document
   .getElementById("submit-button")
   ?.addEventListener("click", submitTransaction);
 
-// Rincian pesanan real-time
-document.addEventListener("DOMContentLoaded", function () {
-  function updateOrderSummary() {
-    // Ambil nilai dari input pengguna
-    const checkInDate = document.getElementById("check_in_date")?.value || "-";
-    const selectedRental = document.querySelector(
-      'input[name="rental_price"]:checked'
+function updateOrderSummary() {
+  // Ambil nilai dari input pengguna
+  const checkInDate = document.getElementById("check_in_date")?.value || "-";
+  const selectedRental = document.querySelector(
+    'input[name="rental_price"]:checked'
+  );
+  const rentalPrice = selectedRental
+    ? selectedRental.nextElementSibling.textContent.trim()
+    : "-";
+
+  // Ambil fasilitas tambahan yang dipilih
+  const selectedFacilities = Array.from(
+    document.querySelectorAll('input[name="custom_facility"]:checked')
+  ).map((facility) => facility.nextElementSibling.textContent.trim());
+
+  // Hitung biaya fasilitas
+  let facilityCost = selectedFacilities.reduce((total, facility) => {
+    const priceMatch = facility.match(/Rp ([0-9.,]+)/);
+    return (
+      total + (priceMatch ? parseInt(priceMatch[1].replace(/\./g, "")) : 0)
     );
-    const rentalPrice = selectedRental
-      ? selectedRental.nextElementSibling.textContent.trim()
-      : "-";
+  }, 0);
 
-    // Ambil fasilitas tambahan yang dipilih
-    const selectedFacilities = Array.from(
-      document.querySelectorAll('input[name="custom_facility"]:checked')
-    ).map((facility) => facility.nextElementSibling.textContent.trim());
+  // Ambil harga sewa dari pilihan user
+  let rentalCost = 0;
+  const rentalMatch = rentalPrice.match(/Rp ([0-9.,]+)/);
+  if (rentalMatch) {
+    rentalCost = parseInt(rentalMatch[1].replace(/\./g, ""));
+  }
 
-    // Hitung biaya fasilitas
-    let facilityCost = selectedFacilities.reduce((total, facility) => {
-      const priceMatch = facility.match(/Rp ([0-9.,]+)/);
-      return (
-        total + (priceMatch ? parseInt(priceMatch[1].replace(/\./g, "")) : 0)
-      );
-    }, 0);
+  // Hitung subtotal, PPN, dan total harga
+  const subTotal = rentalCost + facilityCost;
+  const ppn = subTotal * 0.11; // PPN 11%
+  const totalHarga = subTotal + ppn;
 
-    // Ambil harga sewa dari pilihan user
-    let rentalCost = 0;
-    const rentalMatch = rentalPrice.match(/Rp ([0-9.,]+)/);
-    if (rentalMatch) {
-      rentalCost = parseInt(rentalMatch[1].replace(/\./g, ""));
-    }
+  // Update tampilan ringkasan pesanan
+  document.getElementById("checkin-date").textContent = checkInDate;
+  document.getElementById("fasilitas-list").innerHTML =
+    selectedFacilities.length > 0
+      ? selectedFacilities.map((facility) => `<li>${facility}</li>`).join("")
+      : "";
 
-    // Hitung subtotal, PPN, dan total harga
-    const subTotal = rentalCost + facilityCost;
-    const ppn = subTotal * 0.11; // PPN 11%
-    const totalHarga = subTotal + ppn;
+  document.getElementById(
+    "harga-sewa"
+  ).textContent = `Rp ${rentalCost.toLocaleString("id-ID")}`;
+  document.getElementById(
+    "sub-total"
+  ).textContent = `Rp ${subTotal.toLocaleString("id-ID")}`;
+  document.getElementById("ppn").textContent = `Rp ${ppn.toLocaleString(
+    "id-ID"
+  )}`;
+  document.getElementById(
+    "total-harga"
+  ).textContent = `Rp ${totalHarga.toLocaleString("id-ID")}`;
 
-    // Update tampilan ringkasan pesanan
-    document.getElementById("checkin-date").textContent = checkInDate;
-    document.getElementById("fasilitas-list").innerHTML =
-      selectedFacilities.length > 0
-        ? selectedFacilities.map((facility) => `<li>${facility}</li>`).join("")
-        : "";
+  // Sembunyikan/tampilkan biaya fasilitas sesuai kondisi
+  const biayaFasilitasElement = document.getElementById("biaya-fasilitas");
+  const fasilitasListElement =
+    document.getElementById("fasilitas-list").parentElement;
 
-    document.getElementById(
-      "harga-sewa"
-    ).textContent = `Rp ${rentalCost.toLocaleString("id-ID")}`;
-    document.getElementById(
-      "sub-total"
-    ).textContent = `Rp ${subTotal.toLocaleString("id-ID")}`;
-    document.getElementById("ppn").textContent = `Rp ${ppn.toLocaleString(
+  if (facilityCost > 0) {
+    biayaFasilitasElement.textContent = `Rp ${facilityCost.toLocaleString(
       "id-ID"
     )}`;
-    document.getElementById(
-      "total-harga"
-    ).textContent = `Rp ${totalHarga.toLocaleString("id-ID")}`;
+    fasilitasListElement.style.display = "block"; // Tampilkan jika ada fasilitas
+  } else {
+    fasilitasListElement.style.display = "none"; // Sembunyikan jika tidak ada fasilitas
+  }
+}
 
-    // Sembunyikan/tampilkan biaya fasilitas sesuai kondisi
-    const biayaFasilitasElement = document.getElementById("biaya-fasilitas");
-    const fasilitasListElement = document.getElementById("fasilitas-list").parentElement;
+function checkCustomFacilities() {
+  const facilitiesList = document.getElementById("custom-facilities");
+  if (!facilitiesList) return;
 
-    if (facilityCost > 0) {
-      biayaFasilitasElement.textContent = `Rp ${facilityCost.toLocaleString("id-ID")}`;
-      fasilitasListElement.style.display = "block"; // Tampilkan jika ada fasilitas
-    } else {
-      fasilitasListElement.style.display = "none"; // Sembunyikan jika tidak ada fasilitas
-    }
+  if (facilitiesList.children.length === 0) {
+    // Jika tidak ada fasilitas, tampilkan pesan dan sembunyikan elemen
+    facilitiesList.innerHTML =
+      "<p style='color: red; font-style: italic;'>Tidak ada fasilitas custom yang tersedia.</p>";
   }
 
-  function checkCustomFacilities() {
-    const facilitiesList = document.getElementById("custom-facilities");
-    if (!facilitiesList) return;
+  // Setelah fasilitas dimuat, jalankan updateOrderSummary segera
+  requestAnimationFrame(updateOrderSummary);
+}
 
-    if (facilitiesList.children.length === 0) {
-      // Jika tidak ada fasilitas, tampilkan pesan dan sembunyikan elemen
-      facilitiesList.innerHTML =
-        "<p style='color: red; font-style: italic;'>Tidak ada fasilitas custom yang tersedia.</p>";
-    }
-  }
+function addEventListeners() {
+  document
+    .getElementById("check_in_date")
+    ?.addEventListener("input", updateOrderSummary);
 
-  function addEventListeners() {
-    document
-      .getElementById("check_in_date")
-      ?.addEventListener("input", updateOrderSummary);
+  document.querySelectorAll('input[name="rental_price"]').forEach((input) => {
+    input.addEventListener("change", updateOrderSummary);
+  });
 
-    document.querySelectorAll('input[name="rental_price"]').forEach((input) => {
+  document
+    .querySelectorAll('input[name="custom_facility"]')
+    .forEach((input) => {
       input.addEventListener("change", updateOrderSummary);
     });
+}
 
-    document
-      .querySelectorAll('input[name="custom_facility"]')
-      .forEach((input) => {
-        input.addEventListener("change", updateOrderSummary);
-      });
-  }
-
-  // Jalankan update pertama kali
+// Jalankan update pertama kali setelah halaman dimuat
+document.addEventListener("DOMContentLoaded", function () {
   updateOrderSummary();
   addEventListeners();
   checkCustomFacilities();
