@@ -352,19 +352,19 @@ function updateOrderSummary() {
     "total-harga"
   ).textContent = `Rp ${totalHarga.toLocaleString("id-ID")}`;
 
-  // Sembunyikan/tampilkan biaya fasilitas sesuai kondisi
-  const biayaFasilitasElement = document.getElementById("biaya-fasilitas");
-  const fasilitasListElement =
-    document.getElementById("fasilitas-list").parentElement;
+  // // Sembunyikan/tampilkan biaya fasilitas sesuai kondisi
+  // const biayaFasilitasElement = document.getElementById("biaya-fasilitas");
+  // const fasilitasListElement =
+  //   document.getElementById("fasilitas-list").parentElement;
 
-  if (facilityCost > 0) {
-    biayaFasilitasElement.textContent = `Rp ${facilityCost.toLocaleString(
-      "id-ID"
-    )}`;
-    fasilitasListElement.style.display = "block"; // Tampilkan jika ada fasilitas
-  } else {
-    fasilitasListElement.style.display = "none"; // Sembunyikan jika tidak ada fasilitas
-  }
+  // if (facilityCost > 0) {
+  //   biayaFasilitasElement.textContent = `Rp ${facilityCost.toLocaleString(
+  //     "id-ID"
+  //   )}`;
+  //   fasilitasListElement.style.display = "block"; // Tampilkan jika ada fasilitas
+  // } else {
+  //   fasilitasListElement.style.display = "none"; // Sembunyikan jika tidak ada fasilitas
+  // }
 }
 
 function checkCustomFacilities() {

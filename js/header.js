@@ -10,14 +10,6 @@ export function getCookie(name) {
   return null;
 }
 
-// Fungsi untuk memeriksa peran pengguna sebelum mengakses fitur
-export function checkUserRole() {
-  const userRole = getCookie("userRole");
-  if (userRole !== "user") {
-    window.location.href = "https://kosconnect.github.io/"; // Redirect jika bukan user
-  }
-}
-
 // Fungsi untuk merender dropdown kategori
 export function renderCategories(categories, onCategoryClick) {
   const dropdownCategoryContainer = document.querySelector(
