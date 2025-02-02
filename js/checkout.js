@@ -54,6 +54,10 @@ async function renderCheckoutDetail(roomId) {
       if (roomData.price && typeof roomData.price === "object") {
         Object.entries(roomData.price).forEach(([duration, price], index) => {
           const radioWrapper = document.createElement("div");
+           radioInput.style.display = "flex";
+           radioInput.style.alignItems = "center";
+           radioInput.style.marginBottom = "5px";
+           radioInput.style.gap = "5px";
 
           const radioInput = document.createElement("input");
           radioInput.type = "radio";
@@ -83,6 +87,10 @@ async function renderCheckoutDetail(roomId) {
       ) {
         roomData.custom_facilities.forEach((facility, index) => {
           const checkboxWrapper = document.createElement("div");
+           checkboxWrapper.style.display = "flex";
+           checkboxWrapper.style.alignItems = "center";
+           checkboxWrapper.style.marginBottom = "5px";
+           checkboxWrapper.style.gap = "5px";
 
           const checkboxInput = document.createElement("input");
           checkboxInput.type = "checkbox";
@@ -285,10 +293,13 @@ function updateOrderSummary() {
   ).map((facility) => facility.nextElementSibling.textContent.trim());
 
   // Calculate facility cost
-  let facilityCost = selectedFacilities.reduce((total, facility) => {
+  let facilityCost = 0;
+  selectedFacilities.forEach((facility) => {
     const priceMatch = facility.match(/Rp ([0-9.,]+)/);
-    return total + (priceMatch ? parseInt(priceMatch[1].replace(/\./g, "")) : 0);
-  }, 0);
+    if (priceMatch) {
+      facilityCost += parseInt(priceMatch[1].replace(/\./g, ""));
+    }
+  });
 
   // Get rental cost
   let rentalCost = 0;
@@ -309,6 +320,7 @@ function updateOrderSummary() {
       ? selectedFacilities.map((facility) => `<li>${facility}</li>`).join("")
       : "";
   document.getElementById("harga-sewa").textContent = `Rp ${rentalCost.toLocaleString("id-ID")}`;
+  document.getElementById("biaya-fasilitas").textContent = `Rp ${facilityCost.toLocaleString("id-ID")}`;
   document.getElementById("sub-total").textContent = `Rp ${subTotal.toLocaleString("id-ID")}`;
   document.getElementById("ppn").textContent = `Rp ${ppn.toLocaleString("id-ID")}`;
   document.getElementById("total-harga").textContent = `Rp ${totalHarga.toLocaleString("id-ID")}`;
