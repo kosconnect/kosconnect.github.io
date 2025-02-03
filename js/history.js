@@ -31,7 +31,7 @@ async function renderOrderCards(orders) {
     const roomDetail = await response.json();
 
     // Data boarding house, room, category, owner langsung diambil dari roomDetail
-    const { boarding_house, owner, room_type } = roomDetail[0];
+    const { boarding_house} = roomDetail[0];
     const category = boarding_house?.category || null;
 
     // Format tanggal
