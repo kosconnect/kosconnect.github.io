@@ -28,9 +28,11 @@ async function renderTransactionDetail(order) {
 
   const roomDetail = await response.json();
 
-  // Data boarding house, room, category, owner langsung diambil dari roomDetail
-  const  { boarding_house} = roomDetail[0];
-  const category = boarding_house?.category || null;
+  if (!roomDetail.length) {
+    console.error(`Room details not found for room_id ${order.room_id}`);
+    invoiceElement.innerHTML = "<p>Detail kamar tidak ditemukan.</p>";
+    return;
+  }
 
   // Format tanggal
   const formattedCheckInDate = new Date(order.check_in_date).toLocaleDateString(
