@@ -8,31 +8,31 @@ let allOrderData = [];
 async function renderOrderCards(orders) {
   const orderHistoryElement = document.getElementById("orderHistory");
 
-  // Bersihkan elemen sebelumnya
   orderHistoryElement.innerHTML = "";
 
-  if (orders.length === 0) {
+  if (!orders?.data?.length) {
     orderHistoryElement.innerHTML =
       "<p>Tidak ada transaksi yang ditemukan.</p>";
     return;
   }
 
   for (const order of orders.data) {
-    // Ambil detail kos langsung dari endpoint
+    if (!order.room_id) {
+      console.error("room_id tidak ditemukan untuk order", order);
+      continue;
+    }
+
     const response = await fetch(
       `https://kosconnect-server.vercel.app/api/rooms/${order.room_id}/pages`
     );
 
     if (!response.ok) {
       console.error(`Error fetching room detail for room_id ${order.room_id}`);
-      continue; // Lewati jika detail kos tidak ditemukan
+      continue;
     }
 
     const roomDetail = await response.json();
-
-    // Data boarding house, room, category, owner langsung diambil dari roomDetail
-    const { boarding_house} = roomDetail[0];
-    const category = boarding_house?.category || null;
+    const roomData = roomDetail?.[0] ?? {}; // Fallback kalau undefined
 
     // Format tanggal
     const formattedCheckInDate = new Date(
@@ -87,14 +87,14 @@ async function renderOrderCards(orders) {
 
     // Komponen informasi kos
     const kosDetails = `
-<p><strong> ${roomDetail[0]?.room_name || "Tidak Diketahui"}</strong></p>
-<p><strong>Kategori:</strong> ${
-      roomDetail[0]?.category_name || "Tidak Diketahui"
-    }</p>
-<p><strong>Alamat:</strong> ${roomDetail[0]?.address || "Tidak Diketahui"}</p>
-<p><strong>Nama Pemilik:</strong> ${
-      roomDetail[0]?.owner_fullname || "Tidak Diketahui"
-    }</p>
+<p><strong> ${roomData?.room_name || "Tidak Diketahui"}</strong></p>
+      <p><strong>Kategori:</strong> ${
+        roomData?.category_name || "Tidak Diketahui"
+      }</p>
+      <p><strong>Alamat:</strong> ${roomData?.address || "Tidak Diketahui"}</p>
+      <p><strong>Nama Pemilik:</strong> ${
+        roomData?.owner_fullname || "Tidak Diketahui"
+      }</p>
 `;
 
     // Komponen rincian biaya
